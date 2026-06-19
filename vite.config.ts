@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -37,4 +38,9 @@ export default defineConfig({
       },
     }),
   ],
+  // Vitest: tests de lógica pura (sin DOM), por eso environment 'node'.
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+  },
 })

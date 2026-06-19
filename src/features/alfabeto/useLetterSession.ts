@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { LETTERS, type GreekLetter } from './letters'
+import { LETTERS, type GreekLetter } from '../../core/greek'
 import {
   loadStates,
   saveState,
@@ -13,8 +13,18 @@ import {
 /** Letras nuevas que se introducen como máximo en una sesión. */
 const NEW_PER_SESSION = 8
 
-/** Clave SRS de la carta de reconocimiento de una letra. */
-const cardId = (letterId: string) => `alfabeto:rec:${letterId}`
+/**
+ * Dirección del repaso:
+ *  - `rec` (reconocer): ves el glifo y recuerdas su nombre/sonido.
+ *  - `prod` (producir): ves el nombre/sonido y eliges el glifo.
+ * Cada dirección se memoriza por separado en el SRS (saber leer una letra no
+ * implica saber escribirla), por eso forma parte de la clave de la carta.
+ */
+export type SessionMode = 'rec' | 'prod'
+
+/** Clave SRS de la carta de una letra en una dirección concreta. */
+const cardId = (mode: SessionMode, letterId: string) =>
+  `alfabeto:${mode}:${letterId}`
 
 const letterById = new Map(LETTERS.map((l) => [l.id, l]))
 
@@ -24,26 +34,26 @@ export interface SessionStats {
 }
 
 /**
- * Orquesta una sesión de repaso del alfabeto: carga el progreso, arma la cola
- * (lo que vence + alguna letra nueva), y aplica las calificaciones al SRS.
+ * Orquesta una sesión de repaso del alfabeto en una dirección dada: carga el
+ * progreso, arma la cola (lo que vence + alguna letra nueva) y aplica las
+ * calificaciones al SRS. La presentación (cómo se pregunta) la decide la vista.
  */
-export function useAlfabetoSession() {
+export function useLetterSession(mode: SessionMode) {
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
   const [queue, setQueue] = useState<string[]>([])
-  const [revealed, setRevealed] = useState(false)
   const [stats, setStats] = useState<SessionStats>({ reviewed: 0, recalled: 0 })
 
   const build = useCallback(async () => {
     setLoading(true)
     const now = Date.now()
-    const loaded = await loadStates(LETTERS.map((l) => cardId(l.id)))
+    const loaded = await loadStates(LETTERS.map((l) => cardId(mode, l.id)))
 
     const byLetter = new Map<string, SrsState>()
     const due: string[] = []
     const fresh: string[] = []
     for (const l of LETTERS) {
-      const s = loaded.get(cardId(l.id))
+      const s = loaded.get(cardId(mode, l.id))
       if (!s) {
         fresh.push(l.id)
       } else {
@@ -55,9 +65,8 @@ export function useAlfabetoSession() {
     setStates(byLetter)
     setQueue([...due, ...fresh.slice(0, NEW_PER_SESSION)])
     setStats({ reviewed: 0, recalled: 0 })
-    setRevealed(false)
     setLoading(false)
-  }, [])
+  }, [mode])
 
   useEffect(() => {
     void build()
@@ -74,7 +83,7 @@ export function useAlfabetoSession() {
       const now = Date.now()
       const prev = states.get(currentId) ?? newCard(now)
       const next = review(prev, g, now)
-      void saveState(cardId(currentId), next)
+      void saveState(cardId(mode, currentId), next)
 
       setStates((prevMap) => new Map(prevMap).set(currentId, next))
       setStats((s) => ({
@@ -85,9 +94,8 @@ export function useAlfabetoSession() {
       setQueue((q) =>
         g === 'again' ? [...q.slice(1), currentId] : q.slice(1),
       )
-      setRevealed(false)
     },
-    [currentId, states],
+    [currentId, states, mode],
   )
 
   return {
@@ -95,8 +103,6 @@ export function useAlfabetoSession() {
     done: !loading && queue.length === 0,
     current,
     remaining: queue.length,
-    revealed,
-    reveal: () => setRevealed(true),
     grade,
     restart: build,
     stats,

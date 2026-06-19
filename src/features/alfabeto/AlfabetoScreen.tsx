@@ -1,71 +1,35 @@
+import { useState } from 'react'
 import { Card } from '../../core/ui/Card'
-import { useAlfabetoSession } from './useAlfabetoSession'
+import { RecognitionView } from './RecognitionView'
+import { ProductionView } from './ProductionView'
 
+type Mode = 'menu' | 'rec' | 'prod'
+
+/**
+ * Pantalla del alfabeto: ofrece dos formas de practicar las 24 letras, cada una
+ * con su propio progreso en el SRS.
+ *  - Reconocer (leer): ves el glifo, recuerdas el sonido.
+ *  - Escribir (producir): te damos el sonido, eliges el glifo.
+ */
 export function AlfabetoScreen() {
-  const s = useAlfabetoSession()
+  const [mode, setMode] = useState<Mode>('menu')
 
-  if (s.loading) {
-    return <p className="empty">Cargando…</p>
-  }
-
-  if (s.done) {
-    const { reviewed, recalled } = s.stats
-    return (
-      <Card title="¡Sesión completada! 🎉">
-        {reviewed === 0 ? (
-          <p>No hay nada que repasar ahora mismo. Vuelve más tarde 👋</p>
-        ) : (
-          <p>
-            Repasadas: <strong>{reviewed}</strong> · Acertadas:{' '}
-            <strong>{recalled}</strong>
-          </p>
-        )}
-        <button className="btn btn--primary" onClick={s.restart}>
-          Otra ronda
-        </button>
-      </Card>
-    )
-  }
-
-  const letter = s.current
-  if (!letter) return null
+  if (mode === 'rec') return <RecognitionView onExit={() => setMode('menu')} />
+  if (mode === 'prod') return <ProductionView onExit={() => setMode('menu')} />
 
   return (
-    <div className="alfabeto">
-      <div className="alfabeto__progress">Quedan {s.remaining}</div>
-
-      <div className="glyph">
-        <span className="glyph__lower">{letter.lower}</span>
-        <span className="glyph__upper">{letter.upper}</span>
-      </div>
-
-      {!s.revealed ? (
-        <>
-          <p className="alfabeto__prompt">¿Cómo se llama y cómo suena?</p>
-          <button className="btn btn--primary" onClick={s.reveal}>
-            Mostrar
-          </button>
-        </>
-      ) : (
-        <>
-          <Card>
-            <p className="answer__name">{letter.name}</p>
-            <p className="answer__line">
-              Translit.: <strong>{letter.translit}</strong> · AFI:{' '}
-              <strong>{letter.ipa}</strong>
-            </p>
-            <p className="answer__sound">{letter.sound}</p>
-          </Card>
-          <div className="grade">
-            <button className="btn btn--again" onClick={() => s.grade('again')}>
-              No la recordé
-            </button>
-            <button className="btn btn--good" onClick={() => s.grade('good')}>
-              La recordé
-            </button>
-          </div>
-        </>
-      )}
+    <div className="modes">
+      <Card title="Alfabeto griego">
+        <p>Practica las 24 letras en dos direcciones. Elige cómo:</p>
+      </Card>
+      <button className="btn btn--primary mode-btn" onClick={() => setMode('rec')}>
+        <span className="mode-btn__title">Reconocer</span>
+        <span className="mode-btn__hint">Ves la letra → recuerdas el sonido</span>
+      </button>
+      <button className="btn mode-btn" onClick={() => setMode('prod')}>
+        <span className="mode-btn__title">Escribir</span>
+        <span className="mode-btn__hint">Te damos el sonido → eliges la letra</span>
+      </button>
     </div>
   )
 }
