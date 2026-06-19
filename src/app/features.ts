@@ -1,5 +1,5 @@
 import { registerFeature } from '../core/plugin/registry'
-import { welcomeFeature } from '../features/welcome'
+import { alfabetoFeature } from '../features/alfabeto'
 
 /**
  * Punto ÚNICO donde se enchufan los features al shell.
@@ -8,5 +8,5 @@ import { welcomeFeature } from '../features/welcome'
  * registrarlo (una línea). Nada más cambia en el núcleo ni en la navegación.
  */
 export function registerFeatures(): void {
-  registerFeature(welcomeFeature)
+  registerFeature(alfabetoFeature)
 }

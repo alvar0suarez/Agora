@@ -12,13 +12,31 @@ export interface KvEntry {
   value: unknown
 }
 
+/**
+ * Estado persistido de una carta del sistema de repetición espaciada (SRS).
+ * Es genérico: lo usa cualquier feature (alfabeto, vocabulario, gramática…).
+ */
+export interface SrsRecord {
+  id: string
+  box: number
+  due: number
+  reps: number
+  lapses: number
+  lastReviewed: number | null
+}
+
 export class AgoraDB extends Dexie {
   kv!: Table<KvEntry, string>
+  srs!: Table<SrsRecord, string>
 
   constructor() {
     super('agora')
     this.version(1).stores({
       kv: '&key',
+    })
+    // v2: tabla de repetición espaciada (indexada por vencimiento `due`).
+    this.version(2).stores({
+      srs: '&id, due',
     })
   }
 }

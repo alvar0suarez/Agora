@@ -1,45 +1,63 @@
 # Roadmap de Agora
 
-> Documento vivo: el estado y las fases del proyecto. Se actualiza al cerrar cada
-> tarea relevante. El "qué" detallado de cada feature se decide con el dueño antes
-> de empezarla.
+> Documento vivo: estado y fases del proyecto. Se actualiza al cerrar cada tarea
+> relevante.
+
+## Qué es Agora
+
+App para **aprender a leer y escribir griego antiguo** (ático clásico) de forma
+interactiva, con métodos de eficacia probada (repetición espaciada, recuerdo
+activo, input comprensible) y gamificación ligera. Pronunciación **reconstruida
+ática** (referencia: *Vox Graeca*, W. S. Allen). Es para disfrutar, no para empollar.
 
 ## Estado actual
 
-**Fase 0 — esqueleto PWA verde.** ✅ Completada.
+**Fase 1 — Alfabeto.** En curso (paso **1a** completado).
+
+## El método (resumen)
+
+- **Repetición espaciada** + **recuerdo activo**: los dos pilares con más evidencia.
+- **Input comprensible / lectura graduada**: para leer de verdad (fases posteriores).
+- **Mnemotecnia + interleaving**: para fijar y no aburrir.
+- **Gamificación**: capa de motivación, anclada al recuerdo real (no a tocar botones).
 
 ## Fases
 
-### Fase 0 — Cimiento (hecho)
+### Fase 0 — Cimiento ✅
 
-Objetivo: una base sólida y verde sobre la que construir, sin funcionalidades aún.
+Esqueleto PWA local-first, arquitectura modular, docs.
 
-- [x] Proyecto Vite + React + TypeScript (estricto).
-- [x] PWA instalable y offline (`vite-plugin-pwa`).
-- [x] Núcleo: contrato `FeatureModule` + registro, almacenamiento (Dexie),
-      cifrado (WebCrypto), UI base.
-- [x] Shell que descubre features y construye la navegación.
-- [x] `CLAUDE.md` + `docs/` (principios, modo de colaboración).
-- [x] Build verde + commit.
+### Fase 1 — Alfabeto griego (en curso)
 
-Criterio de "verde": `npm run build` sin errores, manifest y service worker
-válidos, y el shell pinta el conjunto de features registrados.
+Leer y escribir las 24 letras desde cero, con SRS + gamificación ligera.
+Ver `docs/fase-1.md`.
 
-### Fase 1+ — Funcionalidades (por definir)
+- [x] **1a** — Motor SRS (`core/srs`) + 24 letras + sesión de reconocimiento.
+- [ ] **1b** — Producción (escribir/elegir la letra) + interleaving.
+- [ ] **1c** — Gamificación (XP, racha, dominio, resumen).
 
-Pendiente de sesión de diseño con el dueño: decidir las funcionalidades reales,
-cómo se usarán y qué contenidos manejan. Cada una se implementará como un feature
-en `src/features/`, una por sesión enfocada.
+### Fase 2 — Vocabulario núcleo
 
-Ideas / candidatas (sin compromiso, se rellenará al hablarlo):
+Palabras más frecuentes (lista de frecuencia) con SRS.
 
-- _(pendiente)_
+### Fase 3 — Lectura graduada
 
-## Notas de decisiones
+Frases reales un punto por encima del nivel (input comprensible).
 
-- **PWA en vez de Android nativo**: se desarrolla en Claude Code en la web (sin
-  dispositivo ni SDK), la seguridad requerida es ligera, y la PWA corre en Android
-  y se instala desde el móvil. Si en el futuro hiciera falta acceso nativo
-  profundo, la vía es envolver la PWA con Capacitor.
-- **Seguridad ligera**: WebCrypto + almacenamiento del dispositivo. Sin respaldo
-  por hardware (no es el caso de uso).
+### Fase 4 — Morfología
+
+Casos y verbos con drills inteligentes.
+
+## Mejoras futuras (apuntadas, sin fase)
+
+- **Audio** de pronunciación reconstruida (clips grabados; no hay buen TTS).
+- **Trazado a dedo** de las letras (escribir dibujándolas).
+- Algoritmo SRS más avanzado (tipo SM-2) si hiciera falta.
+
+## Decisiones
+
+- **PWA local-first** (no nativo): se desarrolla en Claude Code web, la seguridad
+  es ligera, corre en Android e instalable desde el móvil. Crecer hacia nativo =
+  envolver con Capacitor.
+- **Pronunciación reconstruida ática** y **dialecto ático clásico**.
+- **SRS en `core`** (lo comparten varios features); algoritmo Leitner v1, reemplazable.

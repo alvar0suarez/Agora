@@ -5,7 +5,10 @@
 
 ## Qué es
 
-App personal **local-first**, de un solo usuario, usada **desde el móvil
+App personal **local-first** para **aprender a leer y escribir griego antiguo**
+(ático clásico, pronunciación **reconstruida ática**) de forma interactiva, con
+métodos de eficacia probada (repetición espaciada, recuerdo activo, input
+comprensible) y gamificación ligera. De un solo usuario, usada **desde el móvil
 (Android)** como **PWA** instalable. Los datos viven en el dispositivo. La nube,
 si algún día la hay, será solo backup cifrado, nunca el cerebro. Desarrollada con
 Claude Code; el dueño es técnico pero no desarrollador de apps: dirige y revisa.
@@ -70,6 +73,7 @@ docs/         principios, modo de colaboración, roadmap
 ## Fases
 
 - **Fase 0** — esqueleto PWA verde + contrato + docs. ← hecho
-- **Fase 1+** — por definir con el dueño (funcionalidades reales).
+- **Fase 1** — alfabeto griego (SRS + recuerdo activo + gamificación). ← en curso
+- **Fase 2+** — vocabulario → lectura graduada → morfología.
 
 Ver `docs/roadmap.md`.
