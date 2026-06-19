@@ -33,8 +33,10 @@ Leer y escribir las 24 letras desde cero, con SRS + gamificación ligera.
 Ver `docs/fase-1.md`.
 
 - [x] **1a** — Motor SRS (`core/srs`) + 24 letras + sesión de reconocimiento.
-- [ ] **1b** — Producción (escribir/elegir la letra) + interleaving.
-- [ ] **1c** — Gamificación (XP, racha, dominio, resumen).
+- [x] **1b** — Producción: te damos el sonido → eliges el glifo (elección
+  múltiple). Cartas SRS separadas por dirección (`rec` / `prod`). Tests con Vitest.
+- [ ] **1c** — Gamificación (XP, racha, dominio, resumen) + interleaving (mezclar
+  reconocer/escribir en una misma sesión).
 
 ### Fase 2 — Vocabulario núcleo
 
@@ -61,3 +63,10 @@ Casos y verbos con drills inteligentes.
   envolver con Capacitor.
 - **Pronunciación reconstruida ática** y **dialecto ático clásico**.
 - **SRS en `core`** (lo comparten varios features); algoritmo Leitner v1, reemplazable.
+- **Datos del alfabeto en `core/greek`** (no en el feature): los comparten los
+  modos reconocer y escribir, y el contrato prohíbe que los features dependan
+  entre sí.
+- **Producción por elección múltiple**, no por teclado: la app es móvil y no hay
+  teclado griego cómodo. El trazado/escritura a dedo queda como mejora futura.
+- **Tests con Vitest** (`npm test`): lógica pura (SRS, opciones). La verificación
+  interactiva final en el móvil la hace el dueño.

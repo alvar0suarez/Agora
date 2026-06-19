@@ -26,6 +26,7 @@ Claude Code; el dueño es técnico pero no desarrollador de apps: dirige y revis
 - PWA: `vite-plugin-pwa` (Workbox) → instalable + offline.
 - Almacenamiento local: IndexedDB vía Dexie (`src/core/storage`).
 - Cifrado ligero: WebCrypto AES-GCM (`src/core/crypto`).
+- Tests: **Vitest** (`npm test`) para lógica pura (SRS, opciones…).
 - Versiones fijadas (lockfile commiteado) para reproducibilidad.
 
 ## Invariantes de seguridad (no negociables)
@@ -51,7 +52,7 @@ registro. Cero cambios en el núcleo.
 
 - Un cambio pequeño cada vez. Si la tarea no es trivial: primero PLAN en markdown
   y espera OK antes de implementar.
-- Tras cada cambio relevante: `npm run build` / `typecheck` verde, luego commit.
+- Tras cada cambio relevante: `npm test` + `npm run build`/`typecheck` verde, luego commit.
 - No añadir librerías nuevas sin avisar y justificar.
 - No tocar invariantes de seguridad ni el contrato de módulo sin avisar.
 - Si algo lleva 3-4 intentos sin funcionar, dilo y vuelve al último commit verde.
@@ -65,6 +66,8 @@ src/
     plugin/   contrato FeatureModule + registro
     storage/  Dexie (IndexedDB)
     crypto/   WebCrypto
+    srs/      repetición espaciada (Leitner v1)
+    greek/    datos del idioma compartidos (alfabeto…)
     ui/       componentes base
   features/   funcionalidades enchufables
 docs/         principios, modo de colaboración, roadmap
@@ -73,7 +76,7 @@ docs/         principios, modo de colaboración, roadmap
 ## Fases
 
 - **Fase 0** — esqueleto PWA verde + contrato + docs. ← hecho
-- **Fase 1** — alfabeto griego (SRS + recuerdo activo + gamificación). ← en curso
+- **Fase 1** — alfabeto griego. 1a (reconocer) ✅ · 1b (escribir) ✅ · 1c (gamificación) ← siguiente
 - **Fase 2+** — vocabulario → lectura graduada → morfología.
 
 Ver `docs/roadmap.md`.
