@@ -1,0 +1,17 @@
+name: data
+description: Drift (SQLite) database, DAOs and concrete repository
+  implementations. Drift deps land in the database milestone; boundary only now.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+environment:
+  sdk: ^3.8.0
+  flutter: ">=3.27.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  core: ^0.1.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^9.0.0

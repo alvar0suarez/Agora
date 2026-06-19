@@ -1,0 +1,11 @@
+# json_serializable configuration for this package.
+#
+# `explicit_to_json` makes generated `toJson()` call `.toJson()` on nested
+# model objects (e.g. ReviewCard.fsrsState) instead of leaving them as raw
+# objects. Without it, round-tripping a model with nested models fails.
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          explicit_to_json: true

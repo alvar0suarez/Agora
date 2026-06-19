@@ -1,0 +1,17 @@
+name: mobile
+description: Agora mobile entry point.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+environment:
+  sdk: ^3.8.0
+  flutter: ">=3.27.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  core: ^0.1.0
+  ui_components: ^0.1.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^9.0.0

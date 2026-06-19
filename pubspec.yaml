@@ -1,0 +1,21 @@
+name: agora_workspace
+publish_to: none
+
+# Dart pub workspace: every package listed here resolves together against a
+# single shared lockfile, and local packages reference each other by name
+# without manual path dependencies. See https://dart.dev/tools/pub/workspaces
+environment:
+  sdk: ^3.8.0
+
+workspace:
+  - packages/core
+  - packages/srs_engine
+  - packages/ai_service
+  - packages/audio_service
+  - packages/data
+  - packages/ui_components
+  - apps/mobile
+  - apps/desktop
+
+dev_dependencies:
+  melos: ^7.0.0

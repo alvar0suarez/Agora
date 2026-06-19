@@ -1,0 +1,29 @@
+name: agora
+
+# Melos orchestrates commands across every package in the workspace.
+# Run e.g. `melos run analyze` or `melos run test` from the repo root.
+
+scripts:
+  analyze:
+    description: Run `dart analyze` across all packages, failing on warnings.
+    exec: dart analyze --fatal-infos .
+
+  test:
+    description: Run unit tests in every package that has a test/ folder.
+    # Pure-Dart packages use `dart test`; Flutter packages use `flutter test`.
+    # Melos picks the right runner per package via the `flutter` filter.
+    run: melos exec --dir-exists=test -- "dart test"
+
+  test:flutter:
+    description: Run tests in Flutter packages only.
+    run: melos exec --flutter --dir-exists=test -- "flutter test"
+
+  generate:
+    description: Run build_runner codegen (freezed / json / drift) where needed.
+    exec: dart run build_runner build
+    packageFilters:
+      dependsOn: build_runner
+
+  format:
+    description: Format all Dart code.
+    exec: dart format .

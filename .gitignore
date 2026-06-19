@@ -1,0 +1,27 @@
+# --- Dart / Flutter tooling artifacts (regenerated, never committed) ---
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.pub-cache/
+.pub/
+**/doc/api/
+
+# --- IDE / OS ---
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# --- Secrets: NEVER commit keys, tokens or .env files (principios §2) ---
+*.env
+.env*
+**/secrets.dart
+**/*secret*
+google-services.json
+GoogleService-Info.plist
+
+# NOTE: pubspec.lock IS committed on purpose (reproducibility, principios §3).
+# NOTE: generated *.freezed.dart / *.g.dart ARE committed so a fresh clone
+#       compiles without running build_runner first. Revisit if diffs get noisy.

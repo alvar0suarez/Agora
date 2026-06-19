@@ -1,0 +1,14 @@
+name: srs_engine
+description: Pure-Dart FSRS scheduling engine. The `fsrs` package and scheduler
+  logic land in the SRS milestone; for now this package only defines its
+  boundary and depends on the domain models in `core`.
+publish_to: none
+version: 0.1.0
+resolution: workspace
+environment:
+  sdk: ^3.8.0
+dependencies:
+  core: ^0.1.0
+dev_dependencies:
+  test: ^1.25.0
+  very_good_analysis: ^9.0.0

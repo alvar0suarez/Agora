@@ -1,0 +1,24 @@
+# Root linting rules for the whole Agora workspace.
+# We use `very_good_analysis` — a strict, opinionated rule set that catches
+# common mistakes and enforces a consistent style across every package.
+# Individual packages can override or relax rules in their own
+# analysis_options.yaml if they ever need to.
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  exclude:
+    # Generated code (freezed / json_serializable / drift) is excluded from
+    # linting — we don't hand-edit it, so style warnings there are noise.
+    - "**/*.freezed.dart"
+    - "**/*.g.dart"
+    - "**/*.gen.dart"
+
+linter:
+  rules:
+    # Public packages will add documentation incrementally; don't fail the
+    # whole analysis for missing doc comments while we are scaffolding.
+    public_member_api_docs: false
