@@ -6,7 +6,12 @@ import { VitePWA } from 'vite-plugin-pwa'
 // Configuración de Vite + PWA.
 // La capa PWA es lo que hace a Agora instalable en Android y capaz de
 // funcionar sin conexión (offline).
-export default defineConfig({
+//
+// `base`: en producción la app se publica en GitHub Pages bajo
+// `https://<usuario>.github.io/Agora/`, así que las rutas cuelgan de `/Agora/`.
+// En desarrollo (`npm run dev`) se queda en la raíz `/` por comodidad.
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/Agora/' : '/',
   plugins: [
     react(),
     VitePWA({
@@ -21,8 +26,8 @@ export default defineConfig({
         background_color: '#0f172a',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
-        scope: '/',
+        // start_url y scope se derivan automáticamente de `base` (no los fijamos
+        // a '/', que rompería la instalación bajo /Agora/ en GitHub Pages).
         icons: [
           {
             src: 'icons/icon.svg',
@@ -43,4 +48,4 @@ export default defineConfig({
     environment: 'node',
     include: ['src/**/*.test.ts'],
   },
-})
+}))
