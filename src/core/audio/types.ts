@@ -33,6 +33,8 @@ export interface AudioService {
   ): Promise<void>
   /** Pronuncia una palabra del vocabulario por su id (clip en audio/vocab). */
   pronounceWord(id: string, opts?: SpeakOptions): Promise<void>
+  /** Pronuncia un aforismo por su id (clip en audio/aphorisms). */
+  pronounceAphorism(id: string, opts?: SpeakOptions): Promise<void>
   /** Corta cualquier reproducción en curso. */
   stop(): void
 }

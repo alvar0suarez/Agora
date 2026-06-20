@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import { APHORISMS, vocabById } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
+import { audio } from '../../core/audio'
+
+/** Aforismos con clip de voz generado (offline). */
+const AUDIO_IDS = new Set([
+  'gnothi-seauton',
+  'panta-rhei',
+  'meden-agan',
+  'speude-bradeos',
+  'hen-oida',
+])
 
 /**
  * Lectura (semilla de la Fase 3): input comprensible con aforismos célebres.
@@ -32,6 +42,15 @@ export function LecturaScreen() {
       </div>
 
       <p className="aphorism__greek">{aphorism.greek}</p>
+      {AUDIO_IDS.has(aphorism.id) ? (
+        <button
+          type="button"
+          className="btn btn--ghost"
+          onClick={() => void audio.pronounceAphorism(aphorism.id)}
+        >
+          🔊 Oír
+        </button>
+      ) : null}
       <p className="aphorism__source">{aphorism.source}</p>
 
       {!revealed ? (
