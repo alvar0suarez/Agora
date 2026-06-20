@@ -74,6 +74,7 @@ export function useMorphDrill() {
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
   const [queue, setQueue] = useState<string[]>([])
+  const [total, setTotal] = useState(0)
   const [stats, setStats] = useState<DrillStats>({
     reviewed: 0,
     recalled: 0,
@@ -105,8 +106,10 @@ export function useMorphDrill() {
       }
     }
 
+    const freshLimited = fresh.slice(0, NEW_PER_SESSION)
     setStates(byTask)
-    setQueue([...due, ...fresh.slice(0, NEW_PER_SESSION)])
+    setQueue([...due, ...freshLimited])
+    setTotal(due.length + freshLimited.length)
     setStats({
       reviewed: 0,
       recalled: 0,
@@ -167,6 +170,7 @@ export function useMorphDrill() {
     done: !loading && queue.length === 0,
     current,
     remaining: queue.length,
+    total,
     grade,
     restart: build,
     stats,

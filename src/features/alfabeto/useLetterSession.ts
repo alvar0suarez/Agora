@@ -79,6 +79,7 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
   const [queue, setQueue] = useState<SessionCard[]>([])
+  const [total, setTotal] = useState(0)
   const [stats, setStats] = useState<SessionStats>({
     reviewed: 0,
     recalled: 0,
@@ -125,6 +126,7 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
 
     setStates(byCard)
     setQueue([...due, ...fresh])
+    setTotal(due.length + fresh.length)
     setStats({
       reviewed: 0,
       recalled: 0,
@@ -191,6 +193,7 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
     current,
     currentMode,
     remaining: queue.length,
+    total,
     grade,
     restart: build,
     stats,

@@ -73,6 +73,7 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
   const [queue, setQueue] = useState<VocabCard[]>([])
+  const [total, setTotal] = useState(0)
   const [stats, setStats] = useState<VocabStats>({
     reviewed: 0,
     recalled: 0,
@@ -117,6 +118,7 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
 
     setStates(byCard)
     setQueue([...due, ...fresh])
+    setTotal(due.length + fresh.length)
     setStats({
       reviewed: 0,
       recalled: 0,
@@ -184,6 +186,7 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
     current,
     currentMode,
     remaining: queue.length,
+    total,
     grade,
     restart: build,
     stats,
