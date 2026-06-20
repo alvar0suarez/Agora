@@ -148,6 +148,16 @@ body {
   color: #dcfce7;
 }
 
+/* Control secundario (p. ej. «oír de nuevo»): discreto, sin relleno fuerte. */
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--accent);
+  padding: 0.4rem 0.6rem;
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+}
+
 /* Feature: alfabeto */
 .alfabeto {
   display: flex;
