@@ -43,6 +43,9 @@ B2) miden **comprensión lectora**, no producción.
 **Fuera de alcance:** producción libre y conversación (la app es de lectura y de
 escritura por reconocimiento, no de redacción).
 
+**Fuentes del contenido:** ver `docs/fuentes.md` — Perseus Digital Library
+(textos, léxico LSJ, gramática de Smyth, morfología) y *Vox Graeca* (pronunciación).
+
 ## Estado actual
 
 **Fase 1 — Alfabeto.** Pasos **1a** (reconocer), **1b** (escribir) y **1c**
