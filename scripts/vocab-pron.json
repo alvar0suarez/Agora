@@ -1,0 +1,12 @@
+{
+  "eimi":      { "lemma": "εἰμί",     "ipa": "eːˈmi" },
+  "echo":      { "lemma": "ἔχω",      "ipa": "ˈekʰɔː" },
+  "lego":      { "lemma": "λέγω",     "ipa": "ˈlegɔː" },
+  "logos":     { "lemma": "λόγος",    "ipa": "ˈlogos" },
+  "anthropos": { "lemma": "ἄνθρωπος", "ipa": "ˈantʰrɔːpos" },
+  "psyche":    { "lemma": "ψυχή",     "ipa": "psyˈkʰɛː" },
+  "sophia":    { "lemma": "σοφία",    "ipa": "soˈpʰia" },
+  "theos":     { "lemma": "θεός",     "ipa": "tʰeˈos" },
+  "arete":     { "lemma": "ἀρετή",    "ipa": "areˈtɛː" },
+  "physis":    { "lemma": "φύσις",    "ipa": "ˈpʰysis" }
+}
