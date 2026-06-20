@@ -72,10 +72,10 @@ export const APHORISMS: Aphorism[] = [
     source: 'Sócrates (tradición)',
     words: [
       { gr: 'ἓν', gloss: 'una (cosa)' },
-      { gr: 'οἶδα', gloss: 'sé' },
+      { gr: 'οἶδα', gloss: 'sé', lemmaId: 'oida' },
       { gr: 'ὅτι', gloss: 'que' },
       { gr: 'οὐδὲν', gloss: 'nada' },
-      { gr: 'οἶδα', gloss: 'sé' },
+      { gr: 'οἶδα', gloss: 'sé', lemmaId: 'oida' },
     ],
   },
   {
@@ -95,7 +95,7 @@ export const APHORISMS: Aphorism[] = [
     source: 'Hipócrates, Aforismos',
     words: [
       { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
-      { gr: 'βίος', gloss: 'vida' },
+      { gr: 'βίος', gloss: 'vida', lemmaId: 'bios' },
       { gr: 'βραχύς', gloss: 'breve, corto' },
       { gr: 'ἡ', gloss: 'la (artículo)', lemmaId: 'ho' },
       { gr: 'δὲ', gloss: 'y, mas (contraste)' },
@@ -111,7 +111,7 @@ export const APHORISMS: Aphorism[] = [
     words: [
       { gr: 'ὁ', gloss: 'la (artículo)', lemmaId: 'ho' },
       { gr: 'ἀνεξέταστος', gloss: 'no examinada, sin reflexión' },
-      { gr: 'βίος', gloss: 'vida' },
+      { gr: 'βίος', gloss: 'vida', lemmaId: 'bios' },
       { gr: 'οὐ', gloss: 'no', lemmaId: 'ou' },
       { gr: 'βιωτὸς', gloss: 'digna de vivirse, vivible' },
       { gr: 'ἀνθρώπῳ', gloss: 'para el hombre', lemmaId: 'anthropos' },
@@ -148,7 +148,7 @@ export const APHORISMS: Aphorism[] = [
     source: 'Proverbio griego',
     words: [
       { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
-      { gr: 'χρόνος', gloss: 'tiempo' },
+      { gr: 'χρόνος', gloss: 'tiempo', lemmaId: 'chronos' },
       { gr: 'πάντα', gloss: 'todas las cosas, todo', lemmaId: 'pas' },
       { gr: 'λύει', gloss: 'resuelve, disuelve' },
     ],
