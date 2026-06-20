@@ -37,6 +37,25 @@ body {
 .app__header {
   padding: 1.25rem 1.25rem 0.75rem;
   border-bottom: 1px solid var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.app__audio {
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--surface-2);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.app__audio[aria-pressed='true'] {
+  border-color: var(--accent);
 }
 
 .app__title {

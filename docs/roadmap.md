@@ -29,6 +29,12 @@ Esto fija el nivel y orienta las fases siguientes:
   participio e infinitivo —omnipresentes en filosofía—, formas verbales comunes).
   No gramática exhaustiva.
 
+**Motivaciones concretas (del dueño):** leer griego "en la vida real" (una
+inscripción en un museo, una frase en un libro), entender las citas filosóficas
+sin traducción, y **aprender mejor el español a través del griego** (etimologías:
+cada palabra muestra sus derivados españoles). A futuro, una app hermana de
+**latín** reutilizaría esta misma metodología y núcleo (SRS, progreso, quiz).
+
 **Horizonte de progreso:** el sistema de niveles (XP en `core/progress`) está
 calibrado para un arco largo —de meses/años— hasta una banda de **lectura ~B2**
 (leer prosa ática y filosofía con apoyo). Las bandas (Cimientos → A1 → A2 → B1 →
@@ -111,3 +117,6 @@ Casos y verbos con drills inteligentes.
   teclado griego cómodo. El trazado/escritura a dedo queda como mejora futura.
 - **Tests con Vitest** (`npm test`): lógica pura (SRS, opciones). La verificación
   interactiva final en el móvil la hace el dueño.
+- **Audio silenciado por defecto** (la voz v1 con eSpeak es robótica): hay un
+  interruptor 🔇/🔊 en la cabecera para activarlo; la preferencia se guarda. El
+  audio NO se elimina (será funcionalidad real con voz humana en el futuro).

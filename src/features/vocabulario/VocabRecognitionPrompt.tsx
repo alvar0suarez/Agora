@@ -41,6 +41,11 @@ export function VocabRecognitionPrompt({
             <p className="answer__line">
               <strong>{word.pos}</strong>
             </p>
+            {word.derivados && word.derivados.length > 0 ? (
+              <p className="answer__line">
+                En español: {word.derivados.join(', ')}
+              </p>
+            ) : null}
           </Card>
           <div className="grade">
             <button className="btn btn--again" onClick={() => grade('again')}>
