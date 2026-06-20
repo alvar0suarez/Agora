@@ -115,8 +115,10 @@ Casos y verbos con drills inteligentes.
 - **Datos del alfabeto en `core/greek`** (no en el feature): los comparten los
   modos reconocer y escribir, y el contrato prohíbe que los features dependan
   entre sí.
-- **Producción por elección múltiple**, no por teclado: la app es móvil y no hay
-  teclado griego cómodo. El trazado/escritura a dedo queda como mejora futura.
+- **Producción por elección múltiple Y por tecleo**: además de elegir, se puede
+  **escribir** la palabra con un **teclado griego en pantalla** (`core/ui`), que
+  resuelve la falta de teclado griego en el móvil. La comparación ignora acentos
+  y mayúsculas (`core/greek/normalize`). El trazado a dedo sigue siendo futuro.
 - **Tests con Vitest** (`npm test`): lógica pura (SRS, opciones). La verificación
   interactiva final en el móvil la hace el dueño.
 - **Audio silenciado por defecto** (la voz v1 con eSpeak es robótica): hay un

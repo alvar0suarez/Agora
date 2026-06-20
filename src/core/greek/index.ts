@@ -5,3 +5,4 @@
 export * from './letters'
 export * from './vocab'
 export * from './aphorisms'
+export * from './normalize'

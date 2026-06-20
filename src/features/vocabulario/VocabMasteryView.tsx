@@ -3,8 +3,10 @@ import { VOCAB } from '../../core/greek'
 import { loadStates, masteryLevel, type MasteryLevel } from '../../core/srs'
 import { Card } from '../../core/ui/Card'
 
-/** Clave SRS de una palabra en una dirección (igual que en useVocabSession). */
-const cardId = (mode: 'rec' | 'prod', id: string) => `vocab:${mode}:${id}`
+/** Direcciones que cuentan para el dominio (las mismas claves que la sesión). */
+const DIRS = ['rec', 'prod', 'type'] as const
+const cardId = (mode: (typeof DIRS)[number], id: string) =>
+  `vocab:${mode}:${id}`
 
 /**
  * Vista de dominio del vocabulario: cada palabra con su nivel, DERIVADO del SRS
@@ -17,13 +19,13 @@ export function VocabMasteryView({ onExit }: { onExit: () => void }) {
   useEffect(() => {
     let alive = true
     void (async () => {
-      const ids = VOCAB.flatMap((v) => [cardId('rec', v.id), cardId('prod', v.id)])
+      const ids = VOCAB.flatMap((v) => DIRS.map((d) => cardId(d, v.id)))
       const states = await loadStates(ids)
       const map = new Map<string, MasteryLevel>()
       for (const v of VOCAB) {
-        const boxes = [cardId('rec', v.id), cardId('prod', v.id)]
-          .map((id) => states.get(id)?.box)
-          .filter((b): b is number => b !== undefined)
+        const boxes = DIRS.map((d) => states.get(cardId(d, v.id))?.box).filter(
+          (b): b is number => b !== undefined,
+        )
         map.set(v.id, masteryLevel(boxes))
       }
       if (alive) {

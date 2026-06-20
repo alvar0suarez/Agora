@@ -4,7 +4,7 @@ import { VocabSessionView } from './VocabSessionView'
 import { VocabMasteryView } from './VocabMasteryView'
 import type { VocabMode } from './useVocabSession'
 
-type Screen = 'menu' | 'mixed' | 'rec' | 'prod' | 'mastery'
+type Screen = 'menu' | 'mixed' | 'rec' | 'prod' | 'type' | 'mastery'
 
 /** Direcciones de la sesión mixta (constante: referencia estable). */
 const MIXED_MODES: VocabMode[] = ['rec', 'prod']
@@ -24,6 +24,7 @@ export function VocabularioScreen() {
     return <VocabSessionView modes={MIXED_MODES} onExit={back} />
   if (screen === 'rec') return <VocabSessionView modes="rec" onExit={back} />
   if (screen === 'prod') return <VocabSessionView modes="prod" onExit={back} />
+  if (screen === 'type') return <VocabSessionView modes="type" onExit={back} />
   if (screen === 'mastery') return <VocabMasteryView onExit={back} />
 
   return (
@@ -47,6 +48,10 @@ export function VocabularioScreen() {
       <button className="btn mode-btn" onClick={() => setScreen('prod')}>
         <span className="mode-btn__title">Escribir</span>
         <span className="mode-btn__hint">Te damos el sentido → eliges la palabra</span>
+      </button>
+      <button className="btn mode-btn" onClick={() => setScreen('type')}>
+        <span className="mode-btn__title">Teclear</span>
+        <span className="mode-btn__hint">Te damos el sentido → escribes la palabra</span>
       </button>
       <button className="btn mode-btn" onClick={() => setScreen('mastery')}>
         <span className="mode-btn__title">Dominio</span>
