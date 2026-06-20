@@ -84,3 +84,13 @@ docs/         principios, modo de colaboración, roadmap
 - **Fase 2+** — vocabulario → lectura graduada → morfología.
 
 Ver `docs/roadmap.md`.
+
+## Ecosistema
+
+Esta app forma parte de mi constelación de apps personales. El **mapa canónico**
+(todas las apps, qué exponen y cómo enlazan) vive en `.claude/ecosistema.md`,
+sincronizado desde `alvar0suarez/claude-starter`. Hub: **Nous**.
+
+`.claude/ecosistema.md` es la **fuente de verdad del ecosistema**: si algo en este
+repo lo contradice, **gana el mapa**. Esta app declara lo suyo en `.claude/ficha.md`
+(eso sube al mapa); para saber de las hermanas, lee `.claude/ecosistema.md`.
