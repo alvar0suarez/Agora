@@ -46,7 +46,7 @@ export function LecturaScreen() {
         <button
           type="button"
           className="btn btn--ghost"
-          onClick={() => void audio.pronounceAphorism(aphorism.id)}
+          onClick={() => void audio.pronounceAphorism(aphorism.id, { force: true })}
         >
           🔊 Oír
         </button>

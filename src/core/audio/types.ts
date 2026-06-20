@@ -12,6 +12,12 @@ export type Utterance = 'sound' | 'name'
 export interface SpeakOptions {
   /** Velocidad relativa de habla. */
   rate?: number
+  /**
+   * Reproducir aunque el audio esté silenciado. Para botones EXPLÍCITOS de "Oír":
+   * si el usuario pulsa para escuchar, suena; el interruptor solo silencia el
+   * sonido AUTOMÁTICO.
+   */
+  force?: boolean
 }
 
 /**

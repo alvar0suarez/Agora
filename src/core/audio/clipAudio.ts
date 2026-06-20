@@ -33,19 +33,20 @@ class ClipAudioService implements AudioService {
     what: Utterance = 'sound',
     opts?: SpeakOptions,
   ): Promise<void> {
-    if (!isAudioEnabled()) return // el usuario tiene el audio silenciado
+    // Silenciado solo afecta al sonido AUTOMÁTICO; con `force` (botón explícito) suena.
+    if (!isAudioEnabled() && !opts?.force) return
     if (what !== 'sound') return // por ahora solo hay clips del sonido
     await this.playUrl(clipUrl(letter.id), opts)
   }
 
   async pronounceWord(id: string, opts?: SpeakOptions): Promise<void> {
-    if (!isAudioEnabled()) return // silenciado
+    if (!isAudioEnabled() && !opts?.force) return
     // Si la palabra aún no tiene clip generado, playUrl resuelve sin sonar.
     await this.playUrl(wordClipUrl(id), opts)
   }
 
   async pronounceAphorism(id: string, opts?: SpeakOptions): Promise<void> {
-    if (!isAudioEnabled()) return // silenciado
+    if (!isAudioEnabled() && !opts?.force) return
     await this.playUrl(aphorismClipUrl(id), opts)
   }
 

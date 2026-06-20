@@ -30,7 +30,7 @@ export function VocabRecognitionPrompt({
       <button
         type="button"
         className="btn btn--ghost"
-        onClick={() => void audio.pronounceWord(word.id)}
+        onClick={() => void audio.pronounceWord(word.id, { force: true })}
       >
         🔊 Oír
       </button>
