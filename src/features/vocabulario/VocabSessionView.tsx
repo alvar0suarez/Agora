@@ -1,6 +1,7 @@
 import { useVocabSession, type VocabMode } from './useVocabSession'
 import { VocabRecognitionPrompt } from './VocabRecognitionPrompt'
 import { VocabProductionPrompt } from './VocabProductionPrompt'
+import { VocabTypingPrompt } from './VocabTypingPrompt'
 import { VocabSummary } from './VocabSummary'
 
 /**
@@ -32,12 +33,18 @@ export function VocabSessionView({
           ← Menú
         </button>
         <span className="alfabeto__progress">
-          {s.currentMode === 'rec' ? 'Significado' : 'Palabra'} · Quedan{' '}
-          {s.remaining}
+          {s.currentMode === 'rec'
+            ? 'Significado'
+            : s.currentMode === 'type'
+              ? 'Escribir'
+              : 'Palabra'}{' '}
+          · Quedan {s.remaining}
         </span>
       </div>
       {s.currentMode === 'rec' ? (
         <VocabRecognitionPrompt word={word} onGrade={s.grade} />
+      ) : s.currentMode === 'type' ? (
+        <VocabTypingPrompt word={word} onGrade={s.grade} />
       ) : (
         <VocabProductionPrompt word={word} onGrade={s.grade} />
       )}

@@ -25,10 +25,11 @@ const NEW_PER_SESSION = 8
 /**
  * Dirección del repaso de una palabra:
  *  - `rec` (reconocer): ves la palabra griega y recuerdas su significado.
- *  - `prod` (producir): ves el significado y eliges la palabra griega.
+ *  - `prod` (producir): ves el significado y ELIGES la palabra griega.
+ *  - `type` (teclear): ves el significado y ESCRIBES la palabra griega.
  * Cada dirección es una carta SRS separada.
  */
-export type VocabMode = 'rec' | 'prod'
+export type VocabMode = 'rec' | 'prod' | 'type'
 
 /** Una carta de la cola: una palabra en una dirección concreta. */
 interface VocabCard {
@@ -145,12 +146,14 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
       const next = review(prev, g, now)
       void saveState(key, next)
 
-      // Gamificación anclada al recuerdo real: XP solo al acertar recordando
-      // (grade 'good' en reconocimiento). La actividad alimenta la racha diaria.
+      // Gamificación anclada al recuerdo real: XP al acertar PRODUCIENDO de
+      // memoria — reconocer el sentido ('rec') o escribir la palabra ('type').
+      // 'prod' (elección múltiple) no da XP por ser reconocimiento asistido.
       let gainedXp = 0
       let newStreak: number | null = null
       let newTotalXp: number | null = null
-      if (g === 'good' && currentCard.dir === 'rec' && progress.current) {
+      const earnsXp = currentCard.dir === 'rec' || currentCard.dir === 'type'
+      if (g === 'good' && earnsXp && progress.current) {
         const withActivity = registerActivity(progress.current, dayIndex(now))
         const updated = addXp(withActivity, XP_PER_RECALL)
         progress.current = updated
