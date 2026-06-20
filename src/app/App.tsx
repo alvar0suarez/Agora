@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getFeatures } from '../core/plugin/registry'
 import { useAudioEnabled, loadAudioSetting } from '../core/settings'
 import { requestPersistentStorage } from '../core/storage/persist'
+import { NavigationProvider } from '../core/ui/navigation'
 import { registerFeatures } from './features'
 
 // Registramos los features una sola vez, al cargar el módulo del shell.
@@ -43,13 +44,15 @@ export function App() {
       </header>
 
       <main className="app__main">
-        {active ? (
-          <active.Screen />
-        ) : (
-          <p className="empty">
-            Aún no hay funcionalidades. Las crearemos juntos.
-          </p>
-        )}
+        <NavigationProvider goTo={setActiveId}>
+          {active ? (
+            <active.Screen />
+          ) : (
+            <p className="empty">
+              Aún no hay funcionalidades. Las crearemos juntos.
+            </p>
+          )}
+        </NavigationProvider>
       </main>
 
       {features.length > 0 ? (
