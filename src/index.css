@@ -75,6 +75,14 @@ body {
   white-space: nowrap;
 }
 
+.app__version {
+  padding: 0.4rem 1.25rem calc(0.4rem + env(safe-area-inset-bottom));
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-align: center;
+  opacity: 0.7;
+}
+
 .nav-btn--active {
   background: var(--accent);
   color: #04293a;

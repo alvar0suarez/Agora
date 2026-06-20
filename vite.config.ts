@@ -10,8 +10,15 @@ import { VitePWA } from 'vite-plugin-pwa'
 // `base`: en producción la app se publica en GitHub Pages bajo
 // `https://<usuario>.github.io/Agora/`, así que las rutas cuelgan de `/Agora/`.
 // En desarrollo (`npm run dev`) se queda en la raíz `/` por comodidad.
+// Identificador de build visible en la app (pie de página). Sirve para saber,
+// desde el móvil, si la PWA está sirviendo la última versión o una cacheada.
+const buildId = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+
 export default defineConfig(({ command }) => ({
   base: command === 'build' ? '/Agora/' : '/',
+  define: {
+    __BUILD_ID__: JSON.stringify(buildId),
+  },
   plugins: [
     react(),
     VitePWA({
