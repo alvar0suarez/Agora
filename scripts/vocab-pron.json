@@ -1,12 +1,12 @@
 {
-  "eimi":      { "lemma": "εἰμί",     "ipa": "eːˈmi" },
-  "echo":      { "lemma": "ἔχω",      "ipa": "ˈekʰɔː" },
-  "lego":      { "lemma": "λέγω",     "ipa": "ˈlegɔː" },
-  "logos":     { "lemma": "λόγος",    "ipa": "ˈlogos" },
-  "anthropos": { "lemma": "ἄνθρωπος", "ipa": "ˈantʰrɔːpos" },
-  "psyche":    { "lemma": "ψυχή",     "ipa": "psyˈkʰɛː" },
-  "sophia":    { "lemma": "σοφία",    "ipa": "soˈpʰia" },
-  "theos":     { "lemma": "θεός",     "ipa": "tʰeˈos" },
-  "arete":     { "lemma": "ἀρετή",    "ipa": "areˈtɛː" },
-  "physis":    { "lemma": "φύσις",    "ipa": "ˈpʰysis" }
+  "eimi":      { "lemma": "εἰμί",     "ipa": "eːˈmi",        "phon": "e:mi" },
+  "echo":      { "lemma": "ἔχω",      "ipa": "ˈekʰɔː",       "phon": "ek_#O:" },
+  "lego":      { "lemma": "λέγω",     "ipa": "ˈlegɔː",       "phon": "legO:" },
+  "logos":     { "lemma": "λόγος",    "ipa": "ˈlogos",       "phon": "logos" },
+  "anthropos": { "lemma": "ἄνθρωπος", "ipa": "ˈantʰrɔːpos",  "phon": "ant_#RO:pos" },
+  "psyche":    { "lemma": "ψυχή",     "ipa": "psyˈkʰɛː",     "phon": "psyk_#E:" },
+  "sophia":    { "lemma": "σοφία",    "ipa": "soˈpʰia",      "phon": "sop_#ia" },
+  "theos":     { "lemma": "θεός",     "ipa": "tʰeˈos",       "phon": "t_#eos" },
+  "arete":     { "lemma": "ἀρετή",    "ipa": "areˈtɛː",      "phon": "aRetE:" },
+  "physis":    { "lemma": "φύσις",    "ipa": "ˈpʰysis",      "phon": "p_#ysis" }
 }

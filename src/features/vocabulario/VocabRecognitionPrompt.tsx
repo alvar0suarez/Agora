@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Card } from '../../core/ui/Card'
+import { audio } from '../../core/audio'
 import type { VocabEntry } from '../../core/greek'
 import type { Grade } from '../../core/srs'
 
@@ -26,6 +27,13 @@ export function VocabRecognitionPrompt({
       <div className="glyph">
         <span className="glyph__lower">{word.lemma}</span>
       </div>
+      <button
+        type="button"
+        className="btn btn--ghost"
+        onClick={() => void audio.pronounceWord(word.id)}
+      >
+        🔊 Oír
+      </button>
 
       {!revealed ? (
         <>
