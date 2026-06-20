@@ -535,3 +535,10 @@ body {
   color: var(--muted);
   font-size: 0.85rem;
 }
+
+/* Inicio: progreso y contenido de un vistazo. */
+.inicio {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
