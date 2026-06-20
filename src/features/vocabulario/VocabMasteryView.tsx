@@ -1,41 +1,30 @@
 import { useEffect, useState } from 'react'
-import { LETTERS } from '../../core/greek'
+import { VOCAB } from '../../core/greek'
 import { loadStates, masteryLevel, type MasteryLevel } from '../../core/srs'
 import { Card } from '../../core/ui/Card'
-import { cardId } from './useLetterSession'
 
-/** Etiqueta legible de cada nivel de dominio. */
-const LEVEL_LABEL: Record<MasteryLevel, string> = {
-  0: 'Sin empezar',
-  1: 'Aprendiendo',
-  2: 'Frágil',
-  3: 'En camino',
-  4: 'Casi',
-  5: 'Dominada',
-}
+/** Clave SRS de una palabra en una dirección (igual que en useVocabSession). */
+const cardId = (mode: 'rec' | 'prod', id: string) => `vocab:${mode}:${id}`
 
 /**
- * Vista de dominio: las 24 letras con su nivel, DERIVADO del SRS (la caja más
- * baja entre reconocer y escribir). Solo lee; no modifica nada.
+ * Vista de dominio del vocabulario: cada palabra con su nivel, DERIVADO del SRS
+ * (la caja más baja entre reconocer y escribir). Solo lee; no modifica nada.
  */
-export function MasteryView({ onExit }: { onExit: () => void }) {
+export function VocabMasteryView({ onExit }: { onExit: () => void }) {
   const [loading, setLoading] = useState(true)
   const [levels, setLevels] = useState<Map<string, MasteryLevel>>(new Map())
 
   useEffect(() => {
     let alive = true
     void (async () => {
-      const ids = LETTERS.flatMap((l) => [
-        cardId('rec', l.id),
-        cardId('prod', l.id),
-      ])
+      const ids = VOCAB.flatMap((v) => [cardId('rec', v.id), cardId('prod', v.id)])
       const states = await loadStates(ids)
       const map = new Map<string, MasteryLevel>()
-      for (const l of LETTERS) {
-        const boxes = [cardId('rec', l.id), cardId('prod', l.id)]
+      for (const v of VOCAB) {
+        const boxes = [cardId('rec', v.id), cardId('prod', v.id)]
           .map((id) => states.get(id)?.box)
           .filter((b): b is number => b !== undefined)
-        map.set(l.id, masteryLevel(boxes))
+        map.set(v.id, masteryLevel(boxes))
       }
       if (alive) {
         setLevels(map)
@@ -49,24 +38,22 @@ export function MasteryView({ onExit }: { onExit: () => void }) {
 
   return (
     <div className="mastery">
-      <Card title="Dominio del alfabeto">
-        <p>Tu nivel por letra, según lo bien que la recuerdas (leer y escribir).</p>
+      <Card title="Dominio del vocabulario">
+        <p>Tu nivel por palabra, según lo bien que la recuerdas (leer y escribir).</p>
       </Card>
 
       {loading ? (
         <p>Cargando…</p>
       ) : (
-        <ul className="mastery-grid">
-          {LETTERS.map((l) => {
-            const level = levels.get(l.id) ?? 0
+        <ul className="vocab-mastery">
+          {VOCAB.map((v) => {
+            const level = levels.get(v.id) ?? 0
             return (
-              <li
-                key={l.id}
-                className="mastery-cell"
-                data-level={level}
-                title={`${l.name} · ${LEVEL_LABEL[level]}`}
-              >
-                <span className="mastery-cell__glyph">{l.lower}</span>
+              <li key={v.id} className="vocab-mastery__row" data-level={level}>
+                <span className="vocab-mastery__word">
+                  <span className="vocab-mastery__lemma">{v.lemma}</span>
+                  <span className="vocab-mastery__gloss">{v.gloss}</span>
+                </span>
                 <span className="mastery-cell__bar" aria-hidden="true">
                   {[1, 2, 3, 4, 5].map((n) => (
                     <span

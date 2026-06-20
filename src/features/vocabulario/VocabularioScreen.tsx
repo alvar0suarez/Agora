@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Card } from '../../core/ui/Card'
 import { VocabSessionView } from './VocabSessionView'
+import { VocabMasteryView } from './VocabMasteryView'
 import type { VocabMode } from './useVocabSession'
 
-type Screen = 'menu' | 'mixed' | 'rec' | 'prod'
+type Screen = 'menu' | 'mixed' | 'rec' | 'prod' | 'mastery'
 
 /** Direcciones de la sesión mixta (constante: referencia estable). */
 const MIXED_MODES: VocabMode[] = ['rec', 'prod']
@@ -23,6 +24,7 @@ export function VocabularioScreen() {
     return <VocabSessionView modes={MIXED_MODES} onExit={back} />
   if (screen === 'rec') return <VocabSessionView modes="rec" onExit={back} />
   if (screen === 'prod') return <VocabSessionView modes="prod" onExit={back} />
+  if (screen === 'mastery') return <VocabMasteryView onExit={back} />
 
   return (
     <div className="modes">
@@ -45,6 +47,10 @@ export function VocabularioScreen() {
       <button className="btn mode-btn" onClick={() => setScreen('prod')}>
         <span className="mode-btn__title">Escribir</span>
         <span className="mode-btn__hint">Te damos el sentido → eliges la palabra</span>
+      </button>
+      <button className="btn mode-btn" onClick={() => setScreen('mastery')}>
+        <span className="mode-btn__title">Dominio</span>
+        <span className="mode-btn__hint">Tu nivel en cada palabra</span>
       </button>
     </div>
   )
