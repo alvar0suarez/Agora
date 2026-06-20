@@ -12,12 +12,14 @@ activo, input comprensible) y gamificación ligera. Pronunciación **reconstruid
 
 ## Estado actual
 
-**Fase 1 — Alfabeto.** Pasos **1a** (reconocer) y **1b** (escribir) completados.
-La app está **desplegada** como PWA en GitHub Pages
+**Fase 1 — Alfabeto.** Pasos **1a** (reconocer) y **1b** (escribir) completados,
+más la **voz/audio** del alfabeto (v1: clips pregenerados con eSpeak + fonemas
+reconstruidos; robótica pero correcta — ver `docs/audio.md`). La app está
+**desplegada** como PWA en GitHub Pages
 (https://alvar0suarez.github.io/Agora/), con auto-deploy en cada push a `main`.
 
-**Próxima tarea elegida: voz / audio del alfabeto** → ver `docs/audio.md`.
-(La gamificación 1c queda después.)
+**Próxima tarea: Fase 1c — gamificación ligera** (XP, racha, dominio, resumen,
+interleaving). Plan en `docs/fase-1.md`.
 
 ## El método (resumen)
 
@@ -57,8 +59,9 @@ Casos y verbos con drills inteligentes.
 
 ## Mejoras futuras (apuntadas, sin fase)
 
-- **Audio/voz** de pronunciación reconstruida → **plan en `docs/audio.md`**
-  (es la próxima tarea; no hay buen TTS para ático, ojo al griego moderno).
+- **Audio/voz** de pronunciación reconstruida → **v1 hecho** (clips eSpeak con
+  fonemas curados, robótico; plan y pendientes en `docs/audio.md`). Mejora futura:
+  **clips de voz humana** (sustituibles archivo a archivo, sin tocar features).
 - **Trazado a dedo** de las letras (escribir dibujándolas).
 - Algoritmo SRS más avanzado (tipo SM-2) si hiciera falta.
 
