@@ -85,7 +85,9 @@ Palabras más frecuentes + núcleo filosófico, con SRS. Ver `docs/fase-2.md`.
 
 ### Fase 3 — Lectura graduada
 
-Frases reales un punto por encima del nivel (input comprensible).
+Frases reales un punto por encima del nivel (input comprensible). **Semilla en
+marcha**: feature `lectura` con aforismos célebres (γνῶθι σεαυτόν, πάντα ῥεῖ…),
+traducción y desglose palabra por palabra. Ver `docs/fase-3.md`.
 
 ### Fase 4 — Morfología
 
