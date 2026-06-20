@@ -25,9 +25,10 @@ export default defineConfig(({ command }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon.svg'],
       // Precache offline: el set por defecto no incluye audio, así que añadimos
-      // .wav para que los clips de las letras funcionen sin conexión.
+      // .wav (clips eSpeak) y .m4a (grabaciones humanas) para que suenen sin conexión.
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,wav}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,wav,m4a}'],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
       manifest: {
         name: 'Agora',
