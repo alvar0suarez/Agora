@@ -10,6 +10,28 @@ interactiva, con métodos de eficacia probada (repetición espaciada, recuerdo
 activo, input comprensible) y gamificación ligera. Pronunciación **reconstruida
 ática** (referencia: *Vox Graeca*, W. S. Allen). Es para disfrutar, no para empollar.
 
+## Meta y alcance
+
+**Meta:** leer y comprender **aforismos y citas filosóficas** en ático clásico —el
+griego que aparece citado (a menudo sin traducir) en los libros de filosofía— sin
+depender de la traducción. Ejemplos del objetivo: γνῶθι σεαυτόν, ἓν οἶδα ὅτι
+οὐδὲν οἶδα, πάντα ῥεῖ, y términos clave como λόγος, ἀρετή, ψυχή, εὐδαιμονία.
+
+Esto fija el nivel y orienta las fases siguientes:
+
+- **Vocabulario (Fase 2):** núcleo sesgado al **léxico filosófico** (Presocráticos,
+  Platón, Aristóteles, estoicos) + las palabras-función de altísima frecuencia
+  (artículo, καί, οὐ, partículas) presentes en cualquier frase.
+- **Lectura (Fase 3):** **aforismos y γνῶμαι** (sentencias breves) reales, de menos
+  a más — el formato natural de "lo que se ve en los libros": frases cortas y
+  autocontenidas.
+- **Morfología (Fase 4):** solo la necesaria para **parsear esas frases** (casos,
+  participio e infinitivo —omnipresentes en filosofía—, formas verbales comunes).
+  No gramática exhaustiva.
+
+**Fuera de alcance:** producción libre y conversación (la app es de lectura y de
+escritura por reconocimiento, no de redacción).
+
 ## Estado actual
 
 **Fase 1 — Alfabeto.** Pasos **1a** (reconocer) y **1b** (escribir) completados,
