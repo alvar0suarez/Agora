@@ -587,6 +587,8 @@ body {
   grid-template-columns: repeat(6, 1fr);
   gap: 0.4rem;
   width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
 }
 
 .keypad__key {
@@ -595,18 +597,27 @@ body {
   background: var(--surface);
   color: var(--text);
   border-radius: 10px;
-  padding: 0.7rem 0;
-  font-size: 1.4rem;
+  min-height: 2.9rem;
+  padding: 0;
+  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
 }
 
+/* Pulsación clara: la tecla se ilumina con el color de acento. */
 .keypad__key:active {
-  background: var(--surface-2);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #04293a;
 }
 
 .keypad__key--action {
   color: var(--accent);
+  font-size: 1.3rem;
+}
+
+.keypad__key--action:active {
+  color: #04293a;
 }
 
 /* Gramática: paradigmas verbales. */
