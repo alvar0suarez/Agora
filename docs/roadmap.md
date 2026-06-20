@@ -75,7 +75,7 @@ Ver `docs/fase-1.md`.
 
 ### Fase 2 — Vocabulario núcleo
 
-Palabras más frecuentes (lista de frecuencia) con SRS.
+Palabras más frecuentes + núcleo filosófico, con SRS. Ver `docs/fase-2.md`.
 
 ### Fase 3 — Lectura graduada
 
@@ -92,6 +92,10 @@ Casos y verbos con drills inteligentes.
   **clips de voz humana** (sustituibles archivo a archivo, sin tocar features).
 - **Trazado a dedo** de las letras (escribir dibujándolas).
 - Algoritmo SRS más avanzado (tipo SM-2) si hiciera falta.
+- **Empaquetado nativo (APK) con Capacitor**: misma base web, pero con
+  **notificaciones locales** (recordatorio de racha/repaso) y **datos más
+  persistentes** (menos riesgo de que el sistema borre el progreso). No aporta
+  más potencia de estudio; se plantea cuando haya contenido que merezca avisos.
 
 ## Decisiones
 
