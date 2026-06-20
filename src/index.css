@@ -175,8 +175,14 @@ body {
   text-align: center;
 }
 
+.alfabeto__top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .alfabeto__progress {
-  align-self: flex-end;
   color: var(--muted);
   font-size: 0.8rem;
 }

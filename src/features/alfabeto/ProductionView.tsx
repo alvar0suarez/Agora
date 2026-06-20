@@ -44,7 +44,12 @@ export function ProductionView({ onExit }: { onExit: () => void }) {
 
   return (
     <div className="alfabeto">
-      <div className="alfabeto__progress">Quedan {s.remaining}</div>
+      <div className="alfabeto__top">
+        <button className="btn btn--ghost" onClick={onExit}>
+          ← Menú
+        </button>
+        <span className="alfabeto__progress">Quedan {s.remaining}</span>
+      </div>
 
       <Card>
         <p className="alfabeto__prompt">¿Qué letra suena así?</p>
