@@ -6,7 +6,9 @@ import {
   emptyProgress,
   type ProgressState,
 } from '../../core/progress'
+import { buildPlan, gatherPlanInput, type DailyPlan } from '../../core/plan'
 import { Card } from '../../core/ui/Card'
+import { useNavigate } from '../../core/ui/navigation'
 
 /** Estado de cada parada del camino respecto a tu nivel actual. */
 type StageStatus = 'done' | 'current' | 'locked'
@@ -40,22 +42,37 @@ const STAGE_INFO: Record<string, { name: string; blurb: string; icon: string }> 
   },
 }
 
+/** Área principal a la que enlaza cada banda (para repasar / empezar). */
+const BAND_FEATURE: Record<string, string> = {
+  Cimientos: 'alfabeto',
+  A1: 'vocabulario',
+  A2: 'gramatica',
+  B1: 'lectura',
+  B2: 'lectura',
+}
+
 /**
  * Camino: mapa interactivo del viaje de cero hasta leer griego antiguo. Cada
- * parada es una banda de lectura (Cimientos → A1 → A2 → B1 → B2); tu nivel marca
- * dónde estás. Una ruta vertical con nodos: completados, el actual (con pulso) y
- * los que quedan por desbloquear. Solo lee el progreso.
+ * parada es una banda de lectura; tu nivel marca dónde estás. Y es NAVEGABLE:
+ * tocar una etapa te lleva directo al ejercicio. La etapa ACTUAL enlaza con la
+ * primera recomendación del "Plan de hoy" (lo que más te hace avanzar ahora).
  */
 export function CaminoScreen() {
+  const { goTo } = useNavigate()
   const [progress, setProgress] = useState<ProgressState>(emptyProgress())
+  const [plan, setPlan] = useState<DailyPlan | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let alive = true
     void (async () => {
-      const p = await loadProgress()
+      const [p, planInput] = await Promise.all([
+        loadProgress(),
+        gatherPlanInput(),
+      ])
       if (alive) {
         setProgress(p)
+        setPlan(buildPlan(planInput))
         setLoading(false)
       }
     })()
@@ -66,11 +83,17 @@ export function CaminoScreen() {
 
   const lvl = levelFromXp(progress.xp)
 
-  // Índice de la banda actual: la última cuyo nivel mínimo ya has alcanzado.
   let currentIndex = 0
   READING_BANDS.forEach((b, i) => {
     if (lvl.level >= b.from) currentIndex = i
   })
+
+  /** A dónde lleva tocar una etapa (null = bloqueada, no navegable). */
+  const targetFor = (status: StageStatus, code: string): string | null => {
+    if (status === 'locked') return null
+    if (status === 'current') return plan?.steps[0]?.featureId ?? BAND_FEATURE[code]
+    return BAND_FEATURE[code] // 'done' → repasar esa área
+  }
 
   return (
     <div className="camino">
@@ -80,8 +103,8 @@ export function CaminoScreen() {
         ) : (
           <p>
             Estás en <strong>{lvl.band}</strong>, nivel{' '}
-            <strong>{lvl.level}</strong>. Cada repaso te acerca a leer filosofía
-            en su lengua original.
+            <strong>{lvl.level}</strong>. Toca una etapa para ir directo al
+            ejercicio que te hace avanzar.
           </p>
         )}
       </Card>
@@ -95,7 +118,6 @@ export function CaminoScreen() {
             blurb: '',
             icon: '•',
           }
-          // Progreso dentro de la banda actual (de su nivel inicial al siguiente).
           const next = READING_BANDS[i + 1]
           const pct =
             status === 'current' && next
@@ -108,12 +130,10 @@ export function CaminoScreen() {
               : status === 'done'
                 ? 100
                 : 0
+          const target = targetFor(status, band.code)
 
-          return (
-            <li
-              key={band.code}
-              className={`camino__stage camino__stage--${status}`}
-            >
+          const inner = (
+            <>
               <div className="camino__rail">
                 <span className={`camino__node camino__node--${status}`}>
                   {status === 'locked' ? '🔒' : info.icon}
@@ -131,13 +151,37 @@ export function CaminoScreen() {
                       />
                     </div>
                     <p className="camino__hint">
-                      {pct}% hacia {READING_BANDS[i + 1].code}
+                      {pct}% hacia {next.code}
                     </p>
                   </>
-                ) : status === 'current' ? (
-                  <p className="camino__hint">¡Estás en la cima del mapa! 🎉</p>
                 ) : null}
+                {target ? (
+                  <p className="camino__cta">
+                    {status === 'current' ? 'Seguir avanzando' : 'Repasar'} ›
+                  </p>
+                ) : (
+                  <p className="camino__hint">Sube de nivel para desbloquear</p>
+                )}
               </div>
+            </>
+          )
+
+          return (
+            <li
+              key={band.code}
+              className={`camino__stage camino__stage--${status}`}
+            >
+              {target ? (
+                <button
+                  type="button"
+                  className="camino__row camino__row--link"
+                  onClick={() => goTo(target)}
+                >
+                  {inner}
+                </button>
+              ) : (
+                <div className="camino__row">{inner}</div>
+              )}
             </li>
           )
         })}
