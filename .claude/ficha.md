@@ -2,15 +2,32 @@
 nombre: Agora
 emoji: 📚
 repo: alvar0suarez/Agora
-que_es: Flashcards de griego antiguo (tipo Anki)
-stack: PWA (Vite+React+TS)
+que_es: App local-first para leer y escribir griego antiguo (ático clásico, pronunciación reconstruida) con repetición espaciada, lectura graduada, gramática y gamificación ligera
+stack: PWA (Vite+React+TS) · IndexedDB (Dexie) · WebCrypto · audio offline
 estado: usable
 expone:
+  - App PWA instalable y offline (URL pública en GitHub Pages); un usuario, móvil
+  - Datos de griego curados (TS/JSON en src/core/greek), reutilizables por otras apps de lenguas clásicas, 24 letras con AFI ático, ~50 palabras (glosa ES, categoría, derivados españoles), ~11 aforismos (traducción + desglose palabra↔lema), paradigmas de verbos y casos
+  - Pronunciación reconstruida por unidad en JSON id→{lemma, ipa, phon} + clips de audio WAV offline en public/audio/{letters,vocab,aphorisms}
+  - Pipeline build-time pronunciación→audio (scripts/gen-*-audio.mjs): eSpeak local por defecto, backend neural opcional
+  - Núcleo reutilizable de lógica pura, SRS Leitner, progreso/XP/niveles (bandas Cimientos→B2), quiz, planificador "Plan de hoy", contrato FeatureModule
   - Material/notas de estudio que podrían archivarse en Nous
 consume:
+  - Audio + transcripción de YT-Extractor → para construir VOZ HUMANA natural (alineación forzada + troceo de clips), sustituyendo al eSpeak robótico; requiere permiso/licencia del hablante
   - (potencial) textos o recortes guardados en Nous
+  - Fuentes para curar contenido (no en runtime), Perseus (textos/léxico/gramática) y Vox Graeca (pronunciación); ver docs/fuentes.md
 relaciones:
-  - Patrón estudio→cerebro: archiva material en Nous
+  - Hub Nous, patrón estudio→cerebro, archiva material/progreso en Nous
+  - YT-Extractor, su salida (audio+transcripción) es la fuente candidata para la voz humana de Agora (integración pendiente; gating, permiso del hablante)
+  - Futura app de latín, reutilizaría el núcleo (SRS, progress, quiz, contrato FeatureModule, pipeline de audio)
 ---
-Origen del método. PWA desplegada por URL (GitHub Pages); si la quieres en el
-cajón de apps, se envuelve en APK sin reescribir.
+App personal de **lectura de griego antiguo**, autónoma y **offline**: no ofrece una
+API de red, sino **datos, contenido y herramientas reutilizables** a nivel de repo,
+más un **núcleo de aprendizaje** (SRS, progreso/niveles, quiz, planificador) portable
+a otras lenguas clásicas.
+
+**Cómo integrarse:** reutilizar contenido/motor importando de `src/core/greek/*` y
+`src/core/{srs,progress,quiz,plan}` (todo local, sin servidor); darle voz aportando
+`audio+transcripción` (YT-Extractor) al pipeline de alineación, o clips humanos
+licenciados a `public/audio/**` (esquema `<id>.wav`); o clonar el núcleo para una app
+hermana (p. ej. latín) con sus propios datos `id→{lemma, ipa, phon}`.
