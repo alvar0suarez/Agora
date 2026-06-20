@@ -859,9 +859,38 @@ button:focus:not(:focus-visible) {
 }
 
 .camino__stage {
+  padding-bottom: 1.4rem;
+}
+
+.camino__row {
   display: flex;
   gap: 1rem;
-  padding-bottom: 1.4rem;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Etapa navegable: la fila entera es un botón, sin aspecto de botón. */
+button.camino__row--link {
+  appearance: none;
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.15s ease;
+}
+
+button.camino__row--link:active {
+  background: var(--surface);
+}
+
+.camino__cta {
+  margin: 0.4rem 0 0;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 .camino__rail {
