@@ -117,6 +117,53 @@ export const APHORISMS: Aphorism[] = [
       { gr: 'ἀνθρώπῳ', gloss: 'para el hombre', lemmaId: 'anthropos' },
     ],
   },
+  {
+    id: 'chalepa-ta-kala',
+    greek: 'χαλεπὰ τὰ καλά',
+    translation: 'Lo bello es difícil.',
+    source: 'Platón (proverbial)',
+    words: [
+      { gr: 'χαλεπὰ', gloss: 'difíciles, arduas' },
+      { gr: 'τὰ', gloss: 'las (cosas)', lemmaId: 'ho' },
+      { gr: 'καλά', gloss: 'bellas, hermosas' },
+    ],
+  },
+  {
+    id: 'anthropos-politikon',
+    greek: 'ὁ ἄνθρωπος φύσει πολιτικὸν ζῷον',
+    translation: 'El hombre es por naturaleza un animal político.',
+    source: 'Aristóteles, Política',
+    words: [
+      { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
+      { gr: 'ἄνθρωπος', gloss: 'ser humano, hombre', lemmaId: 'anthropos' },
+      { gr: 'φύσει', gloss: 'por naturaleza', lemmaId: 'physis' },
+      { gr: 'πολιτικὸν', gloss: 'político, social' },
+      { gr: 'ζῷον', gloss: 'animal, ser vivo' },
+    ],
+  },
+  {
+    id: 'chronos-panta-lyei',
+    greek: 'ὁ χρόνος πάντα λύει',
+    translation: 'El tiempo todo lo resuelve.',
+    source: 'Proverbio griego',
+    words: [
+      { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
+      { gr: 'χρόνος', gloss: 'tiempo' },
+      { gr: 'πάντα', gloss: 'todas las cosas, todo', lemmaId: 'pas' },
+      { gr: 'λύει', gloss: 'resuelve, disuelve' },
+    ],
+  },
+  {
+    id: 'hen-kai-pan',
+    greek: 'ἓν καὶ πᾶν',
+    translation: 'Uno y todo.',
+    source: 'Tradición (panteísmo)',
+    words: [
+      { gr: 'ἓν', gloss: 'uno' },
+      { gr: 'καὶ', gloss: 'y', lemmaId: 'kai' },
+      { gr: 'πᾶν', gloss: 'todo', lemmaId: 'pas' },
+    ],
+  },
 ]
 
 /** Índice por id. */
