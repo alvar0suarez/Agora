@@ -4,12 +4,15 @@ import type { ReactNode } from 'react'
 export function Card({
   title,
   children,
+  className,
 }: {
   title?: string
   children: ReactNode
+  /** Clases extra (p. ej. para animar feedback de acierto/fallo). */
+  className?: string
 }) {
   return (
-    <section className="card">
+    <section className={className ? `card ${className}` : 'card'}>
       {title ? <h2>{title}</h2> : null}
       {children}
     </section>

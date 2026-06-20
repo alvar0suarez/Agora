@@ -70,7 +70,7 @@ export function VocabProductionPrompt({
 
       {answered ? (
         <>
-          <Card>
+          <Card className={correct ? 'feedback feedback--correct' : 'feedback feedback--wrong'}>
             <p className="answer__name">
               {correct ? '✓ ' : '✗ '}
               {word.lemma} — {word.gloss}
