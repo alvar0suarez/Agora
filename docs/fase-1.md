@@ -14,8 +14,8 @@ espaciada + recuerdo activo + gamificación ligera. Pronunciación reconstruida
   **reconocimiento** (ver letra → recordar → autocalificar) con persistencia local.
 - **1b** ⬜ **Producción**: ver sonido/nombre → escribir/elegir la letra.
   Interleaving reconocer/escribir en la misma sesión.
-- **1c** ⬜ **Gamificación** (ver plan abajo): XP por acertar recordando, racha
-  diaria, dominio por letra, resumen de sesión, interleaving.
+- **1c** ✅ **Gamificación**: XP por acertar recordando, racha diaria, niveles
+  (banda de lectura hasta B2), dominio por letra, resumen de sesión, interleaving.
 
 ## Plan 1c — gamificación ligera (acordado, pendiente de implementar)
 
@@ -35,10 +35,10 @@ espaciada + recuerdo activo + gamificación ligera. Pronunciación reconstruida
 
 **Sub-pasos (uno cada vez, verde + commit entre cada uno):**
 
-1. `core/progress`: XP + racha diaria (lógica pura + Dexie + tests). Mostrar XP y
-   racha en el resumen de sesión. ← empezar por aquí.
-2. Vista de **dominio**: las 24 letras con su nivel (derivado del SRS).
-3. **Interleaving**: sesión que mezcla reconocer/escribir.
+1. ✅ `core/progress`: XP + racha diaria (lógica pura + Dexie + tests). XP y racha
+   en el resumen de sesión. (+ niveles por XP, banda de lectura hasta B2).
+2. ✅ Vista de **dominio**: las 24 letras con su nivel (derivado del SRS).
+3. ✅ **Interleaving**: sesión mixta que mezcla reconocer/escribir.
 
 ## Decisiones técnicas
 

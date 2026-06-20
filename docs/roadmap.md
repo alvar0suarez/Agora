@@ -39,14 +39,15 @@ escritura por reconocimiento, no de redacción).
 
 ## Estado actual
 
-**Fase 1 — Alfabeto.** Pasos **1a** (reconocer) y **1b** (escribir) completados,
-más la **voz/audio** del alfabeto (v1: clips pregenerados con eSpeak + fonemas
+**Fase 1 — Alfabeto.** Pasos **1a** (reconocer), **1b** (escribir) y **1c**
+(gamificación: XP, racha, niveles, dominio, interleaving) completados, más la
+**voz/audio** del alfabeto (v1: clips pregenerados con eSpeak + fonemas
 reconstruidos; robótica pero correcta — ver `docs/audio.md`). La app está
 **desplegada** como PWA en GitHub Pages
 (https://alvar0suarez.github.io/Agora/), con auto-deploy en cada push a `main`.
 
-**Próxima tarea: Fase 1c — gamificación ligera** (XP, racha, dominio, resumen,
-interleaving). Plan en `docs/fase-1.md`.
+**Próxima tarea: Fase 2 — vocabulario núcleo** (léxico filosófico + palabras de
+alta frecuencia, con SRS). Ver "Meta y alcance".
 
 ## El método (resumen)
 
@@ -69,8 +70,8 @@ Ver `docs/fase-1.md`.
 - [x] **1a** — Motor SRS (`core/srs`) + 24 letras + sesión de reconocimiento.
 - [x] **1b** — Producción: te damos el sonido → eliges el glifo (elección
   múltiple). Cartas SRS separadas por dirección (`rec` / `prod`). Tests con Vitest.
-- [ ] **1c** — Gamificación (XP, racha, dominio, resumen) + interleaving (mezclar
-  reconocer/escribir en una misma sesión).
+- [x] **1c** — Gamificación (XP, racha, niveles hasta banda de lectura B2,
+  dominio por letra, resumen) + interleaving (sesión mixta reconocer/escribir).
 
 ### Fase 2 — Vocabulario núcleo
 
