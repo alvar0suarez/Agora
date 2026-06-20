@@ -138,6 +138,9 @@ tiempos verbales y más modelos de declinación.
 - **Árbol de etimología (raíces griegas ↔ palabras españolas)**: añadir palabras
   (p. ej. *cineteca*) y explorar un grafo de morfemas y familias. Diseño en
   `docs/etimologia.md`. Refuerza "aprender español a través del griego".
+- **Museo / textos reales**: galería de inscripciones/piezas reales (texto griego +
+  traducción + descripción + fuente consultable), con un hito "a tu nivel ya puedes
+  leer estas". Diseño en `docs/realia.md`. Es la meta del proyecto hecha pantalla.
 
 ## Decisiones
 
