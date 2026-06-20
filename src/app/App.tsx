@@ -43,6 +43,8 @@ export function App() {
           ))}
         </nav>
       ) : null}
+
+      <footer className="app__version">build {__BUILD_ID__}</footer>
     </div>
   )
 }
