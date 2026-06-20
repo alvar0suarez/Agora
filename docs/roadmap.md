@@ -91,7 +91,10 @@ traducción y desglose palabra por palabra. Ver `docs/fase-3.md`.
 
 ### Fase 4 — Morfología
 
-Casos y verbos con drills inteligentes.
+Casos y verbos con drills inteligentes. **Semilla en marcha**: feature `gramatica`
+con el presente de indicativo de λύω (modelo regular) y εἰμί; estudiar el
+paradigma y **practicar escribiendo** la forma pedida (teclado griego + SRS + XP).
+Siguiente: más tiempos/verbos y morfología nominal (casos).
 
 ## Mejoras futuras (apuntadas, sin fase)
 
