@@ -135,6 +135,9 @@ tiempos verbales y más modelos de declinación.
   **notificaciones locales** (recordatorio de racha/repaso) y **datos más
   persistentes** (menos riesgo de que el sistema borre el progreso). No aporta
   más potencia de estudio; se plantea cuando haya contenido que merezca avisos.
+- **Árbol de etimología (raíces griegas ↔ palabras españolas)**: añadir palabras
+  (p. ej. *cineteca*) y explorar un grafo de morfemas y familias. Diseño en
+  `docs/etimologia.md`. Refuerza "aprender español a través del griego".
 
 ## Decisiones
 
