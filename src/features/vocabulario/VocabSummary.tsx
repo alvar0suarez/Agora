@@ -6,9 +6,11 @@ import type { VocabStats } from './useVocabSession'
 export function VocabSummary({
   stats,
   onRestart,
+  onExit,
 }: {
   stats: VocabStats
   onRestart: () => void
+  onExit: () => void
 }) {
   const { reviewed, recalled, xpGained, totalXp, streakDays } = stats
   const lvl = levelFromXp(totalXp)
@@ -55,6 +57,9 @@ export function VocabSummary({
         </>
       )}
       <div className="grade">
+        <button className="btn" onClick={onExit}>
+          Volver
+        </button>
         <button className="btn btn--primary" onClick={onRestart}>
           Otra ronda
         </button>

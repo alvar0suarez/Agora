@@ -29,14 +29,15 @@ con repetición espaciada y la misma gamificación ligera ya construida.
 
 ## Sub-pasos (uno cada vez, verde + commit entre cada uno)
 
-1. **Esqueleto + seed pequeño**: feature registrado + ~25 palabras curadas
+1. ✅ **Esqueleto + seed pequeño**: feature registrado + 25 palabras curadas
    (frecuencia alta + términos filosóficos) + **sesión de reconocimiento**
-   (ver griego → recordar significado), reutilizando SRS + progress. ← empezar aquí.
-2. **Producción + interleaving**: ver significado → elegir la palabra; sesión
-   mixta, espejando el alfabeto.
-3. **Ampliar la lista** por tandas pequeñas y revisables (lista de frecuencia +
+   (ver griego → recordar significado), reutilizando SRS + progress.
+2. ✅ **Producción + interleaving**: ver significado → elegir la palabra; sesión
+   mixta, espejando el alfabeto. (Selector de opciones genérico subido a
+   `core/quiz`, compartido con el alfabeto.)
+3. ⬜ **Ampliar la lista** por tandas pequeñas y revisables (lista de frecuencia +
    núcleo filosófico). La calidad del contenido la revisa el dueño.
-4. **Vista de dominio** del vocabulario (derivada del SRS).
+4. ⬜ **Vista de dominio** del vocabulario (derivada del SRS).
 
 ## Decisiones técnicas
 

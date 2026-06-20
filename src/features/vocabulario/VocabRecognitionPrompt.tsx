@@ -1,0 +1,57 @@
+import { useState } from 'react'
+import { Card } from '../../core/ui/Card'
+import type { VocabEntry } from '../../core/greek'
+import type { Grade } from '../../core/srs'
+
+/**
+ * Pregunta de RECONOCER una palabra: ves el griego, recuerdas el significado y
+ * te autocalificas. Presentacional y reutilizable (sesión suelta o mixta).
+ */
+export function VocabRecognitionPrompt({
+  word,
+  onGrade,
+}: {
+  word: VocabEntry
+  onGrade: (g: Grade) => void
+}) {
+  const [revealed, setRevealed] = useState(false)
+
+  const grade = (g: Grade) => {
+    onGrade(g)
+    setRevealed(false)
+  }
+
+  return (
+    <>
+      <div className="glyph">
+        <span className="glyph__lower">{word.lemma}</span>
+      </div>
+
+      {!revealed ? (
+        <>
+          <p className="alfabeto__prompt">¿Qué significa?</p>
+          <button className="btn btn--primary" onClick={() => setRevealed(true)}>
+            Mostrar
+          </button>
+        </>
+      ) : (
+        <>
+          <Card>
+            <p className="answer__name">{word.gloss}</p>
+            <p className="answer__line">
+              <strong>{word.pos}</strong>
+            </p>
+          </Card>
+          <div className="grade">
+            <button className="btn btn--again" onClick={() => grade('again')}>
+              No la recordé
+            </button>
+            <button className="btn btn--good" onClick={() => grade('good')}>
+              La recordé
+            </button>
+          </div>
+        </>
+      )}
+    </>
+  )
+}

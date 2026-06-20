@@ -1,34 +1,33 @@
 import { useMemo, useState } from 'react'
-import { LETTERS, type GreekLetter } from '../../core/greek'
+import { VOCAB, type VocabEntry } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
-import type { Grade } from '../../core/srs'
 import { pickOptions } from '../../core/quiz'
+import type { Grade } from '../../core/srs'
 
 /** Número de opciones (la correcta + distractores) en cada pregunta. */
 const OPTION_COUNT = 4
 
 /**
- * Pregunta de PRODUCIR una letra: te damos el sonido y eliges el glifo. El
- * nombre griego no se muestra hasta revelar (delataría el glifo). Presentacional
- * y reutilizable (vista de escribir y vista mixta).
+ * Pregunta de PRODUCIR una palabra: te damos el significado y eliges la palabra
+ * griega correcta. Presentacional y reutilizable (sesión suelta o mixta).
  */
-export function ProductionPrompt({
-  letter,
+export function VocabProductionPrompt({
+  word,
   onGrade,
 }: {
-  letter: GreekLetter
+  word: VocabEntry
   onGrade: (g: Grade) => void
 }) {
   const [picked, setPicked] = useState<string | null>(null)
 
-  // Opciones estables por letra (se rebarajan solo al cambiar de carta).
+  // Opciones estables por palabra (se rebarajan solo al cambiar de carta).
   const options = useMemo(
-    () => pickOptions(letter, LETTERS, OPTION_COUNT),
-    [letter],
+    () => pickOptions(word, VOCAB, OPTION_COUNT),
+    [word],
   )
 
   const answered = picked !== null
-  const correct = picked === letter.id
+  const correct = picked === word.id
 
   const next = () => {
     onGrade(correct ? 'good' : 'again')
@@ -38,17 +37,16 @@ export function ProductionPrompt({
   return (
     <>
       <Card>
-        <p className="alfabeto__prompt">¿Qué letra suena así?</p>
+        <p className="alfabeto__prompt">¿Qué palabra significa esto?</p>
+        <p className="answer__name">{word.gloss}</p>
         <p className="answer__line">
-          Translit.: <strong>{letter.translit}</strong> · AFI:{' '}
-          <strong>{letter.ipa}</strong>
+          <strong>{word.pos}</strong>
         </p>
-        <p className="answer__sound">{letter.sound}</p>
       </Card>
 
       <div className="options">
         {options.map((opt) => {
-          const isTarget = opt.id === letter.id
+          const isTarget = opt.id === word.id
           const isPicked = opt.id === picked
           const cls = !answered
             ? 'option'
@@ -64,7 +62,7 @@ export function ProductionPrompt({
               disabled={answered}
               onClick={() => setPicked(opt.id)}
             >
-              {opt.lower}
+              {opt.lemma}
             </button>
           )
         })}
@@ -75,7 +73,7 @@ export function ProductionPrompt({
           <Card>
             <p className="answer__name">
               {correct ? '✓ ' : '✗ '}
-              {letter.name} ({letter.lower} {letter.upper})
+              {word.lemma} — {word.gloss}
             </p>
             {!correct ? (
               <p className="answer__line">La correcta está en verde.</p>

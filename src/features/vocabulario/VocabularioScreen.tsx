@@ -1,73 +1,51 @@
 import { useState } from 'react'
 import { Card } from '../../core/ui/Card'
-import { useVocabSession } from './useVocabSession'
-import { VocabSummary } from './VocabSummary'
+import { VocabSessionView } from './VocabSessionView'
+import type { VocabMode } from './useVocabSession'
+
+type Screen = 'menu' | 'mixed' | 'rec' | 'prod'
+
+/** Direcciones de la sesión mixta (constante: referencia estable). */
+const MIXED_MODES: VocabMode[] = ['rec', 'prod']
 
 /**
- * Pantalla de vocabulario (Fase 2.1): sesión de RECONOCIMIENTO. Ves la palabra
- * griega, recuerdas su significado y te autocalificas. Producción e interleaving
- * llegan en 2.2 (espejando el alfabeto).
+ * Pantalla de vocabulario: practica el léxico núcleo en varias direcciones, con
+ * el mismo SRS y la misma gamificación que el alfabeto.
+ *  - Mixto: intercala reconocer y escribir (recomendado).
+ *  - Reconocer: ves el griego → recuerdas el significado.
+ *  - Escribir: te damos el significado → eliges la palabra.
  */
 export function VocabularioScreen() {
-  const s = useVocabSession()
-  const [revealed, setRevealed] = useState(false)
+  const [screen, setScreen] = useState<Screen>('menu')
+  const back = () => setScreen('menu')
 
-  if (s.loading) return <p className="empty">Cargando…</p>
-  if (s.done) {
-    return (
-      <VocabSummary
-        stats={s.stats}
-        onRestart={() => {
-          setRevealed(false)
-          s.restart()
-        }}
-      />
-    )
-  }
-
-  const word = s.current
-  if (!word) return null
-
-  const grade = (g: 'again' | 'good') => {
-    s.grade(g)
-    setRevealed(false)
-  }
+  if (screen === 'mixed')
+    return <VocabSessionView modes={MIXED_MODES} onExit={back} />
+  if (screen === 'rec') return <VocabSessionView modes="rec" onExit={back} />
+  if (screen === 'prod') return <VocabSessionView modes="prod" onExit={back} />
 
   return (
-    <div className="alfabeto">
-      <div className="alfabeto__top">
-        <span className="alfabeto__progress">Quedan {s.remaining}</span>
-      </div>
-
-      <div className="glyph">
-        <span className="glyph__lower">{word.lemma}</span>
-      </div>
-
-      {!revealed ? (
-        <>
-          <p className="alfabeto__prompt">¿Qué significa?</p>
-          <button className="btn btn--primary" onClick={() => setRevealed(true)}>
-            Mostrar
-          </button>
-        </>
-      ) : (
-        <>
-          <Card>
-            <p className="answer__name">{word.gloss}</p>
-            <p className="answer__line">
-              <strong>{word.pos}</strong>
-            </p>
-          </Card>
-          <div className="grade">
-            <button className="btn btn--again" onClick={() => grade('again')}>
-              No la recordé
-            </button>
-            <button className="btn btn--good" onClick={() => grade('good')}>
-              La recordé
-            </button>
-          </div>
-        </>
-      )}
+    <div className="modes">
+      <Card title="Vocabulario griego">
+        <p>Aprende el léxico núcleo (frecuencia + filosofía). Elige cómo:</p>
+      </Card>
+      <button
+        className="btn btn--primary mode-btn"
+        onClick={() => setScreen('mixed')}
+      >
+        <span className="mode-btn__title">Mixto</span>
+        <span className="mode-btn__hint">
+          Intercala significado y palabra · recomendado
+        </span>
+      </button>
+      <button className="btn mode-btn" onClick={() => setScreen('rec')}>
+        <span className="mode-btn__title">Reconocer</span>
+        <span className="mode-btn__hint">Ves el griego → recuerdas el sentido</span>
+      </button>
+      <button className="btn mode-btn" onClick={() => setScreen('prod')}>
+        <span className="mode-btn__title">Escribir</span>
+        <span className="mode-btn__hint">Te damos el sentido → eliges la palabra</span>
+      </button>
     </div>
   )
 }

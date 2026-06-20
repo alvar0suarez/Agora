@@ -19,11 +19,35 @@ import {
   type ProgressState,
 } from '../../core/progress'
 
-/** Palabras nuevas que se introducen como máximo en una sesión. */
+/** Palabras nuevas que se introducen como máximo en una sesión (en total). */
 const NEW_PER_SESSION = 8
 
-/** Clave SRS de una palabra en reconocimiento (ver griego → recordar sentido). */
-const cardId = (id: string) => `vocab:rec:${id}`
+/**
+ * Dirección del repaso de una palabra:
+ *  - `rec` (reconocer): ves la palabra griega y recuerdas su significado.
+ *  - `prod` (producir): ves el significado y eliges la palabra griega.
+ * Cada dirección es una carta SRS separada.
+ */
+export type VocabMode = 'rec' | 'prod'
+
+/** Una carta de la cola: una palabra en una dirección concreta. */
+interface VocabCard {
+  wordId: string
+  dir: VocabMode
+}
+
+/** Clave SRS de la carta de una palabra en una dirección concreta. */
+const cardId = (mode: VocabMode, wordId: string) => `vocab:${mode}:${wordId}`
+
+/** Intercala varias listas por turnos (round-robin): [a1,b1,a2,b2,…]. */
+function interleave<T>(lists: T[][]): T[] {
+  const out: T[] = []
+  const max = Math.max(0, ...lists.map((l) => l.length))
+  for (let i = 0; i < max; i++) {
+    for (const list of lists) if (i < list.length) out.push(list[i])
+  }
+  return out
+}
 
 export interface VocabStats {
   reviewed: number
@@ -37,15 +61,17 @@ export interface VocabStats {
 }
 
 /**
- * Sesión de RECONOCIMIENTO de vocabulario: ves la palabra griega y recuerdas su
- * significado. Reutiliza el SRS y el progreso del núcleo (XP/racha/nivel son
+ * Sesión de vocabulario en una o varias direcciones, con interleaving cuando hay
+ * varias. Reutiliza el SRS y el progreso del núcleo (XP/racha/nivel son
  * transversales). Mismo patrón que la sesión del alfabeto, pero independiente
  * (el contrato prohíbe que un feature dependa de otro).
  */
-export function useVocabSession() {
+export function useVocabSession(modes: VocabMode | VocabMode[]) {
+  const dirKey = Array.isArray(modes) ? modes.join(',') : modes
+
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
-  const [queue, setQueue] = useState<string[]>([])
+  const [queue, setQueue] = useState<VocabCard[]>([])
   const [stats, setStats] = useState<VocabStats>({
     reviewed: 0,
     recalled: 0,
@@ -58,27 +84,38 @@ export function useVocabSession() {
   const build = useCallback(async () => {
     setLoading(true)
     const now = Date.now()
+    const dirs = dirKey.split(',') as VocabMode[]
+    const ids = dirs.flatMap((d) => VOCAB.map((v) => cardId(d, v.id)))
     const [loaded, loadedProgress] = await Promise.all([
-      loadStates(VOCAB.map((v) => cardId(v.id))),
+      loadStates(ids),
       loadProgress(),
     ])
     progress.current = loadedProgress
 
-    const byId = new Map<string, SrsState>()
-    const due: string[] = []
-    const fresh: string[] = []
-    for (const v of VOCAB) {
-      const s = loaded.get(cardId(v.id))
-      if (!s) {
-        fresh.push(v.id)
-      } else {
-        byId.set(v.id, s)
-        if (isDue(s, now)) due.push(v.id)
+    const byCard = new Map<string, SrsState>()
+    const duePerDir: VocabCard[][] = []
+    const freshPerDir: VocabCard[][] = []
+    for (const d of dirs) {
+      const due: VocabCard[] = []
+      const fresh: VocabCard[] = []
+      for (const v of VOCAB) {
+        const key = cardId(d, v.id)
+        const s = loaded.get(key)
+        if (!s) {
+          fresh.push({ wordId: v.id, dir: d })
+        } else {
+          byCard.set(key, s)
+          if (isDue(s, now)) due.push({ wordId: v.id, dir: d })
+        }
       }
+      duePerDir.push(due)
+      freshPerDir.push(fresh)
     }
+    const due = interleave(duePerDir)
+    const fresh = interleave(freshPerDir).slice(0, NEW_PER_SESSION)
 
-    setStates(byId)
-    setQueue([...due, ...fresh.slice(0, NEW_PER_SESSION)])
+    setStates(byCard)
+    setQueue([...due, ...fresh])
     setStats({
       reviewed: 0,
       recalled: 0,
@@ -87,30 +124,33 @@ export function useVocabSession() {
       streakDays: loadedProgress.streakDays,
     })
     setLoading(false)
-  }, [])
+  }, [dirKey])
 
   useEffect(() => {
     void build()
   }, [build])
 
-  const currentId = queue[0] ?? null
-  const current: VocabEntry | null = currentId
-    ? vocabById.get(currentId) ?? null
+  const currentCard = queue[0] ?? null
+  const current: VocabEntry | null = currentCard
+    ? vocabById.get(currentCard.wordId) ?? null
     : null
+  const currentMode: VocabMode | null = currentCard?.dir ?? null
 
   const grade = useCallback(
     (g: Grade) => {
-      if (!currentId) return
+      if (!currentCard) return
       const now = Date.now()
-      const prev = states.get(currentId) ?? newCard(now)
+      const key = cardId(currentCard.dir, currentCard.wordId)
+      const prev = states.get(key) ?? newCard(now)
       const next = review(prev, g, now)
-      void saveState(cardId(currentId), next)
+      void saveState(key, next)
 
-      // Gamificación anclada al recuerdo real: XP solo al acertar recordando.
+      // Gamificación anclada al recuerdo real: XP solo al acertar recordando
+      // (grade 'good' en reconocimiento). La actividad alimenta la racha diaria.
       let gainedXp = 0
       let newStreak: number | null = null
       let newTotalXp: number | null = null
-      if (g === 'good' && progress.current) {
+      if (g === 'good' && currentCard.dir === 'rec' && progress.current) {
         const withActivity = registerActivity(progress.current, dayIndex(now))
         const updated = addXp(withActivity, XP_PER_RECALL)
         progress.current = updated
@@ -120,7 +160,7 @@ export function useVocabSession() {
         newTotalXp = updated.xp
       }
 
-      setStates((prevMap) => new Map(prevMap).set(currentId, next))
+      setStates((prevMap) => new Map(prevMap).set(key, next))
       setStats((s) => ({
         reviewed: s.reviewed + 1,
         recalled: s.recalled + (g === 'good' ? 1 : 0),
@@ -129,16 +169,17 @@ export function useVocabSession() {
         streakDays: newStreak ?? s.streakDays,
       }))
       setQueue((q) =>
-        g === 'again' ? [...q.slice(1), currentId] : q.slice(1),
+        g === 'again' ? [...q.slice(1), currentCard] : q.slice(1),
       )
     },
-    [currentId, states],
+    [currentCard, states],
   )
 
   return {
     loading,
     done: !loading && queue.length === 0,
     current,
+    currentMode,
     remaining: queue.length,
     grade,
     restart: build,

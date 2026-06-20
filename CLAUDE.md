@@ -56,6 +56,10 @@ registro. Cero cambios en el núcleo.
 - No añadir librerías nuevas sin avisar y justificar.
 - No tocar invariantes de seguridad ni el contrato de módulo sin avisar.
 - Si algo lleva 3-4 intentos sin funcionar, dilo y vuelve al último commit verde.
+- **PR y despliegue los gestiono yo (Claude), por defecto.** El dueño no pulsa
+  botones: yo creo el PR, lo fusiono a `main` cuando el trabajo está verde y
+  aprobado, y le paso el enlace ya desplegado (GitHub Pages). Él dirige y revisa,
+  no opera GitHub.
 
 ## Estructura
 
