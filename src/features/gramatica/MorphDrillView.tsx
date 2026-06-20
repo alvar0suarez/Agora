@@ -100,7 +100,7 @@ export function MorphDrillView({ onExit }: { onExit: () => void }) {
         </>
       ) : (
         <>
-          <Card>
+          <Card className={correct ? 'feedback feedback--correct' : 'feedback feedback--wrong'}>
             <p className="answer__name">{correct ? '✓ ¡Correcto!' : '✗ Casi'}</p>
             <p className="answer__line">
               Respuesta: <strong>{target.answer}</strong>

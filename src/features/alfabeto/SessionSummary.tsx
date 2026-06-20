@@ -28,6 +28,13 @@ export function SessionSummary({
             Repasadas: <strong>{reviewed}</strong> · Acertadas:{' '}
             <strong>{recalled}</strong>
           </p>
+          <p className="summary__cheer">
+            {recalled / reviewed >= 0.9
+              ? '¡Excelente memoria! 🌟'
+              : recalled / reviewed >= 0.6
+                ? '¡Buen trabajo! 💪'
+                : 'Sigue así, cada repaso cuenta. 🌱'}
+          </p>
           <p>
             XP ganada: <strong>+{xpGained}</strong>
             {streakDays > 0 && (

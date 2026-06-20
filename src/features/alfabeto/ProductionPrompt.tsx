@@ -72,7 +72,7 @@ export function ProductionPrompt({
 
       {answered ? (
         <>
-          <Card>
+          <Card className={correct ? 'feedback feedback--correct' : 'feedback feedback--wrong'}>
             <p className="answer__name">
               {correct ? '✓ ' : '✗ '}
               {letter.name} ({letter.lower} {letter.upper})

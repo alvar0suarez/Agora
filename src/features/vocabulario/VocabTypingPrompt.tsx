@@ -64,7 +64,7 @@ export function VocabTypingPrompt({
         </>
       ) : (
         <>
-          <Card>
+          <Card className={correct ? 'feedback feedback--correct' : 'feedback feedback--wrong'}>
             <p className="answer__name">
               {correct ? '✓ ¡Correcto!' : '✗ Casi'}
             </p>
