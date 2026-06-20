@@ -1,7 +1,14 @@
-# Etimología — árbol de raíces griegas ↔ palabras españolas (idea / diseño)
+# Etimología — árbol de raíces griegas ↔ palabras españolas
 
-> **Estado:** idea contemplada, sin implementar. Encaja con la meta "aprender mejor
-> el español a través del griego". Aquí queda el diseño para retomarlo.
+> **Estado:** v1 implementado (feature `etimologia`, pestaña 🌳 Raíces): grafo
+> navegable raíz↔palabra con un primer set curado (familias `-teca`, `-logía`,
+> `-grafía`, `bio-`, `geo-`…). Datos en `core/greek/roots.ts`. Encaja con la meta
+> "aprender mejor el español a través del griego".
+>
+> **Texto ≠ audio (no confundir):** "interpretar" aquí = descomponer una PALABRA en
+> raíces (problema de texto, 100% offline). NO tiene nada que ver con "cazar una
+> palabra dentro de un audio" (alineación de voz), que es el hilo de YT-Extractor
+> (ver `docs/audio.md`). Son dos cosas distintas; esta es solo texto.
 
 ## Objetivo
 
