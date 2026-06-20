@@ -42,9 +42,9 @@
 | App | Qué es | Stack | Estado | Repo |
 |---|---|---|---|---|
 | 🧠 **Nous** (hub) | Cerebro digital: notas, libros y archivos, local-first en el móvil | Nativo (Kotlin/Compose) | en curso | `alvar0suarez/Nous` |
-| 📚 **Agora** | Flashcards de griego antiguo (tipo Anki) | PWA (Vite+React+TS) | usable | `alvar0suarez/Agora` |
+| 📚 **Agora** | App local-first para leer y escribir griego antiguo (ático clásico, pronunciación reconstruida) con repetición espaciada, lectura graduada, gramática y gamificación ligera | PWA (Vite+React+TS) · IndexedDB (Dexie) · WebCrypto · audio offline | usable | `alvar0suarez/Agora` |
 | 🔥 **Prometeo** | App personal para aprender plasma (estudio/contenido) | PWA (probable) | arrancando | `alvar0suarez/Prometeo` |
-| 🎬 **YT-Extractor** | Descarga transcripciones de YouTube a una carpeta del móvil | Nativo (Android/Kotlin) | en curso | `alvar0suarez/YT-Extractor` |
+| 🎬 **YT-Extractor** | De un enlace o canal de YouTube genera un Markdown con transcripción, capturas con OCR y resumen, todo on-device | Nativo (Android/Kotlin) | en curso | `alvar0suarez/YT-Extractor` |
 
 ---
 
@@ -62,17 +62,25 @@
 El centro del ecosistema. Datos masivos en el dispositivo → keystore con respaldo
 por hardware (ver `docs/elegir-stack.md`).
 
-### 📚 Agora — Flashcards de griego antiguo (tipo Anki)
+### 📚 Agora — App local-first para leer y escribir griego antiguo (ático clásico, pronunciación reconstruida) con repetición espaciada, lectura graduada, gramática y gamificación ligera
 
-- **Stack:** PWA (Vite+React+TS)
-- **Expone:** Material/notas de estudio que podrían archivarse en Nous
-- **Consume:** (potencial) textos o recortes guardados en Nous
-- **Relaciones:** Patrón estudio→cerebro: archiva material en Nous
+- **Stack:** PWA (Vite+React+TS) · IndexedDB (Dexie) · WebCrypto · audio offline
+- **Expone:** App PWA instalable y offline (URL pública en GitHub Pages); un usuario, móvil; Datos de griego curados (TS/JSON en src/core/greek), reutilizables por otras apps de lenguas clásicas, 24 letras con AFI ático, ~50 palabras (glosa ES, categoría, derivados españoles), ~11 aforismos (traducción + desglose palabra↔lema), paradigmas de verbos y casos; Pronunciación reconstruida por unidad en JSON id→{lemma, ipa, phon} + clips de audio WAV offline en public/audio/{letters,vocab,aphorisms}; Pipeline build-time pronunciación→audio (scripts/gen-*-audio.mjs): eSpeak local por defecto, backend neural opcional; Núcleo reutilizable de lógica pura, SRS Leitner, progreso/XP/niveles (bandas Cimientos→B2), quiz, planificador "Plan de hoy", contrato FeatureModule; Material/notas de estudio que podrían archivarse en Nous
+- **Consume:** Audio + transcripción de YT-Extractor → para construir VOZ HUMANA natural (alineación forzada + troceo de clips), sustituyendo al eSpeak robótico; requiere permiso/licencia del hablante; (potencial) textos o recortes guardados en Nous; Fuentes para curar contenido (no en runtime), Perseus (textos/léxico/gramática) y Vox Graeca (pronunciación); ver docs/fuentes.md
+- **Relaciones:** Hub Nous, patrón estudio→cerebro, archiva material/progreso en Nous; YT-Extractor, su salida (audio+transcripción) es la fuente candidata para la voz humana de Agora (integración pendiente; gating, permiso del hablante); Futura app de latín, reutilizaría el núcleo (SRS, progress, quiz, contrato FeatureModule, pipeline de audio)
 - **Estado:** usable
 - **Repo:** `alvar0suarez/Agora`
 
-Origen del método. PWA desplegada por URL (GitHub Pages); si la quieres en el
-cajón de apps, se envuelve en APK sin reescribir.
+App personal de **lectura de griego antiguo**, autónoma y **offline**: no ofrece una
+API de red, sino **datos, contenido y herramientas reutilizables** a nivel de repo,
+más un **núcleo de aprendizaje** (SRS, progreso/niveles, quiz, planificador) portable
+a otras lenguas clásicas.
+
+**Cómo integrarse:** reutilizar contenido/motor importando de `src/core/greek/*` y
+`src/core/{srs,progress,quiz,plan}` (todo local, sin servidor); darle voz aportando
+`audio+transcripción` (YT-Extractor) al pipeline de alineación, o clips humanos
+licenciados a `public/audio/**` (esquema `<id>.wav`); o clonar el núcleo para una app
+hermana (p. ej. latín) con sus propios datos `id→{lemma, ipa, phon}`.
 
 ### 🔥 Prometeo — App personal para aprender plasma (estudio/contenido)
 
@@ -86,17 +94,22 @@ cajón de apps, se envuelve en APK sin reescribir.
 Primera app incorporada a la constelación tras crear el mapa. La línea de
 Relaciones es su "contrato" inicial.
 
-### 🎬 YT-Extractor — Descarga transcripciones de YouTube a una carpeta del móvil
+### 🎬 YT-Extractor — De un enlace o canal de YouTube genera un Markdown con transcripción, capturas con OCR y resumen, todo on-device
 
 - **Stack:** Nativo (Android/Kotlin)
-- **Expone:** Ficheros de transcripción en una carpeta vigilable
-- **Consume:** —
-- **Relaciones:** Su salida es candidata a ser ingerida por Nous (carpeta → cerebro)
+- **Expone:** "Un Markdown por vídeo (`<base>/<Canal>/<Título>/<Título>.md`) con cabecera de metadatos (canal, duración, enlace) y secciones: Resumen ejecutivo · Capturas · Transcripción · Descripción"; "Transcripción con marcas de tiempo: de los subtítulos de YouTube o, si el vídeo no tiene, por voz on-device (Vosk) como fallback"; "Capturas inteligentes por cambio de escena en `capturas/cap_NNN.jpg` con su texto OCR (ML Kit) embebido en el .md"; "Resúmenes ejecutivos como ficheros aparte junto al .md: `resumen-5min.md` y `resumen-20min.md`"; "Carpeta de salida elegible por el usuario (selector del sistema): la raíz de los .md/capturas puede apuntarse a cualquier ruta del móvil"; "Vigilancia de canales: detecta vídeos nuevos y los procesa en segundo plano (WorkManager), depositando su .md en esa misma carpeta"
+- **Consume:** "API key de Claude (opcional, la pone el usuario) para los resúmenes; sin ella usa un resumen extractivo local"
+- **Relaciones:** "Su salida (carpeta de .md + capturas + resúmenes) es candidata a ser ingerida por Nous (carpeta → cerebro); con el selector de carpeta puede escribir directamente en una ruta vigilada por Nous"
 - **Estado:** en curso
 - **Repo:** `alvar0suarez/YT-Extractor`
 
-Alias *Pájaro*. Pide capacidades del sistema (guardar en carpetas, segundo plano)
-→ por eso nativo y no PWA.
+Alias *Pájaro*. Pide capacidades del sistema (guardar en carpetas públicas,
+trabajo en segundo plano) → por eso nativo y no PWA. Todo el procesamiento
+(extracción, OCR, transcripción por voz, resumen local) es **on-device**; lo
+único que puede salir del móvil es el texto enviado a la API de Claude si el
+usuario activa el resumen con su propia clave. El formato de intercambio es
+**Markdown + JPG en carpetas**, pensado para que otra app lo lea sin acoplarse a
+esta.
 
 ## Añadir una app a la constelación
 
