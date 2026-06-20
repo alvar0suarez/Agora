@@ -55,7 +55,7 @@ export function RecognitionPrompt({
             <button
               type="button"
               className="btn btn--ghost"
-              onClick={() => void audio.pronounce(letter, 'sound')}
+              onClick={() => void audio.pronounce(letter, 'sound', { force: true })}
             >
               🔊 Oír de nuevo
             </button>
