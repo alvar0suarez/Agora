@@ -494,3 +494,44 @@ body {
 .aphorism__lemma-deriv {
   color: var(--muted);
 }
+
+/* Dominio del vocabulario: lista de palabras con su nivel. */
+.vocab-mastery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vocab-mastery__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--surface-2);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.vocab-mastery__row[data-level='0'] {
+  opacity: 0.55;
+}
+
+.vocab-mastery__word {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.vocab-mastery__lemma {
+  font-size: 1.2rem;
+}
+
+.vocab-mastery__gloss {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
