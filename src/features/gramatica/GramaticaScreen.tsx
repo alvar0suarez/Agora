@@ -1,26 +1,26 @@
 import { useState } from 'react'
 import { Card } from '../../core/ui/Card'
-import { VerbStudyView } from './VerbStudyView'
-import { VerbDrillView } from './VerbDrillView'
+import { StudyView } from './StudyView'
+import { MorphDrillView } from './MorphDrillView'
 
 type Screen = 'menu' | 'study' | 'drill'
 
 /**
- * Gramática (Fase 4, semilla): morfología verbal. Estudiar los paradigmas y
- * practicarlos escribiendo la forma pedida. Por ahora, presente de indicativo
- * de λύω (modelo regular) y εἰμί (esencial).
+ * Gramática (Fase 4): morfología. Estudiar los paradigmas y practicarlos
+ * escribiendo la forma pedida. Verbos (presente de λύω y εἰμί) y sustantivos
+ * (declinación de λόγος y ψυχή, los cuatro casos).
  */
 export function GramaticaScreen() {
   const [screen, setScreen] = useState<Screen>('menu')
   const back = () => setScreen('menu')
 
-  if (screen === 'study') return <VerbStudyView onExit={back} />
-  if (screen === 'drill') return <VerbDrillView onExit={back} />
+  if (screen === 'study') return <StudyView onExit={back} />
+  if (screen === 'drill') return <MorphDrillView onExit={back} />
 
   return (
     <div className="modes">
-      <Card title="Gramática · verbos">
-        <p>Aprende a conjugar. Empezamos por el presente de λύω y εἰμί.</p>
+      <Card title="Gramática">
+        <p>Conjuga verbos y declina sustantivos (los casos). Modelos: λύω, εἰμί, λόγος, ψυχή.</p>
       </Card>
       <button className="btn btn--primary mode-btn" onClick={() => setScreen('drill')}>
         <span className="mode-btn__title">Practicar</span>
