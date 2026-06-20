@@ -12,12 +12,17 @@ import type { AudioService, SpeakOptions, Utterance } from './types'
  * clip todavía; el contrato los deja preparados para un motor futuro o para
  * grabaciones humanas (sustituibles archivo a archivo, sin tocar features).
  */
-const clipUrl = (letterId: string) =>
-  `${import.meta.env.BASE_URL}audio/letters/${letterId}.wav`
-const wordClipUrl = (wordId: string) =>
-  `${import.meta.env.BASE_URL}audio/vocab/${wordId}.wav`
-const aphorismClipUrl = (id: string) =>
-  `${import.meta.env.BASE_URL}audio/aphorisms/${id}.wav`
+/**
+ * Candidatos de clip por unidad, en orden de PREFERENCIA: primero `.m4a` (voz
+ * HUMANA grabada, calidad original) y, si no existe, `.wav` (el clip eSpeak de
+ * respaldo). Así una grabación humana sustituye al robótico solo con dejar el
+ * fichero `<id>.m4a` en su carpeta; no hay que tocar código.
+ */
+const base = import.meta.env.BASE_URL
+const clipUrls = (folder: string, id: string) => [
+  `${base}audio/${folder}/${id}.m4a`,
+  `${base}audio/${folder}/${id}.wav`,
+]
 
 class ClipAudioService implements AudioService {
   readonly ready = true
@@ -36,18 +41,18 @@ class ClipAudioService implements AudioService {
     // Silenciado solo afecta al sonido AUTOMÁTICO; con `force` (botón explícito) suena.
     if (!isAudioEnabled() && !opts?.force) return
     if (what !== 'sound') return // por ahora solo hay clips del sonido
-    await this.playUrl(clipUrl(letter.id), opts)
+    await this.playUrls(clipUrls('letters', letter.id), opts)
   }
 
   async pronounceWord(id: string, opts?: SpeakOptions): Promise<void> {
     if (!isAudioEnabled() && !opts?.force) return
-    // Si la palabra aún no tiene clip generado, playUrl resuelve sin sonar.
-    await this.playUrl(wordClipUrl(id), opts)
+    // Si la palabra no tiene ningún clip, playUrls resuelve sin sonar.
+    await this.playUrls(clipUrls('vocab', id), opts)
   }
 
   async pronounceAphorism(id: string, opts?: SpeakOptions): Promise<void> {
     if (!isAudioEnabled() && !opts?.force) return
-    await this.playUrl(aphorismClipUrl(id), opts)
+    await this.playUrls(clipUrls('aphorisms', id), opts)
   }
 
   stop(): void {
@@ -57,21 +62,39 @@ class ClipAudioService implements AudioService {
     this.current = null
   }
 
-  private playUrl(url: string, opts?: SpeakOptions): Promise<void> {
+  /**
+   * Intenta reproducir el primer `url` que cargue (p. ej. `.m4a` y, si falla,
+   * `.wav`). Resuelve al terminar o cuando se agotan los candidatos.
+   */
+  private playUrls(urls: string[], opts?: SpeakOptions): Promise<void> {
     this.stop()
     return new Promise((resolve) => {
-      const audio = new Audio(url)
-      if (opts?.rate) audio.playbackRate = opts.rate
-      this.current = audio
-      const done = () => {
-        if (this.current === audio) this.current = null
-        resolve()
+      const tryAt = (i: number) => {
+        if (i >= urls.length) {
+          resolve()
+          return
+        }
+        const audio = new Audio(urls[i])
+        if (opts?.rate) audio.playbackRate = opts.rate
+        this.current = audio
+        let moved = false
+        const next = () => {
+          if (moved) return
+          moved = true
+          if (this.current === audio) this.current = null
+          tryAt(i + 1) // candidato siguiente (p. ej. .wav si no había .m4a)
+        }
+        const finish = () => {
+          if (moved) return
+          moved = true
+          if (this.current === audio) this.current = null
+          resolve()
+        }
+        audio.onended = finish
+        audio.onerror = next
+        void audio.play().catch(next)
       }
-      audio.onended = done
-      audio.onerror = done
-      // `play()` puede rechazar si el navegador bloquea autoplay; resolvemos
-      // igualmente para no dejar la promesa colgada.
-      void audio.play().catch(done)
+      tryAt(0)
     })
   }
 }
