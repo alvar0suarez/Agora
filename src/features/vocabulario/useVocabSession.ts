@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { LETTERS, type GreekLetter } from '../../core/greek'
+import { VOCAB, vocabById, type VocabEntry } from '../../core/greek'
 import {
   loadStates,
   saveState,
@@ -19,29 +19,25 @@ import {
   type ProgressState,
 } from '../../core/progress'
 
-/** Letras nuevas que se introducen como máximo en una sesión (en total). */
+/** Palabras nuevas que se introducen como máximo en una sesión (en total). */
 const NEW_PER_SESSION = 8
 
 /**
- * Dirección del repaso:
- *  - `rec` (reconocer): ves el glifo y recuerdas su nombre/sonido.
- *  - `prod` (producir): ves el nombre/sonido y eliges el glifo.
- * Cada dirección se memoriza por separado en el SRS (saber leer una letra no
- * implica saber escribirla), por eso forma parte de la clave de la carta.
+ * Dirección del repaso de una palabra:
+ *  - `rec` (reconocer): ves la palabra griega y recuerdas su significado.
+ *  - `prod` (producir): ves el significado y eliges la palabra griega.
+ * Cada dirección es una carta SRS separada.
  */
-export type SessionMode = 'rec' | 'prod'
+export type VocabMode = 'rec' | 'prod'
 
-/** Una carta de la cola: una letra en una dirección concreta. */
-interface SessionCard {
-  letterId: string
-  dir: SessionMode
+/** Una carta de la cola: una palabra en una dirección concreta. */
+interface VocabCard {
+  wordId: string
+  dir: VocabMode
 }
 
-/** Clave SRS de la carta de una letra en una dirección concreta. */
-export const cardId = (mode: SessionMode, letterId: string) =>
-  `alfabeto:${mode}:${letterId}`
-
-const letterById = new Map(LETTERS.map((l) => [l.id, l]))
+/** Clave SRS de la carta de una palabra en una dirección concreta. */
+const cardId = (mode: VocabMode, wordId: string) => `vocab:${mode}:${wordId}`
 
 /** Intercala varias listas por turnos (round-robin): [a1,b1,a2,b2,…]. */
 function interleave<T>(lists: T[][]): T[] {
@@ -53,48 +49,43 @@ function interleave<T>(lists: T[][]): T[] {
   return out
 }
 
-export interface SessionStats {
+export interface VocabStats {
   reviewed: number
   recalled: number
   /** XP ganada en esta sesión (anclada a aciertos recordando). */
   xpGained: number
   /** XP total acumulada (para derivar el nivel). */
   totalXp: number
-  /** Racha diaria actual (días consecutivos con actividad). */
+  /** Racha diaria actual. */
   streakDays: number
 }
 
 /**
- * Orquesta una sesión de repaso del alfabeto en una o varias direcciones: carga
- * el progreso, arma la cola (lo que vence + alguna letra nueva) y aplica las
- * calificaciones al SRS. Con varias direcciones las cartas se INTERCALAN
- * (interleaving). La presentación (cómo se pregunta cada carta) la decide la
- * vista, que se guía por `currentMode`.
+ * Sesión de vocabulario en una o varias direcciones, con interleaving cuando hay
+ * varias. Reutiliza el SRS y el progreso del núcleo (XP/racha/nivel son
+ * transversales). Mismo patrón que la sesión del alfabeto, pero independiente
+ * (el contrato prohíbe que un feature dependa de otro).
  */
-export function useLetterSession(modes: SessionMode | SessionMode[]) {
-  // Clave estable de las direcciones para las dependencias (evita rehacer la
-  // sesión por recibir un array nuevo con el mismo contenido en cada render).
+export function useVocabSession(modes: VocabMode | VocabMode[]) {
   const dirKey = Array.isArray(modes) ? modes.join(',') : modes
 
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
-  const [queue, setQueue] = useState<SessionCard[]>([])
-  const [stats, setStats] = useState<SessionStats>({
+  const [queue, setQueue] = useState<VocabCard[]>([])
+  const [stats, setStats] = useState<VocabStats>({
     reviewed: 0,
     recalled: 0,
     xpGained: 0,
     totalXp: 0,
     streakDays: 0,
   })
-  // Progreso transversal (XP + racha). Vive en una ref porque solo lo leemos
-  // y actualizamos al calificar; lo visible (xpGained, streak) va en `stats`.
   const progress = useRef<ProgressState | null>(null)
 
   const build = useCallback(async () => {
     setLoading(true)
     const now = Date.now()
-    const dirs = dirKey.split(',') as SessionMode[]
-    const ids = dirs.flatMap((d) => LETTERS.map((l) => cardId(d, l.id)))
+    const dirs = dirKey.split(',') as VocabMode[]
+    const ids = dirs.flatMap((d) => VOCAB.map((v) => cardId(d, v.id)))
     const [loaded, loadedProgress] = await Promise.all([
       loadStates(ids),
       loadProgress(),
@@ -102,19 +93,19 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
     progress.current = loadedProgress
 
     const byCard = new Map<string, SrsState>()
-    const duePerDir: SessionCard[][] = []
-    const freshPerDir: SessionCard[][] = []
+    const duePerDir: VocabCard[][] = []
+    const freshPerDir: VocabCard[][] = []
     for (const d of dirs) {
-      const due: SessionCard[] = []
-      const fresh: SessionCard[] = []
-      for (const l of LETTERS) {
-        const key = cardId(d, l.id)
+      const due: VocabCard[] = []
+      const fresh: VocabCard[] = []
+      for (const v of VOCAB) {
+        const key = cardId(d, v.id)
         const s = loaded.get(key)
         if (!s) {
-          fresh.push({ letterId: l.id, dir: d })
+          fresh.push({ wordId: v.id, dir: d })
         } else {
           byCard.set(key, s)
-          if (isDue(s, now)) due.push({ letterId: l.id, dir: d })
+          if (isDue(s, now)) due.push({ wordId: v.id, dir: d })
         }
       }
       duePerDir.push(due)
@@ -140,16 +131,16 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
   }, [build])
 
   const currentCard = queue[0] ?? null
-  const current: GreekLetter | null = currentCard
-    ? letterById.get(currentCard.letterId) ?? null
+  const current: VocabEntry | null = currentCard
+    ? vocabById.get(currentCard.wordId) ?? null
     : null
-  const currentMode: SessionMode | null = currentCard?.dir ?? null
+  const currentMode: VocabMode | null = currentCard?.dir ?? null
 
   const grade = useCallback(
     (g: Grade) => {
       if (!currentCard) return
       const now = Date.now()
-      const key = cardId(currentCard.dir, currentCard.letterId)
+      const key = cardId(currentCard.dir, currentCard.wordId)
       const prev = states.get(key) ?? newCard(now)
       const next = review(prev, g, now)
       void saveState(key, next)
@@ -177,7 +168,6 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
         totalXp: newTotalXp ?? s.totalXp,
         streakDays: newStreak ?? s.streakDays,
       }))
-      // 'again' devuelve la carta al final de la cola (reaparece esta sesión).
       setQueue((q) =>
         g === 'again' ? [...q.slice(1), currentCard] : q.slice(1),
       )

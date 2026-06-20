@@ -1,14 +1,14 @@
 import { Card } from '../../core/ui/Card'
 import { levelFromXp } from '../../core/progress'
-import type { SessionStats } from './useLetterSession'
+import type { VocabStats } from './useVocabSession'
 
-/** Pantalla de fin de sesión, común a reconocer y escribir. */
-export function SessionSummary({
+/** Fin de sesión de vocabulario: aciertos + XP/racha/nivel (núcleo compartido). */
+export function VocabSummary({
   stats,
   onRestart,
   onExit,
 }: {
-  stats: SessionStats
+  stats: VocabStats
   onRestart: () => void
   onExit: () => void
 }) {
