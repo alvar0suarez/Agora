@@ -1,3 +1,4 @@
+import { SessionHeader } from '../../core/ui/SessionHeader'
 import { useVocabSession, type VocabMode } from './useVocabSession'
 import { VocabRecognitionPrompt } from './VocabRecognitionPrompt'
 import { VocabProductionPrompt } from './VocabProductionPrompt'
@@ -28,19 +29,18 @@ export function VocabSessionView({
 
   return (
     <div className="alfabeto">
-      <div className="alfabeto__top">
-        <button className="btn btn--ghost" onClick={onExit}>
-          ← Menú
-        </button>
-        <span className="alfabeto__progress">
-          {s.currentMode === 'rec'
+      <SessionHeader
+        onExit={onExit}
+        label={
+          s.currentMode === 'rec'
             ? 'Significado'
             : s.currentMode === 'type'
               ? 'Escribir'
-              : 'Palabra'}{' '}
-          · Quedan {s.remaining}
-        </span>
-      </div>
+              : 'Palabra'
+        }
+        remaining={s.remaining}
+        total={s.total}
+      />
       {s.currentMode === 'rec' ? (
         <VocabRecognitionPrompt word={word} onGrade={s.grade} />
       ) : s.currentMode === 'type' ? (

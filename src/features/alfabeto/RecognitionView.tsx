@@ -1,3 +1,4 @@
+import { SessionHeader } from '../../core/ui/SessionHeader'
 import { useLetterSession } from './useLetterSession'
 import { RecognitionPrompt } from './RecognitionPrompt'
 import { SessionSummary } from './SessionSummary'
@@ -19,12 +20,7 @@ export function RecognitionView({ onExit }: { onExit: () => void }) {
 
   return (
     <div className="alfabeto">
-      <div className="alfabeto__top">
-        <button className="btn btn--ghost" onClick={onExit}>
-          ← Menú
-        </button>
-        <span className="alfabeto__progress">Quedan {s.remaining}</span>
-      </div>
+      <SessionHeader onExit={onExit} remaining={s.remaining} total={s.total} />
       <RecognitionPrompt letter={letter} onGrade={s.grade} />
     </div>
   )

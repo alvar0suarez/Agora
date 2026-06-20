@@ -3,6 +3,7 @@ import { normalizeGreek } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
 import { GreekKeypad } from '../../core/ui/GreekKeypad'
 import { levelFromXp } from '../../core/progress'
+import { SessionHeader } from '../../core/ui/SessionHeader'
 import { useMorphDrill } from './useMorphDrill'
 
 /**
@@ -67,12 +68,7 @@ export function MorphDrillView({ onExit }: { onExit: () => void }) {
 
   return (
     <div className="alfabeto">
-      <div className="alfabeto__top">
-        <button className="btn btn--ghost" onClick={onExit}>
-          ← Menú
-        </button>
-        <span className="alfabeto__progress">Quedan {d.remaining}</span>
-      </div>
+      <SessionHeader onExit={onExit} remaining={d.remaining} total={d.total} />
 
       <Card>
         <p className="alfabeto__prompt">Escribe la forma:</p>

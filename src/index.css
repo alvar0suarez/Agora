@@ -770,3 +770,32 @@ button:focus:not(:focus-visible) {
     transition: none !important;
   }
 }
+
+/* Cabecera de sesión: fila (volver + restante) + barra de progreso. */
+.session-head {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.session-head__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.session-bar {
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.session-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}

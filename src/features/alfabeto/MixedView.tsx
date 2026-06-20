@@ -1,3 +1,4 @@
+import { SessionHeader } from '../../core/ui/SessionHeader'
 import { useLetterSession, type SessionMode } from './useLetterSession'
 import { RecognitionPrompt } from './RecognitionPrompt'
 import { ProductionPrompt } from './ProductionPrompt'
@@ -24,14 +25,12 @@ export function MixedView({ onExit }: { onExit: () => void }) {
 
   return (
     <div className="alfabeto">
-      <div className="alfabeto__top">
-        <button className="btn btn--ghost" onClick={onExit}>
-          ← Menú
-        </button>
-        <span className="alfabeto__progress">
-          {s.currentMode === 'rec' ? 'Leer' : 'Escribir'} · Quedan {s.remaining}
-        </span>
-      </div>
+      <SessionHeader
+        onExit={onExit}
+        label={s.currentMode === 'rec' ? 'Leer' : 'Escribir'}
+        remaining={s.remaining}
+        total={s.total}
+      />
       {s.currentMode === 'rec' ? (
         <RecognitionPrompt letter={letter} onGrade={s.grade} />
       ) : (
