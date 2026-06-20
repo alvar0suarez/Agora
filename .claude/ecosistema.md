@@ -43,7 +43,7 @@
 |---|---|---|---|---|
 | 🧠 **Nous** (hub) | Cerebro digital: notas, libros y archivos, local-first en el móvil | Nativo (Kotlin/Compose) | en curso | `alvar0suarez/Nous` |
 | 📚 **Agora** | App local-first para leer y escribir griego antiguo (ático clásico, pronunciación reconstruida) con repetición espaciada, lectura graduada, gramática y gamificación ligera | PWA (Vite+React+TS) · IndexedDB (Dexie) · WebCrypto · audio offline | usable | `alvar0suarez/Agora` |
-| 🔥 **Prometeo** | App personal para aprender plasma (estudio/contenido) | PWA (probable) | arrancando | `alvar0suarez/Prometeo` |
+| 🔥 **Prometeo** | App para aprender física de la fusión (de bachillerato a frontera), con mastery + repaso espaciado | Web app (Next.js + TS + Tailwind, MDX, KaTeX, BKT + FSRS); reutiliza el sistema de aprendizaje de Agora | arrancando | `alvar0suarez/Prometeo` |
 | 🎬 **YT-Extractor** | De un enlace o canal de YouTube genera un Markdown con transcripción, capturas con OCR y resumen, todo on-device | Nativo (Android/Kotlin) | en curso | `alvar0suarez/YT-Extractor` |
 
 ---
@@ -82,10 +82,10 @@ a otras lenguas clásicas.
 licenciados a `public/audio/**` (esquema `<id>.wav`); o clonar el núcleo para una app
 hermana (p. ej. latín) con sus propios datos `id→{lemma, ipa, phon}`.
 
-### 🔥 Prometeo — App personal para aprender plasma (estudio/contenido)
+### 🔥 Prometeo — App para aprender física de la fusión (de bachillerato a frontera), con mastery + repaso espaciado
 
-- **Stack:** PWA (probable)
-- **Expone:** Resúmenes y notas de estudio de plasma
+- **Stack:** Web app (Next.js + TS + Tailwind, MDX, KaTeX, BKT + FSRS); reutiliza el sistema de aprendizaje de Agora
+- **Expone:** Resúmenes y notas de estudio de fusión/plasma
 - **Consume:** (potencial) material guardado en Nous
 - **Relaciones:** Archiva sus resúmenes de plasma en Nous (hub); mismo patrón estudio→cerebro que Agora
 - **Estado:** arrancando
