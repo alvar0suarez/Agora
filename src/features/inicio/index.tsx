@@ -5,6 +5,7 @@ import { InicioScreen } from './InicioScreen'
 export const inicioFeature: FeatureModule = {
   id: 'inicio',
   title: 'Inicio',
+  icon: '🏠',
   security: 'normal',
   Screen: InicioScreen,
 }

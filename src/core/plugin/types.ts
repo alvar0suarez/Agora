@@ -22,6 +22,8 @@ export interface FeatureModule {
   id: string
   /** Nombre visible en la navegación. */
   title: string
+  /** Icono (emoji) para la navegación. Opcional. */
+  icon?: string
   /** Política de seguridad del feature. */
   security: SecurityLevel
   /** Componente de pantalla principal del feature. */

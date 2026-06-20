@@ -5,6 +5,7 @@ import { AlfabetoScreen } from './AlfabetoScreen'
 export const alfabetoFeature: FeatureModule = {
   id: 'alfabeto',
   title: 'Alfabeto',
+  icon: '🔠',
   security: 'normal',
   Screen: AlfabetoScreen,
 }

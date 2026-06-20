@@ -5,6 +5,7 @@ import { LecturaScreen } from './LecturaScreen'
 export const lecturaFeature: FeatureModule = {
   id: 'lectura',
   title: 'Lectura',
+  icon: '📜',
   security: 'normal',
   Screen: LecturaScreen,
 }

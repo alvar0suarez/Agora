@@ -61,9 +61,15 @@ export function App() {
             <button
               key={f.id}
               className={`nav-btn${f.id === activeId ? ' nav-btn--active' : ''}`}
+              aria-current={f.id === activeId ? 'page' : undefined}
               onClick={() => setActiveId(f.id)}
             >
-              {f.title}
+              {f.icon ? (
+                <span className="nav-btn__icon" aria-hidden="true">
+                  {f.icon}
+                </span>
+              ) : null}
+              <span className="nav-btn__label">{f.title}</span>
             </button>
           ))}
         </nav>
