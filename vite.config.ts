@@ -27,7 +27,7 @@ export default defineConfig(({ command }) => ({
       // Precache offline: el set por defecto no incluye audio, así que añadimos
       // .wav (clips eSpeak) y .m4a (grabaciones humanas) para que suenen sin conexión.
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,wav,m4a}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,wav,m4a}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
       manifest: {
