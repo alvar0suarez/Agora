@@ -11,16 +11,27 @@ export function SessionSummary({
   onRestart: () => void
   onExit: () => void
 }) {
-  const { reviewed, recalled } = stats
+  const { reviewed, recalled, xpGained, streakDays } = stats
   return (
     <Card title="¡Sesión completada! 🎉">
       {reviewed === 0 ? (
         <p>No hay nada que repasar ahora mismo. Vuelve más tarde 👋</p>
       ) : (
-        <p>
-          Repasadas: <strong>{reviewed}</strong> · Acertadas:{' '}
-          <strong>{recalled}</strong>
-        </p>
+        <>
+          <p>
+            Repasadas: <strong>{reviewed}</strong> · Acertadas:{' '}
+            <strong>{recalled}</strong>
+          </p>
+          <p>
+            XP ganada: <strong>+{xpGained}</strong>
+            {streakDays > 0 && (
+              <>
+                {' '}
+                · Racha: <strong>🔥 {streakDays}</strong>
+              </>
+            )}
+          </p>
+        </>
       )}
       <div className="grade">
         <button className="btn" onClick={onExit}>
