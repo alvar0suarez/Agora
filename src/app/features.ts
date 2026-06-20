@@ -1,4 +1,5 @@
 import { registerFeature } from '../core/plugin/registry'
+import { inicioFeature } from '../features/inicio'
 import { alfabetoFeature } from '../features/alfabeto'
 import { vocabularioFeature } from '../features/vocabulario'
 import { lecturaFeature } from '../features/lectura'
@@ -10,6 +11,7 @@ import { lecturaFeature } from '../features/lectura'
  * registrarlo (una línea). Nada más cambia en el núcleo ni en la navegación.
  */
 export function registerFeatures(): void {
+  registerFeature(inicioFeature)
   registerFeature(alfabetoFeature)
   registerFeature(vocabularioFeature)
   registerFeature(lecturaFeature)
