@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card } from '../../core/ui/Card'
+import { audio } from '../../core/audio'
 import { useLetterSession } from './useLetterSession'
 import { SessionSummary } from './SessionSummary'
 
@@ -10,6 +11,12 @@ import { SessionSummary } from './SessionSummary'
 export function RecognitionView({ onExit }: { onExit: () => void }) {
   const s = useLetterSession('rec')
   const [revealed, setRevealed] = useState(false)
+
+  // Acción → audio: al revelar la respuesta suena el sonido de la letra
+  // (pronunciación reconstruida ática). El usuario puede repetirlo abajo.
+  useEffect(() => {
+    if (revealed && s.current) void audio.pronounce(s.current, 'sound')
+  }, [revealed, s.current])
 
   if (s.loading) return <p className="empty">Cargando…</p>
 
@@ -45,6 +52,13 @@ export function RecognitionView({ onExit }: { onExit: () => void }) {
               <strong>{letter.ipa}</strong>
             </p>
             <p className="answer__sound">{letter.sound}</p>
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={() => void audio.pronounce(letter, 'sound')}
+            >
+              🔊 Oír de nuevo
+            </button>
           </Card>
           <div className="grade">
             <button

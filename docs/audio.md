@@ -27,39 +27,54 @@ transliteración + AFI + pista).
 | **eSpeak-NG (grc) por WASM** | Robótica, pero apunta a la reconstrucción | Dependencia nueva (~MB en la PWA) | ✅ |
 | ~~TTS griego moderno~~ | Suena bien pero enseña mal | — | descartado |
 
-## Recomendación
+## Decisión final (implementada)
 
-**eSpeak-NG (grc) vía WASM** como v1: funciona offline y apunta a los sonidos
-correctos, sin depender de grabaciones. **Diseñar el contrato para poder
-sustituirlo por clips pregrabados** cuando haya voz humana (mejor calidad).
+**Clips pregenerados con eSpeak-NG en build-time**, NO el WASM en runtime.
+
+Al investigar el paquete `espeak-ng` (npm, GPL-3.0) salieron dos problemas que
+cambiaron el plan original (que era cargar el WASM en el móvil):
+
+1. **Peso**: el WASM lleva los datos de TODOS los idiomas embebidos → ~18 MB.
+   Muchísimo para pronunciar 24 letras en una PWA.
+2. **Corrección**: la voz `grc` ("griego antiguo") de eSpeak usa la convención
+   académica/erasmiana y **enseña mal las letras clave**: φ→[f], θ/χ fricativas,
+   ζ→[z]. Justo lo que el proyecto quiere evitar. Acierta β γ δ η υ ρ, falla en
+   las 4 que `letters.ts` marca como distintivas del ático auténtico.
+
+**Solución**: no le damos texto griego a eSpeak (sus reglas grc son erasmianas);
+le damos los **fonemas correctos** de la reconstrucción ([pʰ tʰ kʰ], [zd], trino
+[r]…) vía su entrada `[[...]]`, verificados contra el AFI de `letters.ts`. eSpeak
+corre **aquí, en build-time** (Node) y genera un `.wav` por letra. La app solo
+embarca esos clips.
+
+Ventajas: ligero (~850 KiB los 24 clips), 100% offline, y la app **no arrastra la
+licencia GPL** (el audio que produce un programa GPL no es GPL, como con un
+compilador). eSpeak queda como `devDependency`, solo para regenerar.
 
 ## Encaje en la arquitectura (contrato de módulo)
 
-- Servicio de audio en **`core`** (p. ej. `src/core/audio/`): interfaz tipo
-  `pronounce(letter)` / `speak(...)`, con una implementación eSpeak-WASM detrás.
-  Los features lo usan; el contrato se respeta (features → core, nunca entre sí).
-- Los datos de la letra ya están en `core/greek` (incluyen `ipa`), útiles para
-  alimentar al motor.
+- Servicio de audio en **`core/audio`**: interfaz `AudioService`
+  (`pronounce(letter, what)` / `speak(text)`); motor activo en `audio` (1 línea
+  para cambiarlo). Implementación v1 = `clipAudio` (reproduce los `.wav`).
+  Features → core, nunca entre sí.
+- Generación: `scripts/gen-letter-audio.mjs` (mapa de fonemas curados → eSpeak).
+  Salida en `public/audio/letters/<id>.wav` (commiteada, así el build no necesita
+  eSpeak). Precache: se añadió `wav` a `workbox.globPatterns` en `vite.config.ts`.
+- `letterText()` (puro, con tests) aísla "qué se dice" de cada letra.
 
 ## Integración en la UI (feature alfabeto)
 
-- **Reconocer**: botón de altavoz al revelar la respuesta.
-- **Escribir**: el estímulo como **audio** (botón "oír de nuevo"), además del texto.
+- **Reconocer**: al **revelar** la respuesta suena el sonido (acción → audio),
+  con un "🔊 Oír de nuevo". ← hecho.
+- **Escribir / dictado**: pendiente de diseño (ver abajo).
 
-## Consideraciones / riesgos
+## Pendiente (próximos pasos)
 
-- **Dependencia nueva y peso**: eSpeak-WASM pesa (datos de voz). Afecta al precache
-  offline de la PWA. Requiere OK explícito (CLAUDE.md: no añadir libs sin justificar).
-- **No se puede probar el audio aquí** (contenedor sin sonido): la prueba real la
-  hace el dueño en el móvil. Aquí se deja verde (build + typecheck + tests de la
-  lógica que no sea de reproducción).
-- Empezar por un **espurio pequeño** (una letra) para validar que el WASM carga y
-  suena en el móvil antes de cablear toda la UI.
-
-## Pasos sugeridos
-
-1. Plan corto + OK (qué paquete WASM exacto, tamaño, licencia).
-2. Servicio de audio en `core` con interfaz + implementación eSpeak-WASM.
-3. Probar con UNA letra (botón altavoz en "Reconocer").
-4. Integrar en ambos modos. Tests de lo testeable.
-5. Dejar el contrato listo para clips pregrabados (mejora futura).
+1. **Verificar el sonido en el móvil** (aquí no hay audio): si alguna letra suena
+   rara, se ajusta su fonema en `scripts/gen-letter-audio.mjs` y se regenera.
+   Vigilar: vocales largas η/ω, la `a` de apoyo de las consonantes, el trino ρ.
+2. **Nombres de letra** (ἄλφα…) como audio, si se quieren: generar clips de
+   nombre con fonemas correctos (¡los nombres con φ/θ/χ también deben aspirarse!).
+3. **Modo dictado** (oír → escribir): es un modo de ejercicio NUEVO, no solo
+   añadir audio. Diseñarlo aparte antes de codificar.
+4. Audio en "Escribir" como estímulo, si encaja con el dictado.

@@ -17,6 +17,11 @@ export default defineConfig(({ command }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon.svg'],
+      // Precache offline: el set por defecto no incluye audio, así que añadimos
+      // .wav para que los clips de las letras funcionen sin conexión.
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,wav}'],
+      },
       manifest: {
         name: 'Agora',
         short_name: 'Agora',
