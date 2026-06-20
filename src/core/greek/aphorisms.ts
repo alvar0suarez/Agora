@@ -12,6 +12,12 @@
 export interface AphorismWord {
   gr: string
   gloss: string
+  /**
+   * Id del lema de vocabulario (`core/greek/vocab.ts`) al que corresponde esta
+   * forma, si está en el vocabulario. Permite enlazar la lectura con la ficha
+   * de la palabra (la forma del texto suele estar flexionada respecto al lema).
+   */
+  lemmaId?: string
 }
 
 /** Un aforismo: texto completo, traducción, fuente y desglose. */
@@ -55,7 +61,7 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Todo fluye.',
     source: 'Heráclito (atribuido)',
     words: [
-      { gr: 'πάντα', gloss: 'todas las cosas, todo' },
+      { gr: 'πάντα', gloss: 'todas las cosas, todo', lemmaId: 'pas' },
       { gr: 'ῥεῖ', gloss: 'fluye, corre' },
     ],
   },
@@ -88,10 +94,10 @@ export const APHORISMS: Aphorism[] = [
     translation: 'La vida es breve; el arte, largo.',
     source: 'Hipócrates, Aforismos',
     words: [
-      { gr: 'ὁ', gloss: 'el (artículo)' },
+      { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
       { gr: 'βίος', gloss: 'vida' },
       { gr: 'βραχύς', gloss: 'breve, corto' },
-      { gr: 'ἡ', gloss: 'la (artículo)' },
+      { gr: 'ἡ', gloss: 'la (artículo)', lemmaId: 'ho' },
       { gr: 'δὲ', gloss: 'y, mas (contraste)' },
       { gr: 'τέχνη', gloss: 'arte, técnica' },
       { gr: 'μακρή', gloss: 'larga' },
@@ -103,12 +109,12 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Una vida sin examen no merece ser vivida por el hombre.',
     source: 'Platón, Apología de Sócrates',
     words: [
-      { gr: 'ὁ', gloss: 'la (artículo)' },
+      { gr: 'ὁ', gloss: 'la (artículo)', lemmaId: 'ho' },
       { gr: 'ἀνεξέταστος', gloss: 'no examinada, sin reflexión' },
       { gr: 'βίος', gloss: 'vida' },
-      { gr: 'οὐ', gloss: 'no' },
+      { gr: 'οὐ', gloss: 'no', lemmaId: 'ou' },
       { gr: 'βιωτὸς', gloss: 'digna de vivirse, vivible' },
-      { gr: 'ἀνθρώπῳ', gloss: 'para el hombre' },
+      { gr: 'ἀνθρώπῳ', gloss: 'para el hombre', lemmaId: 'anthropos' },
     ],
   },
 ]

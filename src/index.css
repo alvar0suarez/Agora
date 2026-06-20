@@ -436,19 +436,61 @@ body {
   gap: 0.4rem;
 }
 
+.aphorism__hint {
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 .aphorism__word {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--surface-2);
+}
+
+.aphorism__word-row {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--surface-2);
 }
 
 .aphorism__word-gr {
   font-size: 1.15rem;
 }
 
+/* Palabra enlazada a una ficha de vocabulario: tocable. */
+.aphorism__word-gr--link {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+  font-size: 1.15rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.aphorism__word-gr--link.is-open {
+  font-weight: 600;
+}
+
 .aphorism__word-gloss {
   color: var(--muted);
   text-align: right;
+}
+
+.aphorism__lemma {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  background: var(--surface-2);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.aphorism__lemma-deriv {
+  color: var(--muted);
 }
