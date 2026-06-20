@@ -19,7 +19,7 @@ import {
   type ProgressState,
 } from '../../core/progress'
 
-/** Letras nuevas que se introducen como máximo en una sesión. */
+/** Letras nuevas que se introducen como máximo en una sesión (en total). */
 const NEW_PER_SESSION = 8
 
 /**
@@ -31,11 +31,27 @@ const NEW_PER_SESSION = 8
  */
 export type SessionMode = 'rec' | 'prod'
 
+/** Una carta de la cola: una letra en una dirección concreta. */
+interface SessionCard {
+  letterId: string
+  dir: SessionMode
+}
+
 /** Clave SRS de la carta de una letra en una dirección concreta. */
 export const cardId = (mode: SessionMode, letterId: string) =>
   `alfabeto:${mode}:${letterId}`
 
 const letterById = new Map(LETTERS.map((l) => [l.id, l]))
+
+/** Intercala varias listas por turnos (round-robin): [a1,b1,a2,b2,…]. */
+function interleave<T>(lists: T[][]): T[] {
+  const out: T[] = []
+  const max = Math.max(0, ...lists.map((l) => l.length))
+  for (let i = 0; i < max; i++) {
+    for (const list of lists) if (i < list.length) out.push(list[i])
+  }
+  return out
+}
 
 export interface SessionStats {
   reviewed: number
@@ -49,14 +65,20 @@ export interface SessionStats {
 }
 
 /**
- * Orquesta una sesión de repaso del alfabeto en una dirección dada: carga el
- * progreso, arma la cola (lo que vence + alguna letra nueva) y aplica las
- * calificaciones al SRS. La presentación (cómo se pregunta) la decide la vista.
+ * Orquesta una sesión de repaso del alfabeto en una o varias direcciones: carga
+ * el progreso, arma la cola (lo que vence + alguna letra nueva) y aplica las
+ * calificaciones al SRS. Con varias direcciones las cartas se INTERCALAN
+ * (interleaving). La presentación (cómo se pregunta cada carta) la decide la
+ * vista, que se guía por `currentMode`.
  */
-export function useLetterSession(mode: SessionMode) {
+export function useLetterSession(modes: SessionMode | SessionMode[]) {
+  // Clave estable de las direcciones para las dependencias (evita rehacer la
+  // sesión por recibir un array nuevo con el mismo contenido en cada render).
+  const dirKey = Array.isArray(modes) ? modes.join(',') : modes
+
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
-  const [queue, setQueue] = useState<string[]>([])
+  const [queue, setQueue] = useState<SessionCard[]>([])
   const [stats, setStats] = useState<SessionStats>({
     reviewed: 0,
     recalled: 0,
@@ -71,27 +93,38 @@ export function useLetterSession(mode: SessionMode) {
   const build = useCallback(async () => {
     setLoading(true)
     const now = Date.now()
+    const dirs = dirKey.split(',') as SessionMode[]
+    const ids = dirs.flatMap((d) => LETTERS.map((l) => cardId(d, l.id)))
     const [loaded, loadedProgress] = await Promise.all([
-      loadStates(LETTERS.map((l) => cardId(mode, l.id))),
+      loadStates(ids),
       loadProgress(),
     ])
     progress.current = loadedProgress
 
-    const byLetter = new Map<string, SrsState>()
-    const due: string[] = []
-    const fresh: string[] = []
-    for (const l of LETTERS) {
-      const s = loaded.get(cardId(mode, l.id))
-      if (!s) {
-        fresh.push(l.id)
-      } else {
-        byLetter.set(l.id, s)
-        if (isDue(s, now)) due.push(l.id)
+    const byCard = new Map<string, SrsState>()
+    const duePerDir: SessionCard[][] = []
+    const freshPerDir: SessionCard[][] = []
+    for (const d of dirs) {
+      const due: SessionCard[] = []
+      const fresh: SessionCard[] = []
+      for (const l of LETTERS) {
+        const key = cardId(d, l.id)
+        const s = loaded.get(key)
+        if (!s) {
+          fresh.push({ letterId: l.id, dir: d })
+        } else {
+          byCard.set(key, s)
+          if (isDue(s, now)) due.push({ letterId: l.id, dir: d })
+        }
       }
+      duePerDir.push(due)
+      freshPerDir.push(fresh)
     }
+    const due = interleave(duePerDir)
+    const fresh = interleave(freshPerDir).slice(0, NEW_PER_SESSION)
 
-    setStates(byLetter)
-    setQueue([...due, ...fresh.slice(0, NEW_PER_SESSION)])
+    setStates(byCard)
+    setQueue([...due, ...fresh])
     setStats({
       reviewed: 0,
       recalled: 0,
@@ -100,31 +133,33 @@ export function useLetterSession(mode: SessionMode) {
       streakDays: loadedProgress.streakDays,
     })
     setLoading(false)
-  }, [mode])
+  }, [dirKey])
 
   useEffect(() => {
     void build()
   }, [build])
 
-  const currentId = queue[0] ?? null
-  const current: GreekLetter | null = currentId
-    ? letterById.get(currentId) ?? null
+  const currentCard = queue[0] ?? null
+  const current: GreekLetter | null = currentCard
+    ? letterById.get(currentCard.letterId) ?? null
     : null
+  const currentMode: SessionMode | null = currentCard?.dir ?? null
 
   const grade = useCallback(
     (g: Grade) => {
-      if (!currentId) return
+      if (!currentCard) return
       const now = Date.now()
-      const prev = states.get(currentId) ?? newCard(now)
+      const key = cardId(currentCard.dir, currentCard.letterId)
+      const prev = states.get(key) ?? newCard(now)
       const next = review(prev, g, now)
-      void saveState(cardId(mode, currentId), next)
+      void saveState(key, next)
 
       // Gamificación anclada al recuerdo real: XP solo al acertar recordando
       // (grade 'good' en reconocimiento). La actividad alimenta la racha diaria.
       let gainedXp = 0
       let newStreak: number | null = null
       let newTotalXp: number | null = null
-      if (g === 'good' && mode === 'rec' && progress.current) {
+      if (g === 'good' && currentCard.dir === 'rec' && progress.current) {
         const withActivity = registerActivity(progress.current, dayIndex(now))
         const updated = addXp(withActivity, XP_PER_RECALL)
         progress.current = updated
@@ -134,7 +169,7 @@ export function useLetterSession(mode: SessionMode) {
         newTotalXp = updated.xp
       }
 
-      setStates((prevMap) => new Map(prevMap).set(currentId, next))
+      setStates((prevMap) => new Map(prevMap).set(key, next))
       setStats((s) => ({
         reviewed: s.reviewed + 1,
         recalled: s.recalled + (g === 'good' ? 1 : 0),
@@ -142,18 +177,19 @@ export function useLetterSession(mode: SessionMode) {
         totalXp: newTotalXp ?? s.totalXp,
         streakDays: newStreak ?? s.streakDays,
       }))
-      // 'again' devuelve la letra al final de la cola (reaparece esta sesión).
+      // 'again' devuelve la carta al final de la cola (reaparece esta sesión).
       setQueue((q) =>
-        g === 'again' ? [...q.slice(1), currentId] : q.slice(1),
+        g === 'again' ? [...q.slice(1), currentCard] : q.slice(1),
       )
     },
-    [currentId, states, mode],
+    [currentCard, states],
   )
 
   return {
     loading,
     done: !loading && queue.length === 0,
     current,
+    currentMode,
     remaining: queue.length,
     grade,
     restart: build,
