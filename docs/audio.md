@@ -120,3 +120,46 @@ implica una llamada a la nube en la generación.
 - **Acento musical** del ático: ningún motor estándar lo reproduce con fidelidad;
   el techo es **voz humana experta** (sustituible archivo a archivo, sin tocar la app).
 - Ampliar `vocab-pron.json` al resto de palabras (y a los verbos) por tandas.
+
+## Voz HUMANA (en marcha) — vía YT-Extractor
+
+> Veredicto tras oír el piloto: **eSpeak suena demasiado robótico**. Decisión: ir a
+> **voz humana real**, recortada a mano de vídeos (p. ej. ático reconstruido de
+> Luke Ranieri/Polymathy). Sin nube, sin reconocimiento automático (no hay ASR fiable
+> de griego antiguo): el corte y el etiquetado los hace el dueño **a mano**.
+
+### Lo que YA está hecho en Agora (app lista para clips humanos)
+- El reproductor prueba **`<id>.m4a` primero** (grabación humana, AAC calidad original
+  que el navegador reproduce **nativo**) y, si no existe, cae a **`<id>.wav`** (eSpeak).
+  → Una grabación humana **sustituye** al robótico solo con dejar el fichero; cero código.
+- Precache offline incluye `.m4a`. Los botones "🔊 Oír" suenan siempre (force), aunque
+  el toggle 🔇/🔊 esté en silencio (ese toggle solo silencia el sonido automático).
+
+### Lo que hace YT-Extractor (acordado: Opción 1 = motor + A-lite + B)
+- **Export de audio** (ya implementado allí): `audio.m4a` (completo, sin reencodear) +
+  `transcript.json` (`cues:[{startMs,endMs,text}]`), bajo un toggle "Exportar audio".
+- **A-lite** (a implementar): sobre el audio descargado, seleccionar un tramo (apoyado
+  en los cues), ajustar inicio/fin fino (±50/±200 ms), **escribir un nombre** y exportar
+  → `clips/<nombre>.m4a`. **El `<nombre>` = el `<id>` de Agora** (drop-in directo).
+  Corte sin reencodear (~20 ms de precisión, estéreo): suficiente y calidad intacta.
+- **B** (de regalo): un `.m4a` por cue + `manifest.json` (útil para frases/aforismos).
+
+### Nomenclatura (nombre del clip = id)
+- Palabras → `public/audio/vocab/<id>.m4a`. Ids en `src/core/greek/vocab.ts`
+  (p. ej. `logos`, `psyche`, `eimi`, `arete`…).
+- Aforismos → `public/audio/aphorisms/<id>.m4a`. Ids en `src/core/greek/aphorisms.ts`
+  (p. ej. `gnothi-seauton`, `panta-rhei`, `hen-oida`…).
+
+### Pendiente (los pasos que faltan)
+1. YT-Extractor termina **A-lite** (en su repo).
+2. Recortar clips humanos **nombrados por id**, con **permiso/licencia** del hablante
+   (la app es pública).
+3. **Transporte**: la carpeta `clips/` sale al móvil; Agora vive en el repo. Subir esos
+   `.m4a` a un enlace (o vía Nous) y Claude los **commitea** en `public/audio/vocab|aphorisms/`.
+4. **Probar el circuito** con UNA palabra (p. ej. `logos.m4a`) antes de escalar.
+
+### Si más adelante hace falta cortar en el repo (no ahora)
+El contenedor de Agora **no tiene ffmpeg**, así que no puede trocear `.m4a` server-side.
+Alternativas: (a) que el dueño dé un `audio.wav` + tiempos y Claude corta WAV en Node puro;
+(b) añadir `ffmpeg-static` como devDependency (avisar/justificar antes). Por defecto, el
+corte lo hace YT-Extractor (A-lite) y Agora solo recibe los `<id>.m4a` ya cortados.
