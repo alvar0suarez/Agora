@@ -14,7 +14,7 @@
 export const LEVEL_STEP_XP = 100
 
 /** Banda de competencia (lectura) asociada a un nivel a partir de `from`. */
-interface Band {
+export interface Band {
   /** Nivel mínimo en el que empieza la banda. */
   from: number
   /** Etiqueta de la banda. */
@@ -32,6 +32,9 @@ const BANDS: Band[] = [
   { from: 23, code: 'B1' },
   { from: 36, code: 'B2' },
 ]
+
+/** Bandas de lectura, en orden, para construir el "Camino" (mapa de progreso). */
+export const READING_BANDS: readonly Band[] = BANDS
 
 /** Resumen del nivel para mostrar (nivel, banda y progreso dentro del nivel). */
 export interface LevelInfo {
