@@ -1,5 +1,12 @@
 import { LETTERS } from '../greek'
 
+/** Vibración táctil breve al pulsar (si el dispositivo la soporta). */
+function tap() {
+  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+    navigator.vibrate(8)
+  }
+}
+
 /**
  * Teclado griego en pantalla: las 24 letras minúsculas + borrar. Pensado para el
  * móvil, donde no hay teclado griego cómodo. Es controlado: avisa de cada pulsación
@@ -19,7 +26,10 @@ export function GreekKeypad({
           key={l.id}
           type="button"
           className="keypad__key"
-          onClick={() => onInput(l.lower)}
+          onClick={() => {
+            tap()
+            onInput(l.lower)
+          }}
         >
           {l.lower}
         </button>
@@ -28,7 +38,10 @@ export function GreekKeypad({
         type="button"
         className="keypad__key keypad__key--action"
         aria-label="Borrar"
-        onClick={onBackspace}
+        onClick={() => {
+          tap()
+          onBackspace()
+        }}
       >
         ⌫
       </button>
