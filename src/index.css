@@ -620,3 +620,61 @@ body {
   text-align: right;
   font-size: 1.2rem;
 }
+
+/* Plan de hoy: lista de pasos con acceso directo a cada ejercicio. */
+.plan {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  counter-reset: plan;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.plan__step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--surface-2);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.plan__step::before {
+  counter-increment: plan;
+  content: counter(plan);
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.plan__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.plan__title {
+  font-weight: 600;
+}
+
+.plan__detail {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.plan__go {
+  flex-shrink: 0;
+  padding: 0.4rem 1rem;
+}

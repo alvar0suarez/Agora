@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { LETTERS, VOCAB, APHORISMS } from '../../core/greek'
 import { loadProgress, levelFromXp, emptyProgress } from '../../core/progress'
 import type { ProgressState } from '../../core/progress'
+import { buildPlan, gatherPlanInput, type DailyPlan } from '../../core/plan'
 import { Card } from '../../core/ui/Card'
+import { useNavigate } from '../../core/ui/navigation'
 
 /**
  * Inicio: el progreso de un vistazo (nivel, banda de lectura, racha y XP) más un
@@ -10,15 +12,21 @@ import { Card } from '../../core/ui/Card'
  * no solo al terminar una sesión. Solo lee; no modifica nada.
  */
 export function InicioScreen() {
+  const { goTo } = useNavigate()
   const [progress, setProgress] = useState<ProgressState>(emptyProgress())
+  const [plan, setPlan] = useState<DailyPlan | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let alive = true
     void (async () => {
-      const p = await loadProgress()
+      const [p, planInput] = await Promise.all([
+        loadProgress(),
+        gatherPlanInput(),
+      ])
       if (alive) {
         setProgress(p)
+        setPlan(buildPlan(planInput))
         setLoading(false)
       }
     })()
@@ -65,6 +73,37 @@ export function InicioScreen() {
                   : 'aún sin racha — ¡empieza hoy!'}
               </strong>
             </p>
+          </>
+        )}
+      </Card>
+
+      <Card title="Plan de hoy">
+        {!plan ? (
+          <p>Preparando tu plan…</p>
+        ) : plan.steps.length === 0 ? (
+          <p>¡Todo al día! 🎉 Vuelve más tarde o explora una pestaña.</p>
+        ) : (
+          <>
+            <p>
+              Tu entrenador te propone{' '}
+              <strong>{plan.totalItems}</strong> ejercicios. Empieza por arriba:
+            </p>
+            <ol className="plan">
+              {plan.steps.map((step, i) => (
+                <li key={i} className="plan__step">
+                  <span className="plan__info">
+                    <span className="plan__title">{step.title}</span>
+                    <span className="plan__detail">{step.detail}</span>
+                  </span>
+                  <button
+                    className="btn btn--primary plan__go"
+                    onClick={() => goTo(step.featureId)}
+                  >
+                    Ir
+                  </button>
+                </li>
+              ))}
+            </ol>
           </>
         )}
       </Card>
