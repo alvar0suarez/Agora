@@ -13,13 +13,10 @@ expone:
   - Núcleo reutilizable de lógica pura, SRS Leitner, progreso/XP/niveles (bandas Cimientos→B2), quiz, planificador "Plan de hoy", contrato FeatureModule
   - Material/notas de estudio que podrían archivarse en Nous
 consume:
-  - Audio + transcripción de YT-Extractor → para construir VOZ HUMANA natural (alineación forzada + troceo de clips), sustituyendo al eSpeak robótico; requiere permiso/licencia del hablante
-  - (potencial) textos o recortes guardados en Nous
-  - Fuentes para curar contenido (no en runtime), Perseus (textos/léxico/gramática) y Vox Graeca (pronunciación); ver docs/fuentes.md
+  - Clips de audio de palabras griegas de YT-Extractor (para el botón de audio de las tarjetas)
+  - (potencial) textos/recortes guardados en Nous
 relaciones:
-  - Hub Nous, patrón estudio→cerebro, archiva material/progreso en Nous
-  - YT-Extractor, su salida (audio+transcripción) es la fuente candidata para la voz humana de Agora (integración pendiente; gating, permiso del hablante)
-  - Futura app de latín, reutilizaría el núcleo (SRS, progress, quiz, contrato FeatureModule, pipeline de audio)
+  - Consume audio de YT-Extractor para el botón de audio; archiva material en Nous
 ---
 App personal de **lectura de griego antiguo**, autónoma y **offline**: no ofrece una
 API de red, sino **datos, contenido y herramientas reutilizables** a nivel de repo,
