@@ -29,6 +29,11 @@ Esto fija el nivel y orienta las fases siguientes:
   participio e infinitivo —omnipresentes en filosofía—, formas verbales comunes).
   No gramática exhaustiva.
 
+**Horizonte de progreso:** el sistema de niveles (XP en `core/progress`) está
+calibrado para un arco largo —de meses/años— hasta una banda de **lectura ~B2**
+(leer prosa ática y filosofía con apoyo). Las bandas (Cimientos → A1 → A2 → B1 →
+B2) miden **comprensión lectora**, no producción.
+
 **Fuera de alcance:** producción libre y conversación (la app es de lectura y de
 escritura por reconocimiento, no de redacción).
 

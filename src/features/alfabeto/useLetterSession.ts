@@ -42,6 +42,8 @@ export interface SessionStats {
   recalled: number
   /** XP ganada en esta sesión (anclada a aciertos recordando). */
   xpGained: number
+  /** XP total acumulada (para derivar el nivel). */
+  totalXp: number
   /** Racha diaria actual (días consecutivos con actividad). */
   streakDays: number
 }
@@ -59,6 +61,7 @@ export function useLetterSession(mode: SessionMode) {
     reviewed: 0,
     recalled: 0,
     xpGained: 0,
+    totalXp: 0,
     streakDays: 0,
   })
   // Progreso transversal (XP + racha). Vive en una ref porque solo lo leemos
@@ -93,6 +96,7 @@ export function useLetterSession(mode: SessionMode) {
       reviewed: 0,
       recalled: 0,
       xpGained: 0,
+      totalXp: loadedProgress.xp,
       streakDays: loadedProgress.streakDays,
     })
     setLoading(false)
@@ -119,6 +123,7 @@ export function useLetterSession(mode: SessionMode) {
       // (grade 'good' en reconocimiento). La actividad alimenta la racha diaria.
       let gainedXp = 0
       let newStreak: number | null = null
+      let newTotalXp: number | null = null
       if (g === 'good' && mode === 'rec' && progress.current) {
         const withActivity = registerActivity(progress.current, dayIndex(now))
         const updated = addXp(withActivity, XP_PER_RECALL)
@@ -126,6 +131,7 @@ export function useLetterSession(mode: SessionMode) {
         void saveProgress(updated)
         gainedXp = XP_PER_RECALL
         newStreak = updated.streakDays
+        newTotalXp = updated.xp
       }
 
       setStates((prevMap) => new Map(prevMap).set(currentId, next))
@@ -133,6 +139,7 @@ export function useLetterSession(mode: SessionMode) {
         reviewed: s.reviewed + 1,
         recalled: s.recalled + (g === 'good' ? 1 : 0),
         xpGained: s.xpGained + gainedXp,
+        totalXp: newTotalXp ?? s.totalXp,
         streakDays: newStreak ?? s.streakDays,
       }))
       // 'again' devuelve la letra al final de la cola (reaparece esta sesión).

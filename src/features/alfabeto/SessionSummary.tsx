@@ -1,4 +1,5 @@
 import { Card } from '../../core/ui/Card'
+import { levelFromXp } from '../../core/progress'
 import type { SessionStats } from './useLetterSession'
 
 /** Pantalla de fin de sesión, común a reconocer y escribir. */
@@ -11,7 +12,12 @@ export function SessionSummary({
   onRestart: () => void
   onExit: () => void
 }) {
-  const { reviewed, recalled, xpGained, streakDays } = stats
+  const { reviewed, recalled, xpGained, totalXp, streakDays } = stats
+  const lvl = levelFromXp(totalXp)
+  const pct =
+    lvl.xpForNextLevel > 0
+      ? Math.round((lvl.xpIntoLevel / lvl.xpForNextLevel) * 100)
+      : 0
   return (
     <Card title="¡Sesión completada! 🎉">
       {reviewed === 0 ? (
@@ -30,6 +36,23 @@ export function SessionSummary({
                 · Racha: <strong>🔥 {streakDays}</strong>
               </>
             )}
+          </p>
+          <p className="level__head">
+            Nivel <strong>{lvl.level}</strong> · Lectura{' '}
+            <strong>{lvl.band}</strong>
+          </p>
+          <div
+            className="level-bar"
+            role="progressbar"
+            aria-valuenow={pct}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <span className="level-bar__fill" style={{ width: `${pct}%` }} />
+          </div>
+          <p className="level__foot">
+            {lvl.xpIntoLevel} / {lvl.xpForNextLevel} XP para el nivel{' '}
+            {lvl.level + 1}
           </p>
         </>
       )}
