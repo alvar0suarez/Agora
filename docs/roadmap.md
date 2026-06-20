@@ -48,15 +48,39 @@ escritura por reconocimiento, no de redacción).
 
 ## Estado actual
 
-**Fase 1 — Alfabeto.** Pasos **1a** (reconocer), **1b** (escribir) y **1c**
-(gamificación: XP, racha, niveles, dominio, interleaving) completados, más la
-**voz/audio** del alfabeto (v1: clips pregenerados con eSpeak + fonemas
-reconstruidos; robótica pero correcta — ver `docs/audio.md`). La app está
-**desplegada** como PWA en GitHub Pages
-(https://alvar0suarez.github.io/Agora/), con auto-deploy en cada push a `main`.
+> Snapshot a junio 2026. La app está **desplegada** como PWA en GitHub Pages
+> (https://alvar0suarez.github.io/Agora/), con auto-deploy en cada push a `main`.
+> **Verde**: 65 tests (Vitest) y `npm run build` correcto; PWA con ~1,15 MiB
+> precacheados (offline).
 
-**Próxima tarea: Fase 2 — vocabulario núcleo** (léxico filosófico + palabras de
-alta frecuencia, con SRS). Ver "Meta y alcance".
+**Features enchufados (6)** — registrados en `src/app/features.ts`:
+
+- **`inicio`** — pantalla de progreso de un vistazo + "Plan de hoy" adaptativo
+  (`core/plan`): reúne lo pendiente de repaso de todos los features y lo prioriza.
+- **`camino`** — mapa interactivo del progreso (Cimientos → B2); tocar una etapa
+  lleva a su ejercicio.
+- **`alfabeto`** — Fase 1 **completa**: reconocer (1a), escribir (1b),
+  gamificación (1c: XP, racha, niveles, dominio, interleaving) y **audio** del
+  alfabeto (clips pregenerados; ver `docs/audio.md`).
+- **`vocabulario`** — Fase 2 en marcha: ~50 palabras, modos reconocer / producir /
+  **teclear** (teclado griego en pantalla, `core/ui`), con SRS. Pipeline de
+  **audio neural (AFI)** en build-time definido (ver `docs/audio.md`).
+- **`lectura`** — Fase 3 (semilla): aforismos y γνῶμαι reales (γνῶθι σεαυτόν,
+  πάντα ῥεῖ…) con traducción y desglose palabra por palabra.
+- **`gramatica`** — Fase 4 (en marcha): conjugación (presente de λύω, εἰμί) y
+  declinación (λόγος 2.ª, ψυχή 1.ª; los 4 casos × sg/pl). Se estudia el paradigma
+  y se **practica escribiendo** la forma pedida (teclado griego + SRS + XP).
+
+**Núcleo (`core`)**: `srs` (Leitner v1), `progress` (XP/niveles/racha),
+`quiz` (opciones), `plan` (entrenador adaptativo), `greek` (datos compartidos:
+letras, vocab, verbos, sustantivos, aforismos, normalización), `audio`
+(servicio + clips), `storage` (Dexie + persistencia blindada), `crypto`
+(WebCrypto), `ui` (Card, teclado griego, cabeceras, navegación).
+
+**Próximos pasos** (sin cambiar la meta): ampliar vocabulario y generar sus
+clips de audio; más tiempos verbales y modelos de declinación; más aforismos en
+lectura. La dirección **personal y local-first** se mantiene; cualquier idea de
+abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad.md`.
 
 ## El método (resumen)
 
