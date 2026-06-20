@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { APHORISMS, aphorismById } from './aphorisms'
+import { vocabById } from './vocab'
 
 describe('APHORISMS (datos)', () => {
   it('tiene ids únicos', () => {
@@ -23,5 +24,13 @@ describe('APHORISMS (datos)', () => {
   it('el índice por id cubre todas las entradas', () => {
     expect(aphorismById.size).toBe(APHORISMS.length)
     for (const a of APHORISMS) expect(aphorismById.get(a.id)).toBe(a)
+  })
+
+  it('cada lemmaId enlazado existe en el vocabulario', () => {
+    for (const a of APHORISMS) {
+      for (const w of a.words) {
+        if (w.lemmaId) expect(vocabById.has(w.lemmaId)).toBe(true)
+      }
+    }
   })
 })
