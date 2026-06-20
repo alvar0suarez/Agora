@@ -75,6 +75,11 @@ export function VocabProductionPrompt({
               {correct ? '✓ ' : '✗ '}
               {word.lemma} — {word.gloss}
             </p>
+            {word.derivados && word.derivados.length > 0 ? (
+              <p className="answer__line">
+                En español: {word.derivados.join(', ')}
+              </p>
+            ) : null}
             {!correct ? (
               <p className="answer__line">La correcta está en verde.</p>
             ) : null}

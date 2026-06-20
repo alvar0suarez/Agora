@@ -1,4 +1,5 @@
 import type { GreekLetter } from '../greek'
+import { isAudioEnabled } from '../settings'
 import type { AudioService, SpeakOptions, Utterance } from './types'
 
 /**
@@ -28,6 +29,7 @@ class ClipAudioService implements AudioService {
     what: Utterance = 'sound',
     opts?: SpeakOptions,
   ): Promise<void> {
+    if (!isAudioEnabled()) return // el usuario tiene el audio silenciado
     if (what !== 'sound') return // por ahora solo hay clips del sonido
     await this.playUrl(clipUrl(letter.id), opts)
   }

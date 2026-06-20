@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getFeatures } from '../core/plugin/registry'
+import { useAudioEnabled, loadAudioSetting } from '../core/settings'
 import { registerFeatures } from './features'
 
 // Registramos los features una sola vez, al cargar el módulo del shell.
@@ -10,14 +11,32 @@ export function App() {
   const [activeId, setActiveId] = useState<string | null>(
     features[0]?.id ?? null,
   )
+  const [audioOn, toggleAudio] = useAudioEnabled()
+
+  // Cargamos la preferencia de audio guardada una sola vez, al arrancar.
+  useEffect(() => {
+    void loadAudioSetting()
+  }, [])
 
   const active = features.find((f) => f.id === activeId) ?? null
 
   return (
     <div className="app">
       <header className="app__header">
-        <h1 className="app__title">Agora</h1>
-        <p className="app__subtitle">App personal · local-first</p>
+        <div>
+          <h1 className="app__title">Agora</h1>
+          <p className="app__subtitle">App personal · local-first</p>
+        </div>
+        <button
+          type="button"
+          className="app__audio"
+          aria-pressed={audioOn}
+          aria-label={audioOn ? 'Silenciar audio' : 'Activar audio'}
+          title={audioOn ? 'Audio activado (tocar para silenciar)' : 'Audio silenciado (tocar para activar)'}
+          onClick={toggleAudio}
+        >
+          {audioOn ? '🔊' : '🔇'}
+        </button>
       </header>
 
       <main className="app__main">
