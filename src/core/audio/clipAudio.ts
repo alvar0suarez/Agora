@@ -16,6 +16,8 @@ const clipUrl = (letterId: string) =>
   `${import.meta.env.BASE_URL}audio/letters/${letterId}.wav`
 const wordClipUrl = (wordId: string) =>
   `${import.meta.env.BASE_URL}audio/vocab/${wordId}.wav`
+const aphorismClipUrl = (id: string) =>
+  `${import.meta.env.BASE_URL}audio/aphorisms/${id}.wav`
 
 class ClipAudioService implements AudioService {
   readonly ready = true
@@ -40,6 +42,11 @@ class ClipAudioService implements AudioService {
     if (!isAudioEnabled()) return // silenciado
     // Si la palabra aún no tiene clip generado, playUrl resuelve sin sonar.
     await this.playUrl(wordClipUrl(id), opts)
+  }
+
+  async pronounceAphorism(id: string, opts?: SpeakOptions): Promise<void> {
+    if (!isAudioEnabled()) return // silenciado
+    await this.playUrl(aphorismClipUrl(id), opts)
   }
 
   stop(): void {
