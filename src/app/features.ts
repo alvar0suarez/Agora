@@ -1,5 +1,6 @@
 import { registerFeature } from '../core/plugin/registry'
 import { alfabetoFeature } from '../features/alfabeto'
+import { vocabularioFeature } from '../features/vocabulario'
 
 /**
  * Punto ÚNICO donde se enchufan los features al shell.
@@ -9,4 +10,5 @@ import { alfabetoFeature } from '../features/alfabeto'
  */
 export function registerFeatures(): void {
   registerFeature(alfabetoFeature)
+  registerFeature(vocabularioFeature)
 }

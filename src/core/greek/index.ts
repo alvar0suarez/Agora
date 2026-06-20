@@ -3,3 +3,4 @@
  * porque el contrato prohíbe que los features dependan entre sí).
  */
 export * from './letters'
+export * from './vocab'
