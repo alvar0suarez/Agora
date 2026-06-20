@@ -5,6 +5,7 @@ import { GramaticaScreen } from './GramaticaScreen'
 export const gramaticaFeature: FeatureModule = {
   id: 'gramatica',
   title: 'Gramática',
+  icon: '🏛️',
   security: 'normal',
   Screen: GramaticaScreen,
 }

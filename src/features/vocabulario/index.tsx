@@ -5,6 +5,7 @@ import { VocabularioScreen } from './VocabularioScreen'
 export const vocabularioFeature: FeatureModule = {
   id: 'vocabulario',
   title: 'Vocabulario',
+  icon: '📚',
   security: 'normal',
   Screen: VocabularioScreen,
 }
