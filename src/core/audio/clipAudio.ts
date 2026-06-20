@@ -14,6 +14,8 @@ import type { AudioService, SpeakOptions, Utterance } from './types'
  */
 const clipUrl = (letterId: string) =>
   `${import.meta.env.BASE_URL}audio/letters/${letterId}.wav`
+const wordClipUrl = (wordId: string) =>
+  `${import.meta.env.BASE_URL}audio/vocab/${wordId}.wav`
 
 class ClipAudioService implements AudioService {
   readonly ready = true
@@ -32,6 +34,12 @@ class ClipAudioService implements AudioService {
     if (!isAudioEnabled()) return // el usuario tiene el audio silenciado
     if (what !== 'sound') return // por ahora solo hay clips del sonido
     await this.playUrl(clipUrl(letter.id), opts)
+  }
+
+  async pronounceWord(id: string, opts?: SpeakOptions): Promise<void> {
+    if (!isAudioEnabled()) return // silenciado
+    // Si la palabra aún no tiene clip generado, playUrl resuelve sin sonar.
+    await this.playUrl(wordClipUrl(id), opts)
   }
 
   stop(): void {

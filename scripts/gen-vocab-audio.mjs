@@ -1,23 +1,26 @@
 #!/usr/bin/env node
 /**
- * Generador de clips de voz del VOCABULARIO (calidad, en build-time).
+ * Generador de clips de voz del VOCABULARIO (en build-time).
  *
- * Lee `scripts/vocab-pron.json` (id → { lemma, ipa }) y produce un `.wav` por
- * palabra en `public/audio/vocab/<id>.wav` con un motor TTS NEURAL al que se le
- * impone la pronunciación RECONSTRUIDA vía fonemas IPA (SSML <phoneme>), no la
- * del griego moderno. Los clips quedan en el repo: son TUYOS, archivados y
- * funcionan offline. Este script NO corre en el build de la app (como el de las
- * letras): se ejecuta a mano cuando hay palabras nuevas y se commitean los .wav.
+ * Por defecto usa **eSpeak-NG local** (paquete `espeak-ng`, WASM en Node): 100%
+ * OFFLINE, gratis, sin internet ni claves. Igual que el generador de letras, NO
+ * le damos texto griego (la voz `grc` es erasmiana y enseña mal φ θ χ ζ): le
+ * damos los FONEMAS reconstruidos (`phon`, notación `[[...]]`) de
+ * `scripts/vocab-pron.json`. Voz robótica pero con pronunciación ÁTICA correcta.
  *
- * Backend por defecto: Azure Speech (capa gratuita generosa). Necesita:
- *   AZURE_TTS_KEY     clave del recurso Speech
- *   AZURE_TTS_REGION  región, p. ej. 'westeurope'
- *   AZURE_TTS_VOICE   (opcional) voz, por defecto 'el-GR-AthinaNeural'
+ * Salida: un `.wav` por palabra en `public/audio/vocab/<id>.wav`. Se commitean
+ * (tuyos, archivados, offline). Este script NO corre en el build de la app.
  *
- * Uso:
- *   AZURE_TTS_KEY=xxx AZURE_TTS_REGION=westeurope node scripts/gen-vocab-audio.mjs
+ * Uso (local, sin internet):
+ *   node scripts/gen-vocab-audio.mjs
  *
- * (Alternativa equivalente: Amazon Polly, que también acepta <phoneme alphabet="ipa">.)
+ * Notación de fonemas (ver scripts/gen-letter-audio.mjs):
+ *   aspiradas φ θ χ → p_#  t_#  k_#   ·   ζ → zd   ·   ρ → R (trino)
+ *   η → E:   ω → O:   (vocales largas)
+ *
+ * — Alternativa de MÁS calidad (opcional, usa internet al generar) —
+ * Backend neural Azure con el campo `ipa` por SSML <phoneme>:
+ *   BACKEND=azure AZURE_TTS_KEY=xxx AZURE_TTS_REGION=westeurope node scripts/gen-vocab-audio.mjs
  */
 import { readFile, mkdir, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
@@ -26,57 +29,66 @@ import { dirname, join } from 'node:path'
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..')
 const outDir = join(root, 'public', 'audio', 'vocab')
+const BACKEND = process.env.BACKEND || 'espeak'
+const WPM = '130' // lento y claro, para aprender
 
-const KEY = process.env.AZURE_TTS_KEY
-const REGION = process.env.AZURE_TTS_REGION
-const VOICE = process.env.AZURE_TTS_VOICE || 'el-GR-AthinaNeural'
-
-if (!KEY || !REGION) {
-  console.error(
-    'Faltan AZURE_TTS_KEY y/o AZURE_TTS_REGION.\n' +
-      'Crea un recurso "Speech" en Azure (capa gratuita F0) y exporta la clave y la región.\n' +
-      'Detalle en docs/audio.md.',
-  )
-  process.exit(1)
-}
-
-const endpoint = `https://${REGION}.tts.speech.microsoft.com/cognitiveservices/v1`
+const pron = JSON.parse(await readFile(join(here, 'vocab-pron.json'), 'utf8'))
+await mkdir(outDir, { recursive: true })
 
 const escapeXml = (s) =>
   s.replace(/[<>&'"]/g, (c) =>
     ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c],
   )
 
-const pron = JSON.parse(await readFile(join(here, 'vocab-pron.json'), 'utf8'))
-await mkdir(outDir, { recursive: true })
-
-let ok = 0
-for (const [id, { lemma, ipa }] of Object.entries(pron)) {
-  const ssml =
-    `<speak version="1.0" xml:lang="el-GR"><voice name="${VOICE}">` +
-    `<phoneme alphabet="ipa" ph="${escapeXml(ipa)}">${escapeXml(lemma)}</phoneme>` +
-    `</voice></speak>`
-
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Ocp-Apim-Subscription-Key': KEY,
-      'Content-Type': 'application/ssml+xml',
-      'X-Microsoft-OutputFormat': 'riff-24khz-16bit-mono-pcm',
-      'User-Agent': 'agora-vocab-audio',
-    },
-    body: ssml,
+/** eSpeak-NG local (WASM): fonemas reconstruidos → WAV. Offline. */
+async function synthEspeak(entry) {
+  const { default: ESpeakNg } = await import('espeak-ng')
+  const out = 'clip.wav'
+  const espeak = await ESpeakNg({
+    arguments: ['-s', WPM, '-w', out, `[[${entry.phon}]]`],
   })
-
-  if (!res.ok) {
-    console.error(`✗ ${id}: ${res.status} ${await res.text()}`)
-    process.exitCode = 1
-    continue
-  }
-  const buf = Buffer.from(await res.arrayBuffer())
-  await writeFile(join(outDir, `${id}.wav`), buf)
-  console.log(`✓ ${id} (${lemma}) → ${buf.length} B`)
-  ok++
+  return Buffer.from(espeak.FS.readFile(out))
 }
 
-console.log(`\nHecho: ${ok}/${Object.keys(pron).length} clips en public/audio/vocab/`)
+/** Azure Speech (neural) con IPA por SSML. Usa internet al generar. */
+async function synthAzure(entry) {
+  const KEY = process.env.AZURE_TTS_KEY
+  const REGION = process.env.AZURE_TTS_REGION
+  const VOICE = process.env.AZURE_TTS_VOICE || 'el-GR-AthinaNeural'
+  if (!KEY || !REGION) throw new Error('Faltan AZURE_TTS_KEY / AZURE_TTS_REGION')
+  const ssml =
+    `<speak version="1.0" xml:lang="el-GR"><voice name="${VOICE}">` +
+    `<phoneme alphabet="ipa" ph="${escapeXml(entry.ipa)}">${escapeXml(entry.lemma)}</phoneme>` +
+    `</voice></speak>`
+  const res = await fetch(
+    `https://${REGION}.tts.speech.microsoft.com/cognitiveservices/v1`,
+    {
+      method: 'POST',
+      headers: {
+        'Ocp-Apim-Subscription-Key': KEY,
+        'Content-Type': 'application/ssml+xml',
+        'X-Microsoft-OutputFormat': 'riff-24khz-16bit-mono-pcm',
+        'User-Agent': 'agora-vocab-audio',
+      },
+      body: ssml,
+    },
+  )
+  if (!res.ok) throw new Error(`${res.status} ${await res.text()}`)
+  return Buffer.from(await res.arrayBuffer())
+}
+
+const synth = BACKEND === 'azure' ? synthAzure : synthEspeak
+
+let ok = 0
+for (const [id, entry] of Object.entries(pron)) {
+  try {
+    const wav = await synth(entry)
+    await writeFile(join(outDir, `${id}.wav`), wav)
+    console.log(`✓ ${id.padEnd(10)} ${entry.lemma.padEnd(10)} ${wav.length} B`)
+    ok++
+  } catch (err) {
+    console.error(`✗ ${id}: ${err.message}`)
+    process.exitCode = 1
+  }
+}
+console.log(`\n[${BACKEND}] ${ok}/${Object.keys(pron).length} clips en public/audio/vocab/`)

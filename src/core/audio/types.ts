@@ -31,6 +31,8 @@ export interface AudioService {
     what?: Utterance,
     opts?: SpeakOptions,
   ): Promise<void>
+  /** Pronuncia una palabra del vocabulario por su id (clip en audio/vocab). */
+  pronounceWord(id: string, opts?: SpeakOptions): Promise<void>
   /** Corta cualquier reproducción en curso. */
   stop(): void
 }

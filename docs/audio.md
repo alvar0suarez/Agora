@@ -79,41 +79,44 @@ compilador). eSpeak queda como `devDependency`, solo para regenerar.
    añadir audio. Diseñarlo aparte antes de codificar.
 4. Audio en "Escribir" como estímulo, si encaja con el dictado.
 
-## Voz del vocabulario (calidad, build-time) — pendiente de generar
+## Voz del vocabulario (implementado · piloto)
 
-> Decisión del dueño: quiere **calidad** y la vía **industrializada** (no grabarse
-> él). Los clips deben ser **suyos**, archivados y offline. Vía elegida: **TTS
-> neural con fonemas IPA** en build-time.
+> Decisión del dueño: quiere **calidad** pero **sin depender de la nube**. Como hoy
+> no existe la combinación perfecta (offline + muy natural + ático correcto), se
+> prioriza lo que importa en una app de pronunciación: **offline + correcto**, vía
+> **eSpeak local**. Voz robótica pero con fonología ática correcta. La nube queda
+> como mejora de calidad OPCIONAL; una voz a medida (entrenada) es la joya futura.
 
-### Cómo funciona
-- Fuente de verdad de la pronunciación: `scripts/vocab-pron.json` (`id → {lemma, ipa}`),
-  con la pronunciación **reconstruida ática** en AFI (no la moderna). Es el activo
-  duradero: independiente del motor (sirve para eSpeak, neural o voz humana).
-- Generador: `scripts/gen-vocab-audio.mjs`. Le impone el AFI a una voz **neural**
-  vía SSML `<phoneme alphabet="ipa">`, y guarda un `.wav` por palabra en
-  `public/audio/vocab/<id>.wav`. **No** corre en el build de la app; se ejecuta a
-  mano y se commitean los clips (igual que las letras).
+### Cómo funciona (por defecto: eSpeak local, sin internet)
+- Fuente de verdad: `scripts/vocab-pron.json` (`id → {lemma, ipa, phon}`). `phon` =
+  fonemas reconstruidos en notación eSpeak `[[...]]` (aspiradas `p_# t_# k_#`, `zd`,
+  trino `R`, vocales largas `E:`/`O:`); `ipa` = AFI para el backend neural opcional.
+  Es el activo duradero: independiente del motor (eSpeak, neural o voz humana).
+- Generador: `scripts/gen-vocab-audio.mjs`. Por defecto usa **eSpeak-NG local**
+  (paquete `espeak-ng`, WASM en Node): 100% offline, gratis, sin claves. Guarda un
+  `.wav` por palabra en `public/audio/vocab/<id>.wav`. NO corre en el build de la
+  app; se ejecuta a mano y se commitean los clips (igual que las letras).
+- App: `core/audio.pronounceWord(id)` reproduce el clip (bajo el toggle 🔇/🔊).
+  Botón "🔊 Oír" en el vocabulario (reconocer y teclear).
 
-### Generarlos (Azure Speech, capa gratuita)
-1. Crear un recurso **Speech** en Azure (capa **F0 gratuita**: 0,5 M caracteres/mes
-   → estas palabras cuestan ≈ 0 €).
-2. Exportar credenciales y ejecutar:
-   ```
-   AZURE_TTS_KEY=xxx AZURE_TTS_REGION=westeurope node scripts/gen-vocab-audio.mjs
-   ```
-3. Commitear los `.wav` generados. Quedan en el repo (tuyos) y se precachean.
+### Generar / regenerar
+```
+node scripts/gen-vocab-audio.mjs        # eSpeak local (offline) — por defecto
+```
+Piloto ya generado y commiteado: 10 palabras (εἰμί, ἔχω, λέγω, λόγος, ἄνθρωπος,
+ψυχή, σοφία, θεός, ἀρετή, φύσις).
 
-Alternativa equivalente: **Amazon Polly** (también acepta `<phoneme alphabet="ipa">`).
+### Mejora de calidad OPCIONAL (usa internet solo al generar)
+Backend neural Azure con el AFI por SSML (la app sigue 100% offline):
+```
+BACKEND=azure AZURE_TTS_KEY=xxx AZURE_TTS_REGION=westeurope node scripts/gen-vocab-audio.mjs
+```
+Capa gratuita F0 (≈ 0 €). Alternativa: Amazon Polly. Suena natural y correcto, pero
+implica una llamada a la nube en la generación.
 
-### Límite de calidad (honesto)
-El AFI nos da la **fonología correcta** (φ/θ/χ aspiradas, ζ=[zd], vocales largas) y
-voz **natural**, muy por encima del eSpeak robótico. Pero el **acento musical (de
-tono)** del ático se aproxima con acento de intensidad: un motor neural no lo
-reproduce con fidelidad total. El techo absoluto sigue siendo **voz humana experta**
-(sustituible archivo a archivo sin tocar la app). Revisar/ajustar el AFI de
-`vocab-pron.json` tras oír el piloto.
-
-### Pendiente de integrar en la app (tras generar el piloto)
-- Extender `core/audio` para reproducir el clip de una palabra por `id`.
-- Botón 🔊 en el vocabulario (al revelar), bajo el toggle de audio ya existente.
-- Ampliar `vocab-pron.json` al resto de palabras por tandas revisadas.
+### Límites y siguientes pasos
+- **eSpeak**: robótico; revisar/ajustar `phon` tras oír (ojo a υ = [y], η/ω largas,
+  el trino ρ). Se regenera y se vuelve a commitear.
+- **Acento musical** del ático: ningún motor estándar lo reproduce con fidelidad;
+  el techo es **voz humana experta** (sustituible archivo a archivo, sin tocar la app).
+- Ampliar `vocab-pron.json` al resto de palabras (y a los verbos) por tandas.
