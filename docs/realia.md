@@ -1,8 +1,10 @@
-# Museo / Textos reales — galería de griego "de verdad" (idea / diseño)
+# Museo / Textos reales — galería de griego "de verdad"
 
-> **Estado:** idea contemplada, sin implementar. Conecta con la meta original del
-> dueño: **leer griego en la vida real** (una inscripción en un museo, una cita en
-> un libro). Es el "para qué" del proyecto hecho pantalla.
+> **Estado:** v1 implementado (feature `museo` 🏺). Galería con piezas reales:
+> óstrakon de Temístocles (ático, con foto de dominio público), copa de Néstor
+> (poema arcaico) e inscripción del soreg (koiné). Cada pieza con texto, traducción,
+> descripción, fuente y un sello "¿puedes leerla?" según tu nivel. Datos en
+> `core/greek/realia.ts`. Conecta con la meta: **leer griego en la vida real**.
 
 ## Objetivo
 
