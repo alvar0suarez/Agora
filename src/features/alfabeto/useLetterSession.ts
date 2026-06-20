@@ -32,7 +32,7 @@ const NEW_PER_SESSION = 8
 export type SessionMode = 'rec' | 'prod'
 
 /** Clave SRS de la carta de una letra en una dirección concreta. */
-const cardId = (mode: SessionMode, letterId: string) =>
+export const cardId = (mode: SessionMode, letterId: string) =>
   `alfabeto:${mode}:${letterId}`
 
 const letterById = new Map(LETTERS.map((l) => [l.id, l]))

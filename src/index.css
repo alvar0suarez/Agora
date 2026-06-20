@@ -303,3 +303,55 @@ body {
 .option--dim {
   opacity: 0.45;
 }
+
+/* Vista de dominio: rejilla de las 24 letras con su nivel (derivado del SRS). */
+.mastery {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mastery-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 0.6rem;
+}
+
+.mastery-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.3rem;
+  border: 1px solid var(--surface-2);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.mastery-cell[data-level='0'] {
+  opacity: 0.55;
+}
+
+.mastery-cell__glyph {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.mastery-cell__bar {
+  display: flex;
+  gap: 3px;
+}
+
+.mastery-cell__pip {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--surface-2);
+}
+
+.mastery-cell__pip--on {
+  background: var(--accent);
+}
