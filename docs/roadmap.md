@@ -91,10 +91,11 @@ traducción y desglose palabra por palabra. Ver `docs/fase-3.md`.
 
 ### Fase 4 — Morfología
 
-Casos y verbos con drills inteligentes. **Semilla en marcha**: feature `gramatica`
-con el presente de indicativo de λύω (modelo regular) y εἰμί; estudiar el
-paradigma y **practicar escribiendo** la forma pedida (teclado griego + SRS + XP).
-Siguiente: más tiempos/verbos y morfología nominal (casos).
+Casos y verbos con drills inteligentes. **En marcha**: feature `gramatica` con
+**conjugación** (presente de λύω y εἰμί) y **declinación** (λόγος 2.ª y ψυχή 1.ª,
+los cuatro casos × singular/plural). Estudiar el paradigma y **practicar
+escribiendo** la forma pedida (teclado griego + SRS + XP). Siguiente: más
+tiempos verbales y más modelos de declinación.
 
 ## Mejoras futuras (apuntadas, sin fase)
 

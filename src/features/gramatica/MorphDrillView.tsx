@@ -3,20 +3,21 @@ import { normalizeGreek } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
 import { GreekKeypad } from '../../core/ui/GreekKeypad'
 import { levelFromXp } from '../../core/progress'
-import { useVerbDrill } from './useVerbDrill'
+import { useMorphDrill } from './useMorphDrill'
 
 /**
- * Practicar: te damos verbo + persona/número y escribes la forma con el teclado
- * griego. Se comprueba sin acentos ni mayúsculas. Producción real → da XP.
+ * Practicar morfología: te damos palabra + forma pedida (persona/número o
+ * caso/número) y la escribes con el teclado griego. Se comprueba sin acentos ni
+ * mayúsculas. Producción real → da XP.
  */
-export function VerbDrillView({ onExit }: { onExit: () => void }) {
-  const d = useVerbDrill()
+export function MorphDrillView({ onExit }: { onExit: () => void }) {
+  const d = useMorphDrill()
   const [typed, setTyped] = useState('')
   const [correct, setCorrect] = useState<boolean | null>(null)
 
   const target = d.current
   const accepted = useMemo(
-    () => (target ? normalizeGreek(target.form.form) : ''),
+    () => (target ? normalizeGreek(target.answer) : ''),
     [target],
   )
 
@@ -74,15 +75,12 @@ export function VerbDrillView({ onExit }: { onExit: () => void }) {
       </div>
 
       <Card>
-        <p className="alfabeto__prompt">Conjuga este verbo:</p>
+        <p className="alfabeto__prompt">Escribe la forma:</p>
         <p className="answer__name">
-          {target.verb.lemma} <span className="verb__gloss">— {target.verb.gloss}</span>
+          {target.headword} <span className="verb__gloss">— {target.gloss}</span>
         </p>
         <p className="answer__line">
-          <strong>
-            {target.form.pronoun}
-          </strong>{' '}
-          ({target.form.person}.ª {target.form.number === 'sg' ? 'singular' : 'plural'})
+          <strong>{target.prompt}</strong>
         </p>
       </Card>
 
@@ -109,7 +107,7 @@ export function VerbDrillView({ onExit }: { onExit: () => void }) {
           <Card>
             <p className="answer__name">{correct ? '✓ ¡Correcto!' : '✗ Casi'}</p>
             <p className="answer__line">
-              Respuesta: <strong>{target.form.form}</strong>
+              Respuesta: <strong>{target.answer}</strong>
             </p>
           </Card>
           <button className="btn btn--primary" onClick={next}>

@@ -1,5 +1,5 @@
 import { db } from '../storage/db'
-import { LETTERS, VOCAB, VERB_FORMS, APHORISMS } from '../greek'
+import { LETTERS, VOCAB, VERB_FORMS, NOUN_FORMS, APHORISMS } from '../greek'
 import type { PlanInput } from './plan'
 
 /**
@@ -21,7 +21,10 @@ export async function gatherPlanInput(now: number = Date.now()): Promise<PlanInp
 
   const alfabetoTotal = LETTERS.length * 2
   const vocabTotal = VOCAB.length * 3
-  const verbTotal = VERB_FORMS.length
+  // Gramática agrupa morfología verbal ('verb:') y nominal ('noun:').
+  const morphTotal = VERB_FORMS.length + NOUN_FORMS.length
+  const morphDue = due('verb:') + due('noun:')
+  const morphSeen = seen('verb:') + seen('noun:')
 
   return {
     alfabeto: {
@@ -33,8 +36,8 @@ export async function gatherPlanInput(now: number = Date.now()): Promise<PlanInp
       newAvailable: Math.max(0, vocabTotal - seen('vocab:')),
     },
     gramatica: {
-      due: due('verb:'),
-      newAvailable: Math.max(0, verbTotal - seen('verb:')),
+      due: morphDue,
+      newAvailable: Math.max(0, morphTotal - morphSeen),
     },
     lecturaNew: APHORISMS.length > 0 ? 1 : 0,
   }

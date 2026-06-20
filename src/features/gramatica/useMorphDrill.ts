@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { VERB_FORMS, type Verb, type VerbForm } from '../../core/greek'
+import { VERB_FORMS, NOUN_FORMS, CASE_LABEL } from '../../core/greek'
 import {
   loadStates,
   saveState,
@@ -19,11 +19,43 @@ import {
   type ProgressState,
 } from '../../core/progress'
 
-/** Formas nuevas que se introducen como máximo en una sesión. */
+/** Palabras nuevas que se introducen como máximo en una sesión. */
 const NEW_PER_SESSION = 8
 
-/** Clave SRS de una forma verbal (producción: escribir la forma). */
-const cardId = (formId: string) => `verb:type:${formId}`
+/** Una tarea de morfología: produce una forma a partir de su descripción. */
+export interface MorphTask {
+  /** Clave SRS única (incluye el prefijo de área). */
+  id: string
+  /** Palabra base (lema). */
+  headword: string
+  gloss: string
+  /** Qué forma se pide, p. ej. 'vosotros (2.ª plural)' o 'genitivo singular'. */
+  prompt: string
+  /** Forma griega correcta. */
+  answer: string
+}
+
+const numLabel = (n: 'sg' | 'pl') => (n === 'sg' ? 'singular' : 'plural')
+
+/** Todas las tareas: conjugación (verbos) + declinación (sustantivos). */
+const TASKS: MorphTask[] = [
+  ...VERB_FORMS.map(({ verb, form }) => ({
+    id: `verb:type:${form.id}`,
+    headword: verb.lemma,
+    gloss: verb.gloss,
+    prompt: `${form.pronoun} (${form.person}.ª ${numLabel(form.number)})`,
+    answer: form.form,
+  })),
+  ...NOUN_FORMS.map(({ noun, form }) => ({
+    id: `noun:type:${form.id}`,
+    headword: noun.lemma,
+    gloss: noun.gloss,
+    prompt: `${CASE_LABEL[form.case]} ${numLabel(form.number)}`,
+    answer: form.form,
+  })),
+]
+
+const taskById = new Map(TASKS.map((t) => [t.id, t]))
 
 export interface DrillStats {
   reviewed: number
@@ -33,14 +65,12 @@ export interface DrillStats {
   streakDays: number
 }
 
-const formById = new Map(VERB_FORMS.map((vf) => [vf.form.id, vf]))
-
 /**
- * Drill de conjugación: te damos un verbo y una persona/número, escribes la
- * forma. Producción real (recuerdo activo) → da XP. Reutiliza el SRS y el
- * progreso del núcleo, como el vocabulario.
+ * Drill de morfología: te damos una palabra y la forma pedida (persona/número o
+ * caso/número) y la escribes. Producción real (recuerdo activo) → da XP.
+ * Reutiliza el SRS y el progreso del núcleo.
  */
-export function useVerbDrill() {
+export function useMorphDrill() {
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
   const [queue, setQueue] = useState<string[]>([])
@@ -57,25 +87,25 @@ export function useVerbDrill() {
     setLoading(true)
     const now = Date.now()
     const [loaded, loadedProgress] = await Promise.all([
-      loadStates(VERB_FORMS.map((vf) => cardId(vf.form.id))),
+      loadStates(TASKS.map((t) => t.id)),
       loadProgress(),
     ])
     progress.current = loadedProgress
 
-    const byForm = new Map<string, SrsState>()
+    const byTask = new Map<string, SrsState>()
     const due: string[] = []
     const fresh: string[] = []
-    for (const { form } of VERB_FORMS) {
-      const s = loaded.get(cardId(form.id))
+    for (const t of TASKS) {
+      const s = loaded.get(t.id)
       if (!s) {
-        fresh.push(form.id)
+        fresh.push(t.id)
       } else {
-        byForm.set(form.id, s)
-        if (isDue(s, now)) due.push(form.id)
+        byTask.set(t.id, s)
+        if (isDue(s, now)) due.push(t.id)
       }
     }
 
-    setStates(byForm)
+    setStates(byTask)
     setQueue([...due, ...fresh.slice(0, NEW_PER_SESSION)])
     setStats({
       reviewed: 0,
@@ -92,8 +122,8 @@ export function useVerbDrill() {
   }, [build])
 
   const currentId = queue[0] ?? null
-  const current: { verb: Verb; form: VerbForm } | null = currentId
-    ? formById.get(currentId) ?? null
+  const current: MorphTask | null = currentId
+    ? taskById.get(currentId) ?? null
     : null
 
   const grade = useCallback(
@@ -102,7 +132,7 @@ export function useVerbDrill() {
       const now = Date.now()
       const prev = states.get(currentId) ?? newCard(now)
       const next = review(prev, g, now)
-      void saveState(cardId(currentId), next)
+      void saveState(currentId, next)
 
       let gainedXp = 0
       let newStreak: number | null = null
