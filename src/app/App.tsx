@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getFeatures } from '../core/plugin/registry'
 import { useAudioEnabled, loadAudioSetting } from '../core/settings'
+import { requestPersistentStorage } from '../core/storage/persist'
 import { registerFeatures } from './features'
 
 // Registramos los features una sola vez, al cargar el módulo del shell.
@@ -13,9 +14,11 @@ export function App() {
   )
   const [audioOn, toggleAudio] = useAudioEnabled()
 
-  // Cargamos la preferencia de audio guardada una sola vez, al arrancar.
+  // Al arrancar: cargamos la preferencia de audio y pedimos almacenamiento
+  // persistente (best-effort) para blindar los datos locales.
   useEffect(() => {
     void loadAudioSetting()
+    void requestPersistentStorage()
   }, [])
 
   const active = features.find((f) => f.id === activeId) ?? null
