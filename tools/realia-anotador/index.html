@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anotador de realia — Agora</title>
+    <!--
+      Herramienta LOCAL (sin red, sin dependencias) para mapear el texto griego
+      sobre la foto de una pieza del Museo: calcas cada letra como uno o varios
+      TRAZOS y exporta el JSON `marcas` listo para pegar en src/core/greek/realia.ts.
+
+      No es un módulo de la app: vive en tools/ y se usa al preparar contenido.
+      Funciona con ratón y con el dedo (táctil). Coordenadas en fracción 0..1 de
+      la imagen, igual que las pinta la app (SVG viewBox 0..100, sin deformar el
+      trazo). Diseñada para enchufarle más adelante una IA local que pre-proponga.
+    -->
+    <style>
+      :root {
+        --bg: #0f172a;
+        --surface: #1e293b;
+        --surface-2: #334155;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #38bdf8;
+        --red: #ef4444;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding: 1rem;
+      }
+      h1 { font-size: 1.2rem; margin: 0 0 0.25rem; }
+      p.lead { color: var(--muted); margin: 0 0 1rem; font-size: 0.9rem; }
+      .row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
+      label { font-size: 0.85rem; color: var(--muted); }
+      input[type='text'] {
+        background: var(--surface); color: var(--text);
+        border: 1px solid var(--surface-2); border-radius: 8px;
+        padding: 0.4rem 0.6rem; font-size: 1rem; min-width: 14rem;
+      }
+      button {
+        background: var(--surface); color: var(--text);
+        border: 1px solid var(--surface-2); border-radius: 8px;
+        padding: 0.45rem 0.75rem; font-size: 0.9rem; cursor: pointer;
+      }
+      button:hover { border-color: var(--accent); }
+      button.primary { background: var(--accent); color: #04293a; border-color: var(--accent); font-weight: 700; }
+      .stage {
+        position: relative; display: inline-block; max-width: 100%;
+        border: 1px solid var(--surface-2); border-radius: 10px; overflow: hidden;
+        touch-action: none; /* el dedo dibuja, no hace scroll */
+      }
+      .stage img { display: block; max-width: 100%; height: auto; }
+      .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .stroke { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+      .stroke--current { stroke: #fca5a5; }
+      .pt { fill: #fff; stroke: var(--red); stroke-width: 1; }
+      .hint { color: var(--muted); font-size: 0.8rem; }
+      textarea {
+        width: 100%; min-height: 9rem; margin-top: 0.5rem;
+        background: var(--surface); color: var(--text);
+        border: 1px solid var(--surface-2); border-radius: 8px;
+        padding: 0.6rem; font-family: ui-monospace, monospace; font-size: 0.8rem;
+      }
+      .empty { color: var(--muted); padding: 2rem 1rem; }
+    </style>
+  </head>
+  <body>
+    <h1>Anotador de realia 🏺</h1>
+    <p class="lead">
+      Calca las letras de la foto como trazos rojos y exporta el JSON
+      <code>marcas</code> para <code>src/core/greek/realia.ts</code>. Todo local,
+      sin red.
+    </p>
+
+    <div class="row">
+      <label>Foto: <input type="file" id="file" accept="image/*" /></label>
+      <label>
+        Opacidad foto
+        <input type="range" id="opacity" min="0.2" max="1" step="0.05" value="1" />
+      </label>
+    </div>
+    <div class="row">
+      <label>Texto de referencia: <input type="text" id="legend" placeholder="ΘΕΜΙΣΤΟΚΛΕΣ ΝΕΟΚΛΕΟΣ" /></label>
+    </div>
+    <div class="row">
+      <button id="finish">Terminar trazo (Enter)</button>
+      <button id="undoPt">Deshacer punto (Z)</button>
+      <button id="undoStroke">Deshacer trazo</button>
+      <button id="clear">Limpiar</button>
+      <span class="hint" id="status">0 trazos</span>
+    </div>
+
+    <p class="hint">
+      Toca/clica para ir poniendo los puntos de una letra. «Terminar trazo» cierra
+      esa línea y empieza otra (una letra puede llevar varios trazos: p. ej. Θ =
+      círculo + barra). Baja la opacidad de la foto para calcar más cómodo.
+    </p>
+
+    <div id="stageWrap">
+      <p class="empty">Carga una foto para empezar.</p>
+    </div>
+
+    <div class="row" style="margin-top: 1rem">
+      <strong>JSON para <code>marcas</code>:</strong>
+      <button class="primary" id="copy">Copiar</button>
+    </div>
+    <textarea id="out" readonly placeholder="marcas: [ … ]"></textarea>
+
+    <script>
+      // Estado: lista de trazos terminados + el trazo en curso. Cada punto es
+      // [x, y] en FRACCIÓN 0..1 de la imagen (igual que la app).
+      let strokes = []
+      let current = []
+      let img = null
+      let svg = null
+
+      const $ = (id) => document.getElementById(id)
+      const round = (n) => Math.round(n * 1000) / 1000
+
+      function loadImage(src) {
+        const wrap = $('stageWrap')
+        wrap.innerHTML = ''
+        const stage = document.createElement('div')
+        stage.className = 'stage'
+        img = document.createElement('img')
+        img.src = src
+        img.alt = 'pieza'
+        svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        svg.setAttribute('viewBox', '0 0 100 100')
+        svg.setAttribute('preserveAspectRatio', 'none')
+        stage.appendChild(img)
+        stage.appendChild(svg)
+        wrap.appendChild(stage)
+        strokes = []
+        current = []
+        img.onload = render
+        svg.addEventListener('pointerdown', onPoint)
+      }
+
+      function onPoint(ev) {
+        ev.preventDefault()
+        const rect = svg.getBoundingClientRect()
+        const x = (ev.clientX - rect.left) / rect.width
+        const y = (ev.clientY - rect.top) / rect.height
+        current.push([round(Math.min(1, Math.max(0, x))), round(Math.min(1, Math.max(0, y)))])
+        render()
+      }
+
+      function finishStroke() {
+        if (current.length >= 2) strokes.push(current)
+        current = []
+        render()
+      }
+
+      function poly(points, cls) {
+        const el = document.createElementNS('http://www.w3.org/2000/svg', 'polyline')
+        el.setAttribute('class', cls)
+        el.setAttribute('points', points.map(([x, y]) => `${x * 100},${y * 100}`).join(' '))
+        return el
+      }
+
+      function dot([x, y]) {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        c.setAttribute('class', 'pt')
+        c.setAttribute('cx', x * 100)
+        c.setAttribute('cy', y * 100)
+        c.setAttribute('r', 0.8)
+        return c
+      }
+
+      function render() {
+        if (!svg) return
+        if (img) img.style.opacity = $('opacity').value
+        svg.innerHTML = ''
+        for (const s of strokes) svg.appendChild(poly(s, 'stroke'))
+        if (current.length >= 2) svg.appendChild(poly(current, 'stroke stroke--current'))
+        for (const p of current) svg.appendChild(dot(p))
+        $('status').textContent =
+          `${strokes.length} trazo(s)` + (current.length ? ` · trazo actual: ${current.length} punto(s)` : '')
+        exportJson()
+      }
+
+      function exportJson() {
+        const all = current.length >= 2 ? [...strokes, current] : strokes
+        if (all.length === 0) {
+          $('out').value = ''
+          return
+        }
+        const body = all
+          .map((s) => '      [' + s.map(([x, y]) => `[${x}, ${y}]`).join(', ') + '],')
+          .join('\n')
+        $('out').value = `    marcas: [\n${body}\n    ],`
+      }
+
+      $('file').addEventListener('change', (e) => {
+        const f = e.target.files[0]
+        if (f) loadImage(URL.createObjectURL(f))
+      })
+      $('opacity').addEventListener('input', render)
+      $('finish').addEventListener('click', finishStroke)
+      $('undoPt').addEventListener('click', () => { current.pop(); render() })
+      $('undoStroke').addEventListener('click', () => {
+        if (current.length) current = []
+        else strokes.pop()
+        render()
+      })
+      $('clear').addEventListener('click', () => { strokes = []; current = []; render() })
+      $('copy').addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText($('out').value) } catch (_) { $('out').select() }
+      })
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') finishStroke()
+        else if (e.key.toLowerCase() === 'z') { current.pop(); render() }
+      })
+    </script>
+  </body>
+</html>
