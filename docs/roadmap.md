@@ -62,7 +62,7 @@ escritura por reconocimiento, no de redacción).
 - **`alfabeto`** — Fase 1 **completa**: reconocer (1a), escribir (1b),
   gamificación (1c: XP, racha, niveles, dominio, interleaving) y **audio** del
   alfabeto (clips pregenerados; ver `docs/audio.md`).
-- **`vocabulario`** — Fase 2 en marcha: ~50 palabras, modos reconocer / producir /
+- **`vocabulario`** — Fase 2 en marcha: ~59 palabras, modos reconocer / producir /
   **teclear** (teclado griego en pantalla, `core/ui`), con SRS. Pipeline de
   **audio neural (AFI)** en build-time definido (ver `docs/audio.md`).
 - **`lectura`** — Fase 3 (en marcha): aforismos y γνῶμαι reales (γνῶθι σεαυτόν,
@@ -168,6 +168,12 @@ tiempos verbales y más modelos de declinación.
 - **Museo / textos reales**: galería de inscripciones/piezas reales (texto griego +
   traducción + descripción + fuente consultable), con un hito "a tu nivel ya puedes
   leer estas". Diseño en `docs/realia.md`. Es la meta del proyecto hecha pantalla.
+  - *Ideas de futuro (en `docs/realia.md`)*: **overlay guía-lectura** que detecte
+    las letras en la foto real y las realce con una capa translúcida suave; y
+    **vídeos IA** de filósofos recitando en ático reconstruido con transcripción.
+- **Revisión de diseño (UX/estética)**: pasada de "diseñador aséptico" que pula la
+  coherencia visual SIN tocar funcionalidad ni la filosofía. Auditoría y plan en
+  `docs/diseno.md`.
 
 ## Decisiones
 

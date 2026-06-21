@@ -88,3 +88,30 @@ podría consumir el catálogo de textos reales.
   bien"). Para fotos poco legibles, preferir dibujos/facsímiles.
 - Recordatorio: imágenes servidas a ~800 px (ligeras), siempre con atribución;
   nada de fotos con "todos los derechos reservados".
+
+## Hecho recientemente
+
+- **Legibilidad de la leyenda sobre la foto**: la transcripción dejó de ser un
+  degradado tenue y pasó a un **chip sólido** (fondo opaco + desenfoque + borde +
+  sombra de texto), legible sobre cualquier imagen.
+- **"Cómo se pronuncia"**: bloque que deletrea la leyenda y muestra el **AFI por
+  letra** (reutiliza la fonética curada del alfabeto, helper `spellOut` en
+  `core/greek/letters.ts`), más un aviso de las letras que sorprenden a un
+  hispanohablante (Θ = «t» aspirada, no «z»).
+
+## Ideas de futuro (apuntadas por el dueño, sin fase)
+
+- **Overlay guía-lectura sobre la imagen real**: en vez de (o además de) la
+  leyenda en un chip, un modelo de **detección de letras** identificaría DÓNDE
+  está cada letra/palabra en la foto, y se dibujaría encima una capa **muy suave
+  y translúcida** (líneas/realces tenues) que resalte el trazado real sin tapar
+  la pieza. Objetivo: que se vea la imagen auténtica y, a la vez, ayudar a
+  interpretar y leer el texto sobre ella. Reto: la detección/segmentación de
+  glifos en epigrafía es difícil; valdría una **anotación curada a mano** de
+  cajas (bounding boxes letra↔posición) por pieza como primer paso, sin IA en
+  tiempo real. Encaja con "leer una piedra de verdad".
+- **Vídeos IA de filósofos hablando en griego**: clips generados (p. ej. Platón /
+  Aristóteles) recitando una frase en **ático reconstruido**, con su
+  **transcripción** sincronizada. Fase MUY avanzada; depende de TTS de ático de
+  calidad (hoy no existe bueno) y de generación de vídeo. Apuntado como norte
+  lejano, no como tarea.
