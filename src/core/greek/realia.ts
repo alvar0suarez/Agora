@@ -149,6 +149,102 @@ export const REALIA: Realia[] = [
     },
     tags: ['koiné', 'epigrafía', 'Segundo Templo', 'Josefo', 'Pablo'],
   },
+  {
+    id: 'horos-agora',
+    title: 'Mojón del Ágora',
+    tipo: 'inscripción (piedra)',
+    fecha: 'c. 500 a.C.',
+    origen: 'Atenas, Ágora',
+    dialecto: 'ático arcaico',
+    greek: 'ΗΟΡΟΣ ΕΙΜΙ ΤΗΣ ΑΓΟΡΑΣ',
+    leyenda: 'ΗΟΡΟΣ ΕΙΜΙ ΤΗΣ ΑΓΟΡΑΣ',
+    translation: 'Soy el límite del Ágora',
+    descripcion:
+      'Piedra plantada en el borde de la plaza pública ateniense: marcaba dónde empezaba el Ágora, espacio sagrado y cívico del que quedaban excluidos quienes habían perdido sus derechos. Habla en primera persona, como solían hacer los objetos griegos («soy…»). La Η inicial no es una vocal: en el ático arcaico representa la aspiración (la «h» de hóros).',
+    nivel: 'Cimientos',
+    fuente: {
+      titulo: 'Wikipedia',
+      url: 'https://en.wikipedia.org/wiki/Ancient_Agora_of_Athens',
+    },
+    tags: ['ático', 'epigrafía', 'Ágora', 'Atenas', 'mojón'],
+  },
+  {
+    id: 'maximas-delficas',
+    title: 'Máximas délficas',
+    tipo: 'inscripción (templo)',
+    fecha: 's. VI–V a.C.',
+    origen: 'Delfos, templo de Apolo',
+    dialecto: 'griego clásico',
+    greek: 'ΓΝΩΘΙ ΣΑΥΤΟΝ · ΜΗΔΕΝ ΑΓΑΝ',
+    leyenda: 'ΓΝΩΘΙ ΣΑΥΤΟΝ',
+    translation: 'Conócete a ti mismo · Nada en exceso',
+    descripcion:
+      'Dos de las máximas grabadas en el pronaos del templo de Apolo en Delfos, atribuidas a los Siete Sabios. «Conócete a ti mismo» y «Nada en exceso» resumen la sabiduría griega: medida, autoconocimiento y límite. Pausanias y Platón las citan una y otra vez; siguen siendo el lema más famoso de la Antigüedad.',
+    nivel: 'Cimientos',
+    fuente: {
+      titulo: 'Wikipedia',
+      url: 'https://es.wikipedia.org/wiki/M%C3%A1ximas_d%C3%A9lficas',
+    },
+    tags: ['filosofía', 'Delfos', 'Apolo', 'sabiduría', 'Siete Sabios'],
+  },
+  {
+    id: 'leagros-kalos',
+    title: '«Leagro es hermoso»',
+    tipo: 'inscripción en vaso',
+    fecha: 'c. 510 a.C.',
+    origen: 'Atenas, cerámica ática',
+    dialecto: 'ático',
+    greek: 'ΛΕΑΓΡΟΣ ΚΑΛΟΣ',
+    leyenda: 'ΛΕΑΓΡΟΣ ΚΑΛΟΣ',
+    translation: 'Leagro es hermoso',
+    descripcion:
+      'Las «inscripciones kalós» son piropos pintados en miles de vasos áticos: alaban la belleza de un joven de moda. Leagro fue el más célebre; su nombre aparece en más de un centenar de piezas. Son un testimonio directo de la cultura de la pederastia ritual y el aprecio griego por la belleza juvenil.',
+    nivel: 'Cimientos',
+    fuente: {
+      titulo: 'Wikipedia',
+      url: 'https://en.wikipedia.org/wiki/Kalos_inscription',
+    },
+    tags: ['ático', 'cerámica', 'kalós', 'simposio', 'Atenas'],
+  },
+  {
+    id: 'dipylon-inscription',
+    title: 'Inscripción del Dípilon',
+    tipo: 'verso en una jarra',
+    fecha: 'c. 740 a.C.',
+    origen: 'Atenas, cementerio del Dípilon',
+    dialecto: 'ático arcaico',
+    greek: 'ὃς νῦν ὀρχηστῶν πάντων ἀταλώτατα παίζει, τοῦ τόδε …',
+    translation:
+      'Quien de todos los danzantes baile ahora con más gracia, suyo será esto… (el resto está dañado)',
+    descripcion:
+      'Una de las inscripciones alfabéticas griegas más antiguas que se conservan: un verso —probablemente el premio de un concurso de baile— rasgado sobre una jarra de vino con la escritura más temprana del alfabeto. El final no se ha descifrado del todo. Junto con la Copa de Néstor, marca el nacimiento de la escritura griega.',
+    nivel: 'B1',
+    fuente: {
+      titulo: 'Wikipedia',
+      url: 'https://en.wikipedia.org/wiki/Dipylon_inscription',
+    },
+    tags: ['arcaico', 'alfabeto', 'Atenas', 'verso', 'Dípilon'],
+  },
+  {
+    id: 'epitafio-termopilas',
+    title: 'Epitafio de las Termópilas',
+    tipo: 'epigrama funerario',
+    fecha: 's. V a.C.',
+    origen: 'Termópilas (citado por Heródoto)',
+    dialecto: 'griego clásico',
+    greek:
+      'ὦ ξεῖν’, ἀγγέλλειν Λακεδαιμονίοις ὅτι τῇδε κείμεθα τοῖς κείνων ῥήμασι πειθόμενοι.',
+    translation:
+      'Extranjero, anuncia a los lacedemonios que aquí yacemos, obedientes a sus palabras.',
+    descripcion:
+      'El dístico que Simónides compuso para los trescientos espartanos caídos en las Termópilas, grabado en el lugar de la batalla y transmitido por Heródoto. Dos versos secos y enormes: los muertos hablan al caminante y le piden solo que cuente, en casa, que cumplieron la ley hasta el final.',
+    nivel: 'B1',
+    fuente: {
+      titulo: 'Wikipedia',
+      url: 'https://en.wikipedia.org/wiki/Battle_of_Thermopylae',
+    },
+    tags: ['epigrama', 'Simónides', 'Termópilas', 'Esparta', 'Heródoto'],
+  },
 ]
 
 export const realiaById = new Map(REALIA.map((r) => [r.id, r]))
