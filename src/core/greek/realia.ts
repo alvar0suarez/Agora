@@ -60,6 +60,27 @@ export const REALIA: Realia[] = [
     tags: ['ático', 'óstrakon', 'ostracismo', 'Atenas'],
   },
   {
+    id: 'athens-tetradrachm',
+    title: 'Tetradracma de Atenas (la lechuza)',
+    tipo: 'moneda (plata)',
+    fecha: 's. V–IV a.C.',
+    origen: 'Atenas',
+    dialecto: 'ático',
+    greek: 'ΑΘΕ',
+    leyenda: 'ΑΘΕ',
+    translation: '«de los atenienses» (abrevia ΑΘΗΝΑΙΩΝ)',
+    descripcion:
+      'La moneda más famosa de la Antigüedad: en el anverso, la cabeza de Atenea; en el reverso, su lechuza (γλαύξ) con una ramita de olivo y la luna. Las tres letras ΑΘΕ abrevian «de los atenienses». Fue la divisa internacional del Mediterráneo durante siglos.',
+    nivel: 'Cimientos',
+    fuente: {
+      titulo: 'Wikimedia Commons',
+      url: 'https://commons.wikimedia.org/wiki/File:Athens_-_410-400_BC_-_bronze_tetradrachm_-_head_of_Athena_-_owl_-_Berlin_MK_AM.jpg',
+    },
+    imagen: 'athens-tetradrachm.jpg',
+    creditos: 'Moneda de Atenas · CC BY-SA 4.0, vía Wikimedia Commons',
+    tags: ['ático', 'moneda', 'Atenas', 'Atenea'],
+  },
+  {
     id: 'nestor-cup',
     title: 'Copa de Néstor',
     tipo: 'poema en una copa',
