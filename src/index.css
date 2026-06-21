@@ -1322,18 +1322,13 @@ button.camino__row--link:active {
   color: var(--muted);
 }
 
-/* Overlay guía-lectura: traza las hendiduras reales con líneas rojas (toggle). */
+/* Overlay guía-lectura: calca las hendiduras con líneas rojas (toggle). */
 .museo__marks {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.museo__marks-svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 
 .museo__mark-stroke {
@@ -1345,17 +1340,6 @@ button.camino__row--link:active {
   stroke-linejoin: round;
   /* Grosor constante en px aunque el SVG se estire con la imagen. */
   vector-effect: non-scaling-stroke;
-}
-
-.museo__mark-letter {
-  position: absolute;
-  transform: translate(-50%, -135%);
-  padding: 0 0.2rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #fff;
-  background: rgba(239, 68, 68, 0.88);
-  border-radius: 3px;
 }
 
 .museo__hltoggle {

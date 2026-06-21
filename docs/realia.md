@@ -98,12 +98,13 @@ podría consumir el catálogo de textos reales.
   letra** (reutiliza la fonética curada del alfabeto, helper `spellOut` en
   `core/greek/letters.ts`), más un aviso de las letras que sorprenden a un
   hispanohablante (Θ = «t» aspirada, no «z»).
-- **Overlay guía-lectura (v2, a calibrar)**: toggle **🔦 Resaltar letras** que
-  traza sobre la foto las **hendiduras reales** con **líneas rojas translúcidas**
-  (SVG), cada una con su etiqueta de letra, para mapear "lo que pone" con "lo que
-  se ve" en la pieza auténtica. Datos: `marcas?: MarcaLetra[]` en
-  `core/greek/realia.ts` = por letra, una **polilínea** de puntos `[x,y]` en
-  fracción 0..1 de la imagen (independiente de la pantalla). Apagado por defecto.
+- **Overlay guía-lectura (v3, a calibrar)**: toggle **🔦 Resaltar letras** que
+  **calca las hendiduras** de la inscripción con **líneas rojas translúcidas**
+  (SVG) que SIGUEN la forma de cada letra — sin cajas ni etiquetas (eso es el
+  *bounding box* de visión por computador antiguo, descartado). Datos:
+  `marcas?: Trazo[]` en `core/greek/realia.ts` = lista de **trazos**, cada uno
+  una polilínea de puntos `[x,y]` en fracción 0..1 de la imagen (una letra puede
+  tener varios trazos, p. ej. Θ = círculo + barra). Apagado por defecto.
   - **Por qué a mano:** no hay detección de glifos en epigrafía viable offline en
     una PWA; se cura a mano.
   - **Cómo calibrar (clave):** el dueño **dibuja los trazos sobre una captura**
