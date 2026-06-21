@@ -22,6 +22,7 @@ const imgUrl = (file: string) => `${import.meta.env.BASE_URL}images/realia/${fil
 export function MuseoScreen() {
   const [progress, setProgress] = useState<ProgressState>(emptyProgress())
   const [openId, setOpenId] = useState<string | null>(null)
+  const [highlight, setHighlight] = useState(false)
 
   useEffect(() => {
     let alive = true
@@ -44,7 +45,13 @@ export function MuseoScreen() {
     const readable = canRead(r.nivel)
     return (
       <div className="museo">
-        <button className="btn btn--ghost" onClick={() => setOpenId(null)}>
+        <button
+          className="btn btn--ghost"
+          onClick={() => {
+            setOpenId(null)
+            setHighlight(false)
+          }}
+        >
           ← Museo
         </button>
         <h2 className="museo__title">{r.title}</h2>
@@ -62,7 +69,35 @@ export function MuseoScreen() {
                   <span className="museo__overlay-text">{r.leyenda}</span>
                 </div>
               ) : null}
+              {highlight && r.marcas ? (
+                <div className="museo__marks" aria-hidden="true">
+                  {r.marcas.map((m, i) => (
+                    <span
+                      key={i}
+                      className="museo__mark"
+                      style={{
+                        left: `${m.x * 100}%`,
+                        top: `${m.y * 100}%`,
+                        width: `${m.w * 100}%`,
+                        height: `${m.h * 100}%`,
+                      }}
+                    >
+                      <span className="museo__mark-letter">{m.letra}</span>
+                    </span>
+                  ))}
+                </div>
+              ) : null}
             </div>
+            {r.marcas && r.marcas.length > 0 ? (
+              <button
+                type="button"
+                className={`btn btn--ghost museo__hltoggle${highlight ? ' is-on' : ''}`}
+                aria-pressed={highlight}
+                onClick={() => setHighlight((h) => !h)}
+              >
+                {highlight ? '🔦 Ocultar letras' : '🔦 Resaltar letras'}
+              </button>
+            ) : null}
             {r.creditos ? <figcaption className="museo__credit">{r.creditos}</figcaption> : null}
           </figure>
         ) : null}
@@ -104,7 +139,13 @@ export function MuseoScreen() {
       <ul className="museo-grid">
         {REALIA.map((r) => (
           <li key={r.id}>
-            <button className="museo-card" onClick={() => setOpenId(r.id)}>
+            <button
+              className="museo-card"
+              onClick={() => {
+                setHighlight(false)
+                setOpenId(r.id)
+              }}
+            >
               {r.imagen ? (
                 <img className="museo-card__thumb" src={imgUrl(r.imagen)} alt="" loading="lazy" />
               ) : (
