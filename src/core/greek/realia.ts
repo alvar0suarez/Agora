@@ -20,6 +20,8 @@ export interface Realia {
   dialecto: string
   /** Texto griego. */
   greek: string
+  /** Transcripción legible y BREVE para superponer sobre la imagen (opcional). */
+  leyenda?: string
   /** Traducción al español. */
   translation: string
   /** Contexto: qué es y por qué importa. */
@@ -43,8 +45,9 @@ export const REALIA: Realia[] = [
     fecha: 's. V a.C.',
     origen: 'Atenas, Ágora',
     dialecto: 'ático',
-    greek: 'ΘΕΜΙΣΤΟΚΛΕΣ',
-    translation: 'Temístocles',
+    greek: 'ΘΕΜΙΣΤΟΚΛΕΣ ΝΕΟΚΛΕΟΣ',
+    leyenda: 'ΘΕΜΙΣΤΟΚΛΕΣ ΝΕΟΚΛΕΟΣ',
+    translation: 'Temístocles, hijo de Neocles',
     descripcion:
       'Trozo de cerámica usado como papeleta en el ostracismo ateniense: se grababa el nombre del ciudadano que se quería desterrar. Temístocles, héroe de Salamina, fue condenado al ostracismo hacia el 471 a.C. (la fórmula completa solía añadir «ΝΕΟΚΛΕΟΣ ΦΡΕΑΡΡΙΟΣ», hijo de Neocles, del demo de Frearros).',
     nivel: 'Cimientos',
