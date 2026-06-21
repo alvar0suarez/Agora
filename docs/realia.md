@@ -98,6 +98,14 @@ podría consumir el catálogo de textos reales.
   letra** (reutiliza la fonética curada del alfabeto, helper `spellOut` en
   `core/greek/letters.ts`), más un aviso de las letras que sorprenden a un
   hispanohablante (Θ = «t» aspirada, no «z»).
+- **Overlay guía-lectura (v1, a calibrar)**: toggle **🔦 Resaltar letras** que
+  dibuja sobre la foto realces **translúcidos** en la posición de cada letra
+  real, con su etiqueta, para ayudar a leer la pieza auténtica (lo pedido por el
+  dueño). Datos: `marcas?: MarcaLetra[]` en `core/greek/realia.ts` (posición en
+  fracción 0..1 de la imagen, independiente de la pantalla). Apagado por defecto.
+  **Pendiente: calibrar las posiciones** en el móvil (la primera estimación se
+  hizo desde capturas) y completar las letras de cada pieza. Sin detección
+  automática (no viable offline); anotación curada a mano, afinable con feedback.
 
 ## Ideas de futuro (apuntadas por el dueño, sin fase)
 
