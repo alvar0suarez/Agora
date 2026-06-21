@@ -8,6 +8,7 @@ import {
   type ProgressState,
 } from '../../core/progress'
 import { Card } from '../../core/ui/Card'
+import { MuseoPronunciation } from './MuseoPronunciation'
 
 const bandIndex = (code: string) => READING_BANDS.findIndex((b) => b.code === code)
 const imgUrl = (file: string) => `${import.meta.env.BASE_URL}images/realia/${file}`
@@ -74,6 +75,8 @@ export function MuseoScreen() {
           <p className="museo__greek">{r.greek}</p>
           <p className="museo__trans">{r.translation}</p>
         </Card>
+
+        {r.leyenda ? <MuseoPronunciation text={r.leyenda} /> : null}
 
         <p className="museo__desc">{r.descripcion}</p>
 

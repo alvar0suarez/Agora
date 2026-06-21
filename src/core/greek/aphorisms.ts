@@ -171,8 +171,8 @@ export const APHORISMS: Aphorism[] = [
     source: 'Protágoras (Platón, Teeteto)',
     words: [
       { gr: 'πάντων', gloss: 'de todas las cosas', lemmaId: 'pas' },
-      { gr: 'χρημάτων', gloss: 'de las cosas, de los asuntos' },
-      { gr: 'μέτρον', gloss: 'medida' },
+      { gr: 'χρημάτων', gloss: 'de las cosas, de los asuntos', lemmaId: 'chrema' },
+      { gr: 'μέτρον', gloss: 'medida', lemmaId: 'metron' },
       { gr: 'ἄνθρωπος', gloss: 'el hombre, el ser humano', lemmaId: 'anthropos' },
     ],
   },
@@ -184,7 +184,7 @@ export const APHORISMS: Aphorism[] = [
     words: [
       { gr: 'φύσις', gloss: 'naturaleza', lemmaId: 'physis' },
       { gr: 'κρύπτεσθαι', gloss: 'ocultarse (infinitivo)' },
-      { gr: 'φιλεῖ', gloss: 'gusta de, ama' },
+      { gr: 'φιλεῖ', gloss: 'gusta de, ama', lemmaId: 'phileo' },
     ],
   },
   {
@@ -207,7 +207,7 @@ export const APHORISMS: Aphorism[] = [
     source: 'Proverbio (cf. Platón, Leyes)',
     words: [
       { gr: 'ἀρχὴ', gloss: 'comienzo, principio', lemmaId: 'arche' },
-      { gr: 'ἥμισυ', gloss: 'la mitad' },
+      { gr: 'ἥμισυ', gloss: 'la mitad', lemmaId: 'hemisy' },
       { gr: 'παντός', gloss: 'del todo', lemmaId: 'pas' },
     ],
   },
