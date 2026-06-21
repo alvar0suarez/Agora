@@ -109,9 +109,8 @@ export function MuseoScreen() {
         <Card>
           <p className="museo__greek">{r.greek}</p>
           <p className="museo__trans">{r.translation}</p>
+          {r.leyenda ? <MuseoPronunciation text={r.leyenda} /> : null}
         </Card>
-
-        {r.leyenda ? <MuseoPronunciation text={r.leyenda} /> : null}
 
         <p className="museo__desc">{r.descripcion}</p>
 
