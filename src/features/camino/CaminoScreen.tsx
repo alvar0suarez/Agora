@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   loadProgress,
   levelFromXp,
+  xpToReachLevel,
   READING_BANDS,
   emptyProgress,
   type ProgressState,
@@ -119,17 +120,26 @@ export function CaminoScreen() {
             icon: '•',
           }
           const next = READING_BANDS[i + 1]
-          const pct =
-            status === 'current' && next
-              ? Math.min(
-                  100,
+          // Avance al SIGUIENTE NIVEL: continuo en XP, se mueve con cada acierto
+          // (antes solo contaba niveles enteros y la barra parecía congelada).
+          const levelPct =
+            lvl.xpForNextLevel > 0
+              ? Math.round((lvl.xpIntoLevel / lvl.xpForNextLevel) * 100)
+              : 0
+          // Contexto de banda: cuánto llevas de esta banda hacia la siguiente.
+          const bandPct = next
+            ? Math.min(
+                100,
+                Math.max(
+                  0,
                   Math.round(
-                    ((lvl.level - band.from) / (next.from - band.from)) * 100,
+                    ((lvl.totalXp - xpToReachLevel(band.from)) /
+                      (xpToReachLevel(next.from) - xpToReachLevel(band.from))) *
+                      100,
                   ),
-                )
-              : status === 'done'
-                ? 100
-                : 0
+                ),
+              )
+            : 100
           const target = targetFor(status, band.code)
 
           const inner = (
@@ -147,11 +157,16 @@ export function CaminoScreen() {
                     <div className="level-bar">
                       <span
                         className="level-bar__fill"
-                        style={{ width: `${pct}%` }}
+                        style={{ width: `${levelPct}%` }}
                       />
                     </div>
                     <p className="camino__hint">
-                      {pct}% hacia {next.code}
+                      Nivel {lvl.level}: faltan{' '}
+                      <strong>{lvl.xpForNextLevel - lvl.xpIntoLevel} XP</strong>{' '}
+                      para el nivel {lvl.level + 1}
+                    </p>
+                    <p className="camino__hint camino__hint--muted">
+                      {bandPct}% de {band.code} hacia {next.code}
                     </p>
                   </>
                 ) : null}

@@ -977,6 +977,12 @@ button.camino__row--link:active {
   font-size: 0.8rem;
 }
 
+.camino__hint--muted {
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  opacity: 0.8;
+}
+
 /* Etimología: raíces griegas ↔ palabras españolas. */
 .etim {
   display: flex;
