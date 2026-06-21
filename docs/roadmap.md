@@ -65,8 +65,10 @@ escritura por reconocimiento, no de redacción).
 - **`vocabulario`** — Fase 2 en marcha: ~50 palabras, modos reconocer / producir /
   **teclear** (teclado griego en pantalla, `core/ui`), con SRS. Pipeline de
   **audio neural (AFI)** en build-time definido (ver `docs/audio.md`).
-- **`lectura`** — Fase 3 (semilla): aforismos y γνῶμαι reales (γνῶθι σεαυτόν,
-  πάντα ῥεῖ…) con traducción y desglose palabra por palabra.
+- **`lectura`** — Fase 3 (en marcha): aforismos y γνῶμαι reales (γνῶθι σεαυτόν,
+  πάντα ῥεῖ…) con traducción y desglose palabra por palabra. Dos modos:
+  **Repasar** (recuerdo activo con SRS + XP — leer ya cuenta para el progreso) y
+  **Explorar** (lectura libre, input comprensible).
 - **`gramatica`** — Fase 4 (en marcha): conjugación (presente de λύω, εἰμί) y
   declinación (λόγος 2.ª, ψυχή 1.ª; los 4 casos × sg/pl). Se estudia el paradigma
   y se **practica escribiendo** la forma pedida (teclado griego + SRS + XP).
@@ -81,6 +83,30 @@ letras, vocab, verbos, sustantivos, aforismos, normalización), `audio`
 clips de audio; más tiempos verbales y modelos de declinación; más aforismos en
 lectura. La dirección **personal y local-first** se mantiene; cualquier idea de
 abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad.md`.
+
+## Cómo crecemos hacia B2 (prioridades)
+
+> Acordado en sesión: el camino a B2 son tres esfuerzos distintos. No mezclarlos
+> en una misma sesión; una tarea por sesión limpia. Orden por palanca:
+
+1. **Cerrar agujeros del bucle de aprendizaje (mayor palanca).** Que toda
+   actividad ancle al recuerdo real y sume al progreso, y añadir tipos de
+   ejercicio que faltan para comprensión lectora B2: rellenar huecos (cloze),
+   dictado por audio, emparejar, preguntas de comprensión, traducción inversa.
+   *Hecho:* lectura ahora tiene **Repasar** (SRS + XP). *Pendiente:* XP en
+   gramática; los nuevos tipos de ejercicio.
+2. **Ampliar contenido (el grano largo, en goteo).** Más léxico filosófico, más
+   tiempos verbales y modelos de declinación, más aforismos y piezas de museo.
+   Imprescindible para B2 pero es maratón: añadir de poco en poco, no de golpe.
+3. **Unificar el diseño (cimiento, hacerlo pronto).** El CSS está coherente en
+   color pero fragmentado en estructura (cada feature reinventa su BEM, colores
+   de feedback y espaciado/tipografía sin escala). Conviene extraer tokens
+   (`--color-success/-danger`, escala de espaciado y tipografía) y componentes
+   comunes **antes** de añadir muchos features, para no acumular más deuda.
+
+**Aparcado:** integración con apps hermanas (audio de YT-Extractor, archivo en
+Nous). Está declarada en `.claude/ficha.md` pero depende de esas otras apps; no
+es accionable desde Agora ahora mismo.
 
 ## El método (resumen)
 
@@ -112,9 +138,10 @@ Palabras más frecuentes + núcleo filosófico, con SRS. Ver `docs/fase-2.md`.
 
 ### Fase 3 — Lectura graduada
 
-Frases reales un punto por encima del nivel (input comprensible). **Semilla en
-marcha**: feature `lectura` con aforismos célebres (γνῶθι σεαυτόν, πάντα ῥεῖ…),
-traducción y desglose palabra por palabra. Ver `docs/fase-3.md`.
+Frases reales un punto por encima del nivel (input comprensible). **En marcha**:
+feature `lectura` con aforismos célebres (γνῶθι σεαυτόν, πάντα ῥεῖ…), traducción
+y desglose palabra por palabra, en dos modos: **Repasar** (recuerdo activo con
+SRS + XP) y **Explorar** (lectura libre). Ver `docs/fase-3.md`.
 
 ### Fase 4 — Morfología
 
