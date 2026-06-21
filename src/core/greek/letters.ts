@@ -8,6 +8,8 @@
  *  - ζ = [zd]; υ = [y] (la "u" francesa).
  */
 
+import { normalizeGreek } from './normalize'
+
 export interface GreekLetter {
   id: string
   /** Nombre de la letra en griego (con diacríticos). */
@@ -48,3 +50,24 @@ export const LETTERS: GreekLetter[] = [
   { id: 'psi',     name: 'ψῖ',       upper: 'Ψ', lower: 'ψ', translit: 'ps', ipa: '[ps]',       sound: 'Como «ps» (pronunciando la p, como en «psicología»).' },
   { id: 'omega',   name: 'ὦ μέγα',   upper: 'Ω', lower: 'ω', translit: 'ō',  ipa: '[ɔː]',       sound: 'Una «o» abierta y larga.' },
 ]
+
+/** Índice de letras por su forma minúscula (clave para deletrear). */
+export const letterByLower = new Map(LETTERS.map((l) => [l.lower, l]))
+
+/**
+ * Deletrea un texto griego en las letras que lo componen, en orden, ignorando
+ * acentos, espíritus, espacios y signos (normaliza cada carácter con
+ * `normalizeGreek`). Sirve para mostrar la pronunciación letra a letra
+ * reutilizando la fonética curada del alfabeto, sin tener que escribir AFI a
+ * mano por cada palabra. Lógica PURA (testeable).
+ */
+export function spellOut(text: string): GreekLetter[] {
+  const out: GreekLetter[] = []
+  for (const ch of text) {
+    const key = normalizeGreek(ch)
+    if (!key) continue
+    const letter = letterByLower.get(key)
+    if (letter) out.push(letter)
+  }
+  return out
+}

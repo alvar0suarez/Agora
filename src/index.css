@@ -1205,27 +1205,109 @@ button.camino__row--link:active {
 
 .museo__overlay {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 0.6rem;
+  bottom: 0.6rem;
+  max-width: calc(100% - 1.2rem);
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  padding: 1.6rem 0.9rem 0.7rem;
-  background: linear-gradient(to top, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0));
-  border-radius: 0 0 12px 12px;
+  gap: 0.1rem;
+  padding: 0.4rem 0.7rem 0.5rem;
+  /* Chip sólido: legible sobre cualquier foto, sin depender del contraste. */
+  background: rgba(2, 6, 23, 0.82);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
   line-height: 1.2;
 }
 
 .museo__overlay-label {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
 }
 
 .museo__overlay-text {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #fff;
   word-break: break-word;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.museo__pron {
+  margin: 0.9rem 0;
+  padding: 0.8rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 12px;
+}
+
+.museo__pron-title {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+}
+
+.museo__pron-letters {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.museo__pron-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 2.6rem;
+  padding: 0.35rem 0.45rem;
+  background: var(--bg);
+  border: 1px solid var(--surface-2);
+  border-radius: 8px;
+}
+
+.museo__pron-glyph {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.museo__pron-ipa {
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.museo__pron-notes {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.museo__pron-note {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.museo__pron-note-glyph {
+  flex: 0 0 auto;
+  min-width: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.museo__pron-note-text {
+  color: var(--text);
+}
+
+.museo__pron-foot {
+  margin: 0.7rem 0 0;
+  font-size: 0.72rem;
+  color: var(--muted);
 }
