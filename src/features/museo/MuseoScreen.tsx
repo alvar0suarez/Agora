@@ -71,18 +71,31 @@ export function MuseoScreen() {
               ) : null}
               {highlight && r.marcas ? (
                 <div className="museo__marks" aria-hidden="true">
+                  <svg
+                    className="museo__marks-svg"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                  >
+                    {r.marcas.map((m, i) => (
+                      <polyline
+                        key={i}
+                        className="museo__mark-stroke"
+                        points={m.puntos
+                          .map(([x, y]) => `${x * 100},${y * 100}`)
+                          .join(' ')}
+                      />
+                    ))}
+                  </svg>
                   {r.marcas.map((m, i) => (
                     <span
                       key={i}
-                      className="museo__mark"
+                      className="museo__mark-letter"
                       style={{
-                        left: `${m.x * 100}%`,
-                        top: `${m.y * 100}%`,
-                        width: `${m.w * 100}%`,
-                        height: `${m.h * 100}%`,
+                        left: `${m.puntos[0][0] * 100}%`,
+                        top: `${m.puntos[0][1] * 100}%`,
                       }}
                     >
-                      <span className="museo__mark-letter">{m.letra}</span>
+                      {m.letra}
                     </span>
                   ))}
                 </div>

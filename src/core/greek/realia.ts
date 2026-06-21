@@ -35,25 +35,24 @@ export interface Realia {
   /** Crédito/atribución de la imagen. */
   creditos?: string
   /**
-   * Marcas guía-lectura sobre la imagen: dónde está cada letra real en la foto,
-   * para resaltarla con una capa translúcida (toggle) y ayudar a leer la pieza
-   * auténtica. Curado a mano (no hay detección automática offline). Opcional.
+   * Marcas guía-lectura sobre la imagen: el TRAZO de cada letra real grabada en
+   * la pieza, para resaltarlo con una línea translúcida (toggle) y ayudar a leer
+   * el objeto auténtico, mapeando "lo que pone" con "lo que se ve". Curado a mano
+   * (no hay detección automática offline). Opcional.
    */
   marcas?: MarcaLetra[]
   tags: string[]
 }
 
 /**
- * Una marca sobre la imagen real: una letra y dónde está, en FRACCIÓN (0..1) del
- * tamaño de la imagen (independiente de la pantalla). `x,y` es la esquina
- * superior izquierda; `w,h`, el tamaño. Se dibuja como un realce translúcido.
+ * El trazo de una letra grabada en la pieza: una polilínea que sigue la
+ * hendidura, como una secuencia de puntos `[x, y]` en FRACCIÓN (0..1) del tamaño
+ * de la imagen (independiente de la pantalla). Se dibuja como una línea roja
+ * translúcida por encima de la foto. `letra` es la letra que representa.
  */
 export interface MarcaLetra {
   letra: string
-  x: number
-  y: number
-  w: number
-  h: number
+  puntos: Array<[number, number]>
 }
 
 export const REALIA: Realia[] = [
@@ -76,18 +75,13 @@ export const REALIA: Realia[] = [
     },
     imagen: 'ostrakon-themistokles.jpg',
     creditos: 'Foto: Han borg (dominio público), vía Wikimedia Commons',
-    // Marcas guía-lectura (PRIMERA ESTIMACIÓN, a calibrar en el móvil): posición
-    // aproximada de algunas letras visibles del nombre grabado, en fracción de
-    // la imagen. Se afinan con feedback; las letras que falten se añaden luego.
+    // Marcas guía-lectura: TRAZOS de muestra (placeholder) para enseñar el estilo
+    // de línea roja. Las posiciones reales se calibran con una captura anotada por
+    // el dueño (no puedo medir la foto desde aquí). Se completan letra a letra.
     marcas: [
-      { letra: 'Ν', x: 0.45, y: 0.2, w: 0.045, h: 0.06 },
-      { letra: 'Ε', x: 0.5, y: 0.2, w: 0.045, h: 0.06 },
-      { letra: 'Ο', x: 0.55, y: 0.2, w: 0.045, h: 0.06 },
-      { letra: 'Κ', x: 0.6, y: 0.21, w: 0.045, h: 0.06 },
-      { letra: 'Λ', x: 0.65, y: 0.23, w: 0.045, h: 0.06 },
-      { letra: 'Ε', x: 0.7, y: 0.33, w: 0.045, h: 0.06 },
-      { letra: 'Ο', x: 0.71, y: 0.43, w: 0.045, h: 0.06 },
-      { letra: 'Σ', x: 0.7, y: 0.51, w: 0.045, h: 0.06 },
+      { letra: 'Θ', puntos: [[0.35, 0.71], [0.38, 0.73]] },
+      { letra: 'Ε', puntos: [[0.41, 0.72], [0.43, 0.74]] },
+      { letra: 'Ν', puntos: [[0.46, 0.73], [0.48, 0.75]] },
     ],
     tags: ['ático', 'óstrakon', 'ostracismo', 'Atenas'],
   },
