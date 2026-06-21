@@ -73,3 +73,18 @@ cita de Heráclito/Platón.
 
 `core/greek/realia.ts` serían **datos reutilizables**; otra app del ecosistema
 podría consumir el catálogo de textos reales.
+
+## Pendiente / notas (para retomar tras un clear)
+
+- **Imágenes para las piezas que aún no la tienen**: Copa de Néstor e Inscripción
+  del soreg muestran el marcador 🏺 (sin foto). Conseguir imágenes de **licencia
+  libre** (Wikimedia PD/CC), reducirlas (`Special:FilePath/...?width=800`),
+  empaquetarlas con **crédito + licencia** y su **leyenda** superpuesta.
+- **Más piezas variadas**: un vaso con escena firmada (p. ej. firma de Exequias),
+  una estela ática, un papiro, la inscripción del Dipylon. Mantener legibles
+  (leyenda) y con su banda de nivel.
+- **Cobertura visual**: idealmente toda pieza con foto debe llevar `leyenda` para
+  que las letras se lean claras sobre la imagen (el usuario lo pidió: "que se vean
+  bien"). Para fotos poco legibles, preferir dibujos/facsímiles.
+- Recordatorio: imágenes servidas a ~800 px (ligeras), siempre con atribución;
+  nada de fotos con "todos los derechos reservados".
