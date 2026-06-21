@@ -103,6 +103,29 @@ export const VOCAB: VocabEntry[] = [
   { id: 'ergon',    lemma: 'ἔργον',    gloss: 'obra, trabajo',       pos: 'sustantivo', tags: ['frecuencia'], derivados: ['energía', 'ergonomía'] },
   { id: 'mythos',   lemma: 'μῦθος',    gloss: 'relato, mito',        pos: 'sustantivo', tags: ['filosofia'], derivados: ['mito', 'mitología'] },
   { id: 'arithmos', lemma: 'ἀριθμός',  gloss: 'número',              pos: 'sustantivo', tags: ['filosofia'], derivados: ['aritmética', 'algoritmo'] },
+
+  // — Segunda tanda: más frecuencia + núcleo filosófico (Platón, Aristóteles) —
+  { id: 'gignomai',    lemma: 'γίγνομαι',     gloss: 'llegar a ser, nacer; suceder', pos: 'verbo',      tags: ['frecuencia', 'filosofia'], derivados: ['génesis', '-geno'] },
+  { id: 'phileo',      lemma: 'φιλέω',        gloss: 'amar, querer; gustar de',      pos: 'verbo',      tags: ['frecuencia'], derivados: ['filántropo', 'filia'] },
+  { id: 'aner',        lemma: 'ἀνήρ',         gloss: 'hombre, varón',                pos: 'sustantivo', tags: ['frecuencia'], derivados: ['androide', 'andrógino'] },
+  { id: 'gyne',        lemma: 'γυνή',         gloss: 'mujer',                        pos: 'sustantivo', tags: ['frecuencia'], derivados: ['ginecología', 'misoginia'] },
+  { id: 'oudeis',      lemma: 'οὐδείς',       gloss: 'ninguno, nadie; nada',         pos: 'pronombre',  tags: ['frecuencia'] },
+  { id: 'zoe',         lemma: 'ζωή',          gloss: 'vida',                         pos: 'sustantivo', tags: ['frecuencia', 'filosofia'], derivados: ['zoología', 'protozoo'] },
+  { id: 'soma',        lemma: 'σῶμα',         gloss: 'cuerpo',                       pos: 'sustantivo', tags: ['filosofia'], derivados: ['somático', 'cromosoma', 'psicosomático'] },
+  { id: 'thanatos',    lemma: 'θάνατος',      gloss: 'muerte',                       pos: 'sustantivo', tags: ['filosofia'], derivados: ['eutanasia', 'tanatorio'] },
+  { id: 'nomos',       lemma: 'νόμος',        gloss: 'ley; costumbre',               pos: 'sustantivo', tags: ['filosofia'], derivados: ['autonomía', 'astronomía', 'economía'] },
+  { id: 'dikaiosyne',  lemma: 'δικαιοσύνη',   gloss: 'justicia',                     pos: 'sustantivo', tags: ['filosofia'] },
+  { id: 'telos',       lemma: 'τέλος',        gloss: 'fin, meta; propósito',         pos: 'sustantivo', tags: ['filosofia'], derivados: ['teleología'] },
+  { id: 'aitia',       lemma: 'αἰτία',        gloss: 'causa, motivo',                pos: 'sustantivo', tags: ['filosofia'], derivados: ['etiología'] },
+  { id: 'dynamis',     lemma: 'δύναμις',      gloss: 'poder, potencia; capacidad',   pos: 'sustantivo', tags: ['filosofia'], derivados: ['dinámica', 'dinamita', 'dinamo'] },
+  { id: 'energeia',    lemma: 'ἐνέργεια',     gloss: 'actividad, acto',              pos: 'sustantivo', tags: ['filosofia'], derivados: ['energía', 'energético'] },
+  { id: 'ousia',       lemma: 'οὐσία',        gloss: 'ser, esencia; sustancia',      pos: 'sustantivo', tags: ['filosofia'] },
+  { id: 'eros',        lemma: 'ἔρως',         gloss: 'amor, deseo',                  pos: 'sustantivo', tags: ['filosofia'], derivados: ['erótico', 'erotismo'] },
+  { id: 'philia',      lemma: 'φιλία',        gloss: 'amistad, afecto',              pos: 'sustantivo', tags: ['filosofia'], derivados: ['hemofilia', 'filia'] },
+  { id: 'gnome',       lemma: 'γνώμη',        gloss: 'juicio, opinión; máxima',      pos: 'sustantivo', tags: ['filosofia'], derivados: ['gnómico'] },
+  { id: 'chrema',      lemma: 'χρῆμα',        gloss: 'cosa, asunto; (pl.) bienes',   pos: 'sustantivo', tags: ['frecuencia'], derivados: ['crematístico'] },
+  { id: 'metron',      lemma: 'μέτρον',       gloss: 'medida',                       pos: 'sustantivo', tags: ['filosofia'], derivados: ['metro', 'simetría', 'diámetro'] },
+  { id: 'hemisy',      lemma: 'ἥμισυ',        gloss: 'mitad, medio',                 pos: 'adjetivo',   tags: ['frecuencia'], derivados: ['hemisferio', 'hemiciclo'] },
 ]
 
 /** Índice por id, para resolver una entrada rápido. */
