@@ -53,7 +53,15 @@ export function MuseoScreen() {
 
         {r.imagen ? (
           <figure className="museo__figure">
-            <img className="museo__img" src={imgUrl(r.imagen)} alt={r.title} loading="lazy" />
+            <div className="museo__imgwrap">
+              <img className="museo__img" src={imgUrl(r.imagen)} alt={r.title} loading="lazy" />
+              {r.leyenda ? (
+                <div className="museo__overlay">
+                  <span className="museo__overlay-label">Lo que pone</span>
+                  <span className="museo__overlay-text">{r.leyenda}</span>
+                </div>
+              ) : null}
+            </div>
             {r.creditos ? <figcaption className="museo__credit">{r.creditos}</figcaption> : null}
           </figure>
         ) : null}
