@@ -35,26 +35,22 @@ export interface Realia {
   /** Crédito/atribución de la imagen. */
   creditos?: string
   /**
-   * Marcas guía-lectura sobre la imagen: dónde está cada letra real en la foto,
-   * para resaltarla con una capa translúcida (toggle) y ayudar a leer la pieza
-   * auténtica. Curado a mano (no hay detección automática offline). Opcional.
+   * Marcas guía-lectura: TRAZOS que calcan las hendiduras de las letras sobre la
+   * foto, dibujados como líneas rojas translúcidas que siguen la forma de cada
+   * letra (sin cajas ni etiquetas). Curado a mano (no hay detección automática
+   * offline). Opcional.
    */
-  marcas?: MarcaLetra[]
+  marcas?: Trazo[]
   tags: string[]
 }
 
 /**
- * Una marca sobre la imagen real: una letra y dónde está, en FRACCIÓN (0..1) del
- * tamaño de la imagen (independiente de la pantalla). `x,y` es la esquina
- * superior izquierda; `w,h`, el tamaño. Se dibuja como un realce translúcido.
+ * Un trazo que sigue una hendidura de la pieza: una polilínea como secuencia de
+ * puntos `[x, y]` en FRACCIÓN (0..1) del tamaño de la imagen (independiente de la
+ * pantalla). Una letra puede necesitar VARIOS trazos (p. ej. Θ = un círculo y una
+ * barra). Se dibuja como una línea roja translúcida sobre la foto.
  */
-export interface MarcaLetra {
-  letra: string
-  x: number
-  y: number
-  w: number
-  h: number
-}
+export type Trazo = Array<[number, number]>
 
 export const REALIA: Realia[] = [
   {
@@ -76,18 +72,19 @@ export const REALIA: Realia[] = [
     },
     imagen: 'ostrakon-themistokles.jpg',
     creditos: 'Foto: Han borg (dominio público), vía Wikimedia Commons',
-    // Marcas guía-lectura (PRIMERA ESTIMACIÓN, a calibrar en el móvil): posición
-    // aproximada de algunas letras visibles del nombre grabado, en fracción de
-    // la imagen. Se afinan con feedback; las letras que falten se añaden luego.
+    // Marcas guía-lectura: TRAZO de muestra de la Θ del fondo (círculo + barra),
+    // calcado a ojo de una captura para enseñar el ESTILO (línea roja que sigue
+    // la forma de la letra). Las posiciones finas se afinan iterando con el dueño
+    // (no puedo ver el render desde aquí). El resto de letras se calcan luego.
     marcas: [
-      { letra: 'Ν', x: 0.45, y: 0.2, w: 0.045, h: 0.06 },
-      { letra: 'Ε', x: 0.5, y: 0.2, w: 0.045, h: 0.06 },
-      { letra: 'Ο', x: 0.55, y: 0.2, w: 0.045, h: 0.06 },
-      { letra: 'Κ', x: 0.6, y: 0.21, w: 0.045, h: 0.06 },
-      { letra: 'Λ', x: 0.65, y: 0.23, w: 0.045, h: 0.06 },
-      { letra: 'Ε', x: 0.7, y: 0.33, w: 0.045, h: 0.06 },
-      { letra: 'Ο', x: 0.71, y: 0.43, w: 0.045, h: 0.06 },
-      { letra: 'Σ', x: 0.7, y: 0.51, w: 0.045, h: 0.06 },
+      // Θ — círculo
+      [
+        [0.306, 0.734], [0.297, 0.764], [0.275, 0.776], [0.253, 0.764],
+        [0.244, 0.734], [0.253, 0.704], [0.275, 0.692], [0.297, 0.704],
+        [0.306, 0.734],
+      ],
+      // Θ — barra central
+      [[0.246, 0.734], [0.304, 0.734]],
     ],
     tags: ['ático', 'óstrakon', 'ostracismo', 'Atenas'],
   },

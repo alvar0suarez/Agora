@@ -70,22 +70,22 @@ export function MuseoScreen() {
                 </div>
               ) : null}
               {highlight && r.marcas ? (
-                <div className="museo__marks" aria-hidden="true">
-                  {r.marcas.map((m, i) => (
-                    <span
+                <svg
+                  className="museo__marks"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  {r.marcas.map((trazo, i) => (
+                    <polyline
                       key={i}
-                      className="museo__mark"
-                      style={{
-                        left: `${m.x * 100}%`,
-                        top: `${m.y * 100}%`,
-                        width: `${m.w * 100}%`,
-                        height: `${m.h * 100}%`,
-                      }}
-                    >
-                      <span className="museo__mark-letter">{m.letra}</span>
-                    </span>
+                      className="museo__mark-stroke"
+                      points={trazo
+                        .map(([x, y]) => `${x * 100},${y * 100}`)
+                        .join(' ')}
+                    />
                   ))}
-                </div>
+                </svg>
               ) : null}
             </div>
             {r.marcas && r.marcas.length > 0 ? (
@@ -109,9 +109,8 @@ export function MuseoScreen() {
         <Card>
           <p className="museo__greek">{r.greek}</p>
           <p className="museo__trans">{r.translation}</p>
+          {r.leyenda ? <MuseoPronunciation text={r.leyenda} /> : null}
         </Card>
-
-        {r.leyenda ? <MuseoPronunciation text={r.leyenda} /> : null}
 
         <p className="museo__desc">{r.descripcion}</p>
 

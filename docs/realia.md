@@ -98,14 +98,33 @@ podría consumir el catálogo de textos reales.
   letra** (reutiliza la fonética curada del alfabeto, helper `spellOut` en
   `core/greek/letters.ts`), más un aviso de las letras que sorprenden a un
   hispanohablante (Θ = «t» aspirada, no «z»).
-- **Overlay guía-lectura (v1, a calibrar)**: toggle **🔦 Resaltar letras** que
-  dibuja sobre la foto realces **translúcidos** en la posición de cada letra
-  real, con su etiqueta, para ayudar a leer la pieza auténtica (lo pedido por el
-  dueño). Datos: `marcas?: MarcaLetra[]` en `core/greek/realia.ts` (posición en
-  fracción 0..1 de la imagen, independiente de la pantalla). Apagado por defecto.
-  **Pendiente: calibrar las posiciones** en el móvil (la primera estimación se
-  hizo desde capturas) y completar las letras de cada pieza. Sin detección
-  automática (no viable offline); anotación curada a mano, afinable con feedback.
+- **Overlay guía-lectura (v3, a calibrar)**: toggle **🔦 Resaltar letras** que
+  **calca las hendiduras** de la inscripción con **líneas rojas translúcidas**
+  (SVG) que SIGUEN la forma de cada letra — sin cajas ni etiquetas (eso es el
+  *bounding box* de visión por computador antiguo, descartado). Datos:
+  `marcas?: Trazo[]` en `core/greek/realia.ts` = lista de **trazos**, cada uno
+  una polilínea de puntos `[x,y]` en fracción 0..1 de la imagen (una letra puede
+  tener varios trazos, p. ej. Θ = círculo + barra). Apagado por defecto.
+  - **Por qué a mano:** no hay detección de glifos en epigrafía viable offline en
+    una PWA; se cura a mano.
+  - **Cómo calibrar (clave):** el dueño **dibuja los trazos sobre una captura**
+    (puede anotar la pantalla) y Claude los **codifica** a coordenadas. Así la
+    persona que SÍ ve la foto pone las líneas y Claude solo las traduce a datos.
+  - **Estado:** el óstrakon lleva 3 trazos de muestra (placeholder) solo para
+    enseñar el estilo; faltan las posiciones reales y el resto de letras/piezas.
+
+## Visión: "Lee la pieza real" (flashcards en el Camino)
+
+> Idea del dueño, muy potente, a desarrollar con tiempo cuando el overlay salga
+> fino. Si el trazado funciona bien sobre una pieza, se convierte en un **tipo de
+> ejercicio**: dentro del Camino, flashcards con una **imagen de griego real**
+> (óstrakon, inscripción, moneda…) donde el usuario tiene que **leer directamente
+> lo que pone**, usando el overlay como ayuda graduada (primero sin líneas →
+> intenta leer → revela los trazos y la transcripción). Es "encontrar la realidad":
+> aplicar lo aprendido a un objeto auténtico. Encaja con la meta del proyecto y
+> sería una experiencia muy chula (p. ej. de cara a una visita a Atenas). Depende
+> de: (1) overlay calibrado y bonito, (2) un modo de ejercicio que reutilice el
+> SRS/XP del núcleo, (3) más piezas con sus trazos.
 
 ## Ideas de futuro (apuntadas por el dueño, sin fase)
 
