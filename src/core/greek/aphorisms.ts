@@ -164,6 +164,53 @@ export const APHORISMS: Aphorism[] = [
       { gr: 'πᾶν', gloss: 'todo', lemmaId: 'pas' },
     ],
   },
+  {
+    id: 'panton-metron-anthropos',
+    greek: 'πάντων χρημάτων μέτρον ἄνθρωπος',
+    translation: 'El hombre es la medida de todas las cosas.',
+    source: 'Protágoras (Platón, Teeteto)',
+    words: [
+      { gr: 'πάντων', gloss: 'de todas las cosas', lemmaId: 'pas' },
+      { gr: 'χρημάτων', gloss: 'de las cosas, de los asuntos' },
+      { gr: 'μέτρον', gloss: 'medida' },
+      { gr: 'ἄνθρωπος', gloss: 'el hombre, el ser humano', lemmaId: 'anthropos' },
+    ],
+  },
+  {
+    id: 'physis-kryptesthai',
+    greek: 'φύσις κρύπτεσθαι φιλεῖ',
+    translation: 'La naturaleza gusta de ocultarse.',
+    source: 'Heráclito',
+    words: [
+      { gr: 'φύσις', gloss: 'naturaleza', lemmaId: 'physis' },
+      { gr: 'κρύπτεσθαι', gloss: 'ocultarse (infinitivo)' },
+      { gr: 'φιλεῖ', gloss: 'gusta de, ama' },
+    ],
+  },
+  {
+    id: 'nous-hora-nous-akouei',
+    greek: 'νοῦς ὁρᾷ καὶ νοῦς ἀκούει',
+    translation: 'La mente ve y la mente oye.',
+    source: 'Epicarmo',
+    words: [
+      { gr: 'νοῦς', gloss: 'mente, intelecto', lemmaId: 'nous' },
+      { gr: 'ὁρᾷ', gloss: 've', lemmaId: 'horao' },
+      { gr: 'καὶ', gloss: 'y', lemmaId: 'kai' },
+      { gr: 'νοῦς', gloss: 'mente, intelecto', lemmaId: 'nous' },
+      { gr: 'ἀκούει', gloss: 'oye', lemmaId: 'akouo' },
+    ],
+  },
+  {
+    id: 'arche-hemisy-pantos',
+    greek: 'ἀρχὴ ἥμισυ παντός',
+    translation: 'El comienzo es la mitad del todo.',
+    source: 'Proverbio (cf. Platón, Leyes)',
+    words: [
+      { gr: 'ἀρχὴ', gloss: 'comienzo, principio', lemmaId: 'arche' },
+      { gr: 'ἥμισυ', gloss: 'la mitad' },
+      { gr: 'παντός', gloss: 'del todo', lemmaId: 'pas' },
+    ],
+  },
 ]
 
 /** Índice por id. */
