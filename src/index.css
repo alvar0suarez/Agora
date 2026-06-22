@@ -1492,3 +1492,55 @@ button.camino__row--link:active {
   color: var(--text);
   font-size: 0.95rem;
 }
+
+/* Inicio: logros (insignias) */
+.achv-count {
+  margin: 0 0 0.6rem;
+  color: var(--muted);
+}
+
+.achv-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  gap: 0.5rem;
+}
+
+.achv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.2rem;
+  padding: 0.6rem 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--surface-2);
+  border-radius: 10px;
+}
+
+.achv--locked {
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+
+.achv__icon {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.achv__title {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.achv--locked .achv__title {
+  color: var(--muted);
+}
+
+.achv__hint {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
