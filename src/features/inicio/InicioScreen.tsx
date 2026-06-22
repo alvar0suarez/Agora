@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react'
 import { LETTERS, VOCAB, APHORISMS } from '../../core/greek'
-import { loadProgress, levelFromXp, emptyProgress } from '../../core/progress'
+import {
+  loadProgress,
+  levelFromXp,
+  emptyProgress,
+  ACHIEVEMENTS,
+  isUnlocked,
+} from '../../core/progress'
 import type { ProgressState } from '../../core/progress'
 import { buildPlan, gatherPlanInput, type DailyPlan } from '../../core/plan'
 import { Card } from '../../core/ui/Card'
@@ -76,6 +82,38 @@ export function InicioScreen() {
           </>
         )}
       </Card>
+
+      {!loading ? (
+        <Card title="Logros">
+          {(() => {
+            const earned = ACHIEVEMENTS.filter((a) => isUnlocked(a, progress))
+            return (
+              <>
+                <p className="achv-count">
+                  <strong>{earned.length}</strong> / {ACHIEVEMENTS.length}{' '}
+                  conseguidos
+                </p>
+                <ul className="achv-grid">
+                  {ACHIEVEMENTS.map((a) => {
+                    const ok = isUnlocked(a, progress)
+                    return (
+                      <li
+                        key={a.id}
+                        className={ok ? 'achv' : 'achv achv--locked'}
+                        title={a.hint}
+                      >
+                        <span className="achv__icon">{ok ? a.icon : '🔒'}</span>
+                        <span className="achv__title">{a.title}</span>
+                        <span className="achv__hint">{a.hint}</span>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </>
+            )
+          })()}
+        </Card>
+      ) : null}
 
       <Card title="Plan de hoy">
         {!plan ? (

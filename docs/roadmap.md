@@ -93,8 +93,8 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    actividad ancle al recuerdo real y sume al progreso, y añadir tipos de
    ejercicio que faltan para comprensión lectora B2: rellenar huecos (cloze),
    dictado por audio, emparejar, preguntas de comprensión, traducción inversa.
-   *Hecho:* lectura ahora tiene **Repasar** (SRS + XP). *Pendiente:* XP en
-   gramática; los nuevos tipos de ejercicio.
+   *Hecho:* lectura y gramática suman XP al recuerdo real. *Pendiente:* los
+   nuevos tipos de ejercicio (cloze, dictado, emparejar…).
 2. **Ampliar contenido (el grano largo, en goteo).** Más léxico filosófico, más
    tiempos verbales y modelos de declinación, más aforismos y piezas de museo.
    Imprescindible para B2 pero es maratón: añadir de poco en poco, no de golpe.
@@ -130,7 +130,8 @@ Ver `docs/fase-1.md`.
 - [x] **1b** — Producción: te damos el sonido → eliges el glifo (elección
   múltiple). Cartas SRS separadas por dirección (`rec` / `prod`). Tests con Vitest.
 - [x] **1c** — Gamificación (XP, racha, niveles hasta banda de lectura B2,
-  dominio por letra, resumen) + interleaving (sesión mixta reconocer/escribir).
+  dominio por letra, resumen, **logros**) + interleaving (sesión mixta
+  reconocer/escribir).
 
 ### Fase 2 — Vocabulario núcleo
 
