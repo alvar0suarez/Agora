@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react'
 import { normalizeGreek, type VocabEntry } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
 import { GreekKeypad } from '../../core/ui/GreekKeypad'
-import { audio } from '../../core/audio'
 import type { Grade } from '../../core/srs'
+import { VocabAnswer } from './VocabAnswer'
 
 /**
  * Pregunta de TECLEAR una palabra: te damos el significado y la escribes en
@@ -72,18 +72,7 @@ export function VocabTypingPrompt({
             <p className="answer__line">
               Respuesta: <strong>{word.lemma}</strong> — {word.gloss}
             </p>
-            <button
-              type="button"
-              className="btn btn--ghost"
-              onClick={() => void audio.pronounceWord(word.id, { force: true })}
-            >
-              🔊 Oír
-            </button>
-            {word.derivados && word.derivados.length > 0 ? (
-              <p className="answer__line">
-                En español: {word.derivados.join(', ')}
-              </p>
-            ) : null}
+            <VocabAnswer word={word} />
           </Card>
           <button className="btn btn--primary" onClick={next}>
             Siguiente

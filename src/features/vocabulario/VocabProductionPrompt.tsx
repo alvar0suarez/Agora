@@ -3,6 +3,7 @@ import { VOCAB, type VocabEntry } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
 import { pickOptions } from '../../core/quiz'
 import type { Grade } from '../../core/srs'
+import { VocabAnswer } from './VocabAnswer'
 
 /** Número de opciones (la correcta + distractores) en cada pregunta. */
 const OPTION_COUNT = 4
@@ -75,11 +76,7 @@ export function VocabProductionPrompt({
               {correct ? '✓ ' : '✗ '}
               {word.lemma} — {word.gloss}
             </p>
-            {word.derivados && word.derivados.length > 0 ? (
-              <p className="answer__line">
-                En español: {word.derivados.join(', ')}
-              </p>
-            ) : null}
+            <VocabAnswer word={word} />
             {!correct ? (
               <p className="answer__line">La correcta está en verde.</p>
             ) : null}
