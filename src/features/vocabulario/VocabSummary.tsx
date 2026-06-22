@@ -1,4 +1,5 @@
 import { Card } from '../../core/ui/Card'
+import { UnlockedBadges } from '../../core/ui/UnlockedBadges'
 import { levelFromXp } from '../../core/progress'
 import type { VocabStats } from './useVocabSession'
 
@@ -12,7 +13,8 @@ export function VocabSummary({
   onRestart: () => void
   onExit: () => void
 }) {
-  const { reviewed, recalled, xpGained, totalXp, streakDays } = stats
+  const { reviewed, recalled, xpGained, totalXp, streakDays, newAchievements } =
+    stats
   const lvl = levelFromXp(totalXp)
   const pct =
     lvl.xpForNextLevel > 0
@@ -61,6 +63,7 @@ export function VocabSummary({
             {lvl.xpIntoLevel} / {lvl.xpForNextLevel} XP para el nivel{' '}
             {lvl.level + 1}
           </p>
+          <UnlockedBadges items={newAchievements} />
         </>
       )}
       <div className="grade">

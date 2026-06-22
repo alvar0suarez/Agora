@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { normalizeGreek } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
 import { GreekKeypad } from '../../core/ui/GreekKeypad'
+import { UnlockedBadges } from '../../core/ui/UnlockedBadges'
 import { levelFromXp } from '../../core/progress'
 import { SessionHeader } from '../../core/ui/SessionHeader'
 import { useMorphDrill } from './useMorphDrill'
@@ -31,11 +32,14 @@ export function MorphDrillView({ onExit }: { onExit: () => void }) {
         {d.stats.reviewed === 0 ? (
           <p>No hay nada que repasar ahora mismo. Vuelve más tarde 👋</p>
         ) : (
-          <p>
-            Acertadas: <strong>{d.stats.recalled}</strong> /{' '}
-            {d.stats.reviewed} · XP: <strong>+{d.stats.xpGained}</strong> ·
-            Nivel <strong>{lvl.level}</strong>
-          </p>
+          <>
+            <p>
+              Acertadas: <strong>{d.stats.recalled}</strong> /{' '}
+              {d.stats.reviewed} · XP: <strong>+{d.stats.xpGained}</strong> ·
+              Nivel <strong>{lvl.level}</strong>
+            </p>
+            <UnlockedBadges items={d.stats.newAchievements} />
+          </>
         )}
         <div className="grade">
           <button className="btn" onClick={onExit}>
