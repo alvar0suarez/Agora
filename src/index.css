@@ -1583,3 +1583,32 @@ button.camino__row--link:active {
 .unlocked__title {
   font-weight: 600;
 }
+
+/* Lectura: rellenar huecos (cloze) */
+.cloze__sentence {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  margin: 0.3rem 0 0.6rem;
+}
+
+.cloze__blank {
+  display: inline-block;
+  min-width: 3.5rem;
+  padding: 0 0.3rem;
+  border-bottom: 2px solid var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+  text-align: center;
+}
+
+.cloze__translation {
+  margin: 0 0 0.3rem;
+  color: var(--text);
+  font-style: italic;
+}
+
+.cloze__hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}

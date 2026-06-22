@@ -93,8 +93,9 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    actividad ancle al recuerdo real y sume al progreso, y añadir tipos de
    ejercicio que faltan para comprensión lectora B2: rellenar huecos (cloze),
    dictado por audio, emparejar, preguntas de comprensión, traducción inversa.
-   *Hecho:* lectura y gramática suman XP al recuerdo real. *Pendiente:* los
-   nuevos tipos de ejercicio (cloze, dictado, emparejar…).
+   *Hecho:* lectura y gramática suman XP al recuerdo real; **rellenar huecos
+   (cloze)** sobre aforismos. *Pendiente:* dictado por audio, emparejar,
+   preguntas de comprensión, traducción inversa.
 2. **Ampliar contenido (el grano largo, en goteo).** Más léxico filosófico, más
    tiempos verbales y modelos de declinación, más aforismos y piezas de museo.
    Imprescindible para B2 pero es maratón: añadir de poco en poco, no de golpe.
