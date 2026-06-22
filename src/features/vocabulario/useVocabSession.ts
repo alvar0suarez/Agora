@@ -16,7 +16,9 @@ import {
   registerActivity,
   dayIndex,
   XP_PER_RECALL,
+  unlockedAchievements,
   type ProgressState,
+  type Achievement,
 } from '../../core/progress'
 
 /** Palabras nuevas que se introducen como máximo en una sesión (en total). */
@@ -59,6 +61,8 @@ export interface VocabStats {
   totalXp: number
   /** Racha diaria actual. */
   streakDays: number
+  /** Logros desbloqueados durante esta sesión (para celebrarlos al final). */
+  newAchievements: Achievement[]
 }
 
 /**
@@ -80,8 +84,11 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
     xpGained: 0,
     totalXp: 0,
     streakDays: 0,
+    newAchievements: [],
   })
   const progress = useRef<ProgressState | null>(null)
+  // Logros que YA tenía al empezar: lo nuevo se mide contra esta base.
+  const baseUnlocked = useRef<Set<string>>(new Set())
 
   const build = useCallback(async () => {
     setLoading(true)
@@ -93,6 +100,9 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
       loadProgress(),
     ])
     progress.current = loadedProgress
+    baseUnlocked.current = new Set(
+      unlockedAchievements(loadedProgress).map((a) => a.id),
+    )
 
     const byCard = new Map<string, SrsState>()
     const duePerDir: VocabCard[][] = []
@@ -125,6 +135,7 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
       xpGained: 0,
       totalXp: loadedProgress.xp,
       streakDays: loadedProgress.streakDays,
+      newAchievements: [],
     })
     setLoading(false)
   }, [dirKey])
@@ -154,6 +165,7 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
       let gainedXp = 0
       let newStreak: number | null = null
       let newTotalXp: number | null = null
+      let fresh: Achievement[] | null = null
       const earnsXp = currentCard.dir === 'rec' || currentCard.dir === 'type'
       if (g === 'good' && earnsXp && progress.current) {
         const withActivity = registerActivity(progress.current, dayIndex(now))
@@ -163,6 +175,9 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
         gainedXp = XP_PER_RECALL
         newStreak = updated.streakDays
         newTotalXp = updated.xp
+        fresh = unlockedAchievements(updated).filter(
+          (a) => !baseUnlocked.current.has(a.id),
+        )
       }
 
       setStates((prevMap) => new Map(prevMap).set(key, next))
@@ -172,6 +187,7 @@ export function useVocabSession(modes: VocabMode | VocabMode[]) {
         xpGained: s.xpGained + gainedXp,
         totalXp: newTotalXp ?? s.totalXp,
         streakDays: newStreak ?? s.streakDays,
+        newAchievements: fresh ?? s.newAchievements,
       }))
       setQueue((q) =>
         g === 'again' ? [...q.slice(1), currentCard] : q.slice(1),

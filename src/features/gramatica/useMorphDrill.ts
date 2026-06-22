@@ -16,7 +16,9 @@ import {
   registerActivity,
   dayIndex,
   XP_PER_RECALL,
+  unlockedAchievements,
   type ProgressState,
+  type Achievement,
 } from '../../core/progress'
 
 /** Palabras nuevas que se introducen como máximo en una sesión. */
@@ -63,6 +65,8 @@ export interface DrillStats {
   xpGained: number
   totalXp: number
   streakDays: number
+  /** Logros desbloqueados durante esta sesión (para celebrarlos al final). */
+  newAchievements: Achievement[]
 }
 
 /**
@@ -81,8 +85,11 @@ export function useMorphDrill() {
     xpGained: 0,
     totalXp: 0,
     streakDays: 0,
+    newAchievements: [],
   })
   const progress = useRef<ProgressState | null>(null)
+  // Logros que YA tenía al empezar: lo nuevo se mide contra esta base.
+  const baseUnlocked = useRef<Set<string>>(new Set())
 
   const build = useCallback(async () => {
     setLoading(true)
@@ -92,6 +99,9 @@ export function useMorphDrill() {
       loadProgress(),
     ])
     progress.current = loadedProgress
+    baseUnlocked.current = new Set(
+      unlockedAchievements(loadedProgress).map((a) => a.id),
+    )
 
     const byTask = new Map<string, SrsState>()
     const due: string[] = []
@@ -116,6 +126,7 @@ export function useMorphDrill() {
       xpGained: 0,
       totalXp: loadedProgress.xp,
       streakDays: loadedProgress.streakDays,
+      newAchievements: [],
     })
     setLoading(false)
   }, [])
@@ -140,6 +151,7 @@ export function useMorphDrill() {
       let gainedXp = 0
       let newStreak: number | null = null
       let newTotalXp: number | null = null
+      let fresh: Achievement[] | null = null
       if (g === 'good' && progress.current) {
         const withActivity = registerActivity(progress.current, dayIndex(now))
         const updated = addXp(withActivity, XP_PER_RECALL)
@@ -148,6 +160,9 @@ export function useMorphDrill() {
         gainedXp = XP_PER_RECALL
         newStreak = updated.streakDays
         newTotalXp = updated.xp
+        fresh = unlockedAchievements(updated).filter(
+          (a) => !baseUnlocked.current.has(a.id),
+        )
       }
 
       setStates((prevMap) => new Map(prevMap).set(currentId, next))
@@ -157,6 +172,7 @@ export function useMorphDrill() {
         xpGained: s.xpGained + gainedXp,
         totalXp: newTotalXp ?? s.totalXp,
         streakDays: newStreak ?? s.streakDays,
+        newAchievements: fresh ?? s.newAchievements,
       }))
       setQueue((q) =>
         g === 'again' ? [...q.slice(1), currentId] : q.slice(1),

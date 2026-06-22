@@ -16,7 +16,9 @@ import {
   registerActivity,
   dayIndex,
   XP_PER_RECALL,
+  unlockedAchievements,
   type ProgressState,
+  type Achievement,
 } from '../../core/progress'
 
 /** Letras nuevas que se introducen como máximo en una sesión (en total). */
@@ -62,6 +64,8 @@ export interface SessionStats {
   totalXp: number
   /** Racha diaria actual (días consecutivos con actividad). */
   streakDays: number
+  /** Logros desbloqueados durante esta sesión (para celebrarlos al final). */
+  newAchievements: Achievement[]
 }
 
 /**
@@ -86,10 +90,13 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
     xpGained: 0,
     totalXp: 0,
     streakDays: 0,
+    newAchievements: [],
   })
   // Progreso transversal (XP + racha). Vive en una ref porque solo lo leemos
   // y actualizamos al calificar; lo visible (xpGained, streak) va en `stats`.
   const progress = useRef<ProgressState | null>(null)
+  // Logros que YA tenía al empezar: lo nuevo se mide contra esta base.
+  const baseUnlocked = useRef<Set<string>>(new Set())
 
   const build = useCallback(async () => {
     setLoading(true)
@@ -101,6 +108,9 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
       loadProgress(),
     ])
     progress.current = loadedProgress
+    baseUnlocked.current = new Set(
+      unlockedAchievements(loadedProgress).map((a) => a.id),
+    )
 
     const byCard = new Map<string, SrsState>()
     const duePerDir: SessionCard[][] = []
@@ -133,6 +143,7 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
       xpGained: 0,
       totalXp: loadedProgress.xp,
       streakDays: loadedProgress.streakDays,
+      newAchievements: [],
     })
     setLoading(false)
   }, [dirKey])
@@ -161,6 +172,7 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
       let gainedXp = 0
       let newStreak: number | null = null
       let newTotalXp: number | null = null
+      let fresh: Achievement[] | null = null
       if (g === 'good' && currentCard.dir === 'rec' && progress.current) {
         const withActivity = registerActivity(progress.current, dayIndex(now))
         const updated = addXp(withActivity, XP_PER_RECALL)
@@ -169,6 +181,9 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
         gainedXp = XP_PER_RECALL
         newStreak = updated.streakDays
         newTotalXp = updated.xp
+        fresh = unlockedAchievements(updated).filter(
+          (a) => !baseUnlocked.current.has(a.id),
+        )
       }
 
       setStates((prevMap) => new Map(prevMap).set(key, next))
@@ -178,6 +193,7 @@ export function useLetterSession(modes: SessionMode | SessionMode[]) {
         xpGained: s.xpGained + gainedXp,
         totalXp: newTotalXp ?? s.totalXp,
         streakDays: newStreak ?? s.streakDays,
+        newAchievements: fresh ?? s.newAchievements,
       }))
       // 'again' devuelve la carta al final de la cola (reaparece esta sesión).
       setQueue((q) =>

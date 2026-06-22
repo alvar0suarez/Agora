@@ -1544,3 +1544,42 @@ button.camino__row--link:active {
   color: var(--muted);
   line-height: 1.35;
 }
+
+/* Aviso de logro recién desbloqueado (fin de sesión) */
+.unlocked {
+  margin-top: 0.8rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.unlocked__head {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.unlocked__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.unlocked__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unlocked__icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.unlocked__title {
+  font-weight: 600;
+}
