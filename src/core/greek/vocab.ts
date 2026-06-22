@@ -30,6 +30,13 @@ export interface VocabEntry {
   gloss: string
   /** Categoría gramatical. */
   pos: PartOfSpeech
+  /**
+   * Transcripción SENCILLA de cómo suena, legible para un hispanohablante
+   * (pronunciación ática reconstruida). Curada a mano: el AFI por letra se deriva
+   * solo, pero la aspiración (h), la cantidad vocálica y el acento necesitan mano.
+   * Opcional; se siembra por tandas empezando por las palabras-función.
+   */
+  pron?: string
   /** Etiquetas para filtrar (p. ej. 'frecuencia', 'filosofia'). */
   tags: string[]
   /**
@@ -39,7 +46,7 @@ export interface VocabEntry {
   derivados?: string[]
 }
 
-export const VOCAB: VocabEntry[] = [
+const ENTRIES: VocabEntry[] = [
   // — Palabras-función y de altísima frecuencia —
   { id: 'ho',       lemma: 'ὁ, ἡ, τό', gloss: 'el, la, lo (artículo)',        pos: 'artículo',   tags: ['frecuencia'] },
   { id: 'kai',      lemma: 'καί',       gloss: 'y; también; incluso',          pos: 'conjunción', tags: ['frecuencia'] },
@@ -127,6 +134,59 @@ export const VOCAB: VocabEntry[] = [
   { id: 'metron',      lemma: 'μέτρον',       gloss: 'medida',                       pos: 'sustantivo', tags: ['filosofia'], derivados: ['metro', 'simetría', 'diámetro'] },
   { id: 'hemisy',      lemma: 'ἥμισυ',        gloss: 'mitad, medio',                 pos: 'adjetivo',   tags: ['frecuencia'], derivados: ['hemisferio', 'hemiciclo'] },
 ]
+
+/**
+ * Transcripción sencilla «cómo suena» (ática reconstruida, Vox Graeca), en grafía
+ * pseudo-española: el acento marca la sílaba fuerte; «h» = aspiración soplada;
+ * θ/φ/χ son t/p/k SOPLADAS (no «z/f/j»); η/ω son e/o LARGAS; υ ≈ «u» francesa.
+ * El acento original era musical (tono), no de intensidad; lo marcamos como
+ * sílaba fuerte solo como guía práctica. Sembrado por tandas (función primero).
+ */
+const PRON: Record<string, string> = {
+  // Palabras-función y de altísima frecuencia
+  ho: 'ho · hē · tó',
+  kai: 'kái',
+  ou: 'u',
+  eimi: 'eimí',
+  lego: 'lég-o',
+  echo: 'ék-ho',
+  gar: 'gár',
+  alla: 'allá',
+  hos: 'hos',
+  ei: 'ei',
+  autos: 'autós',
+  pas: 'pas',
+  de: 'de',
+  men: 'men',
+  oun: 'un',
+  en: 'en',
+  eis: 'eis',
+  ek: 'ek',
+  ego: 'egó',
+  houtos: 'hútos',
+  tis_q: 'tis',
+  oudeis: 'udéis',
+  hemisy: 'hémisü',
+  // Adjetivos y pronombres frecuentes
+  polys: 'polüs',
+  megas: 'mégas',
+  kalos: 'kalós',
+  // Núcleo muy frecuente (para las citas)
+  logos: 'lógos',
+  kosmos: 'kósmos',
+  theos: 'theós',
+  psyche: 'psükhé',
+  sophia: 'sophía',
+  anthropos: 'ánthrōpos',
+}
+
+/**
+ * Vocabulario expuesto: las entradas con su transcripción sencilla fusionada
+ * (donde está sembrada). Donde no la hay, la tarjeta cae al AFI por letra.
+ */
+export const VOCAB: VocabEntry[] = ENTRIES.map((e) =>
+  PRON[e.id] ? { ...e, pron: PRON[e.id] } : e,
+)
 
 /** Índice por id, para resolver una entrada rápido. */
 export const vocabById = new Map(VOCAB.map((v) => [v.id, v]))

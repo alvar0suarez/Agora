@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { Card } from '../../core/ui/Card'
 import { StudyView } from './StudyView'
 import { MorphDrillView } from './MorphDrillView'
+import { WordClassesView } from './WordClassesView'
 
-type Screen = 'menu' | 'study' | 'drill'
+type Screen = 'menu' | 'study' | 'drill' | 'classes'
 
 /**
- * Gramática (Fase 4): morfología. Estudiar los paradigmas y practicarlos
- * escribiendo la forma pedida. Verbos (presente de λύω y εἰμί) y sustantivos
- * (declinación de λόγος y ψυχή, los cuatro casos).
+ * Gramática: morfología (conjugar/declinar) y una referencia de las clases de
+ * palabra (qué es una conjunción, una preposición…). Modelos de paradigmas:
+ * λύω, εἰμί, λόγος, ψυχή.
  */
 export function GramaticaScreen() {
   const [screen, setScreen] = useState<Screen>('menu')
@@ -16,6 +17,7 @@ export function GramaticaScreen() {
 
   if (screen === 'study') return <StudyView onExit={back} />
   if (screen === 'drill') return <MorphDrillView onExit={back} />
+  if (screen === 'classes') return <WordClassesView onExit={back} />
 
   return (
     <div className="modes">
@@ -29,6 +31,10 @@ export function GramaticaScreen() {
       <button className="btn mode-btn" onClick={() => setScreen('study')}>
         <span className="mode-btn__title">Estudiar</span>
         <span className="mode-btn__hint">Lee los paradigmas completos</span>
+      </button>
+      <button className="btn mode-btn" onClick={() => setScreen('classes')}>
+        <span className="mode-btn__title">Las clases de palabra</span>
+        <span className="mode-btn__hint">Qué es una conjunción, preposición, partícula…</span>
       </button>
     </div>
   )

@@ -4,6 +4,7 @@
  */
 export * from './letters'
 export * from './vocab'
+export * from './grammar'
 export * from './aphorisms'
 export * from './verbs'
 export * from './nouns'

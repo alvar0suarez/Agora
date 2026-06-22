@@ -1350,3 +1350,145 @@ button.camino__row--link:active {
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* Vocabulario: bloque de respuesta enriquecido (cómo suena + qué es) */
+.vocab-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  text-align: left;
+}
+
+.vocab-pron {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.vocab-pron__say {
+  margin-top: 0;
+}
+
+.vocab-pron__say-as {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.vocab-pron__say-as strong {
+  color: var(--text);
+}
+
+/* Pronunciación letra a letra (AFI), reutilizable */
+.phon {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.phon__chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 2.6rem;
+  padding: 0.35rem 0.45rem;
+  background: var(--bg);
+  border: 1px solid var(--surface-2);
+  border-radius: 8px;
+}
+
+.phon__glyph {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.phon__ipa {
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.phon__notes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.phon__note {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.phon__note-glyph {
+  flex: 0 0 auto;
+  min-width: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Nota desplegable «¿qué es?» de la categoría gramatical */
+.pos-note {
+  display: inline;
+  margin-left: 0.5rem;
+}
+
+.pos-note > summary {
+  display: inline;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 0.85rem;
+  list-style: none;
+}
+
+.pos-note > summary::-webkit-details-marker {
+  display: none;
+}
+
+.pos-note__que,
+.pos-note__ej {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.pos-note__ej {
+  color: var(--text);
+}
+
+/* Gramática: referencia de las clases de palabra */
+.wclasses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wclass__name {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  color: var(--accent);
+  text-transform: capitalize;
+}
+
+.wclass__que {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.wclass__ej {
+  margin: 0.4rem 0 0;
+  color: var(--text);
+  font-size: 0.95rem;
+}

@@ -3,6 +3,7 @@ import { Card } from '../../core/ui/Card'
 import { audio } from '../../core/audio'
 import type { VocabEntry } from '../../core/greek'
 import type { Grade } from '../../core/srs'
+import { VocabAnswer } from './VocabAnswer'
 
 /**
  * Pregunta de RECONOCER una palabra: ves el griego, recuerdas el significado y
@@ -46,14 +47,7 @@ export function VocabRecognitionPrompt({
         <>
           <Card>
             <p className="answer__name">{word.gloss}</p>
-            <p className="answer__line">
-              <strong>{word.pos}</strong>
-            </p>
-            {word.derivados && word.derivados.length > 0 ? (
-              <p className="answer__line">
-                En español: {word.derivados.join(', ')}
-              </p>
-            ) : null}
+            <VocabAnswer word={word} />
           </Card>
           <div className="grade">
             <button className="btn btn--again" onClick={() => grade('again')}>
