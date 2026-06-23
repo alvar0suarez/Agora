@@ -39,6 +39,9 @@ export async function gatherPlanInput(now: number = Date.now()): Promise<PlanInp
       due: morphDue,
       newAvailable: Math.max(0, morphTotal - morphSeen),
     },
+    // Lectura agrupa recuerdo de aforismos ('lectura:rec:') y huecos
+    // ('lectura:cloze:'): ambos son SRS y cuentan como repaso de lectura.
+    lecturaDue: due('lectura:'),
     lecturaNew: APHORISMS.length > 0 ? 1 : 0,
   }
 }

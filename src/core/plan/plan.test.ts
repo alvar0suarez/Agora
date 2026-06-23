@@ -5,6 +5,7 @@ const empty: PlanInput = {
   alfabeto: { due: 0, newAvailable: 0 },
   vocabulario: { due: 0, newAvailable: 0 },
   gramatica: { due: 0, newAvailable: 0 },
+  lecturaDue: 0,
   lecturaNew: 0,
 }
 
@@ -46,5 +47,25 @@ describe('buildPlan', () => {
     const plan = buildPlan({ ...empty, lecturaNew: 1 })
     expect(plan.steps.at(-1)?.area).toBe('lectura')
     expect(plan.totalItems).toBe(1)
+  })
+
+  it('surfacea los repasos de lectura (recuerdo + huecos) y los topa', () => {
+    const plan = buildPlan({ ...empty, lecturaDue: 30 })
+    const review = plan.steps.find(
+      (s) => s.area === 'lectura' && s.title.includes('repaso'),
+    )
+    expect(review?.count).toBe(15)
+  })
+
+  it('el repaso de lectura va antes que el material nuevo', () => {
+    const plan = buildPlan({
+      ...empty,
+      lecturaDue: 2,
+      vocabulario: { due: 0, newAvailable: 5 },
+    })
+    const readIdx = plan.steps.findIndex((s) => s.title === 'Lectura · repaso')
+    const newIdx = plan.steps.findIndex((s) => s.title.includes('nuevo'))
+    expect(readIdx).toBeGreaterThanOrEqual(0)
+    expect(readIdx).toBeLessThan(newIdx)
   })
 })
