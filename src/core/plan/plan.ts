@@ -28,6 +28,8 @@ export interface PlanInput {
   alfabeto: AreaCounts
   vocabulario: AreaCounts
   gramatica: AreaCounts
+  /** Repasos de lectura vencidos (recuerdo + huecos/cloze, prefijo 'lectura:'). */
+  lecturaDue: number
   /** Aforismos para leer (no usan SRS): 1 si hay material, 0 si no. */
   lecturaNew: number
 }
@@ -85,6 +87,18 @@ export function buildPlan(input: PlanInput): DailyPlan {
         count,
       })
     }
+  }
+
+  // Lectura también es repaso (recuerdo de aforismos + huecos): combate olvido.
+  if (input.lecturaDue > 0) {
+    const count = Math.min(input.lecturaDue, REVIEW_CAP)
+    steps.push({
+      area: 'lectura',
+      featureId: 'lectura',
+      title: 'Lectura · repaso',
+      detail: `${count} que ${count === 1 ? 'toca' : 'tocan'}`,
+      count,
+    })
   }
 
   // 2) Algo nuevo, repartiendo un presupuesto limitado (vocabulario primero).
