@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react'
 import { Card } from '../../core/ui/Card'
-import { newMatchRound, type MatchRound } from './match'
+import { newMatchRound, type MatchCard, type MatchRound } from './match'
 
 /**
  * "Emparejar": casa cada palabra griega con su significado. Práctica ligera de
  * reconocimiento (calentamiento), no puntúa ni mueve el SRS —como "Explorar" en
- * lectura—. Toca una palabra griega y luego su significado; si casan, se fijan.
+ * lectura—. Toca una carta de cualquier columna y luego su pareja en la otra.
  */
+type Side = 'gr' | 'es'
+
 export function MatchView({ onExit }: { onExit: () => void }) {
   const [round, setRound] = useState<MatchRound>(() => newMatchRound())
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<{ side: Side; id: string } | null>(
+    null,
+  )
   const [matched, setMatched] = useState<Set<string>>(new Set())
-  const [wrong, setWrong] = useState<string | null>(null)
+  const [wrong, setWrong] = useState<Set<string>>(new Set())
 
   // El destello de error se borra solo tras un instante.
   useEffect(() => {
-    if (!wrong) return
-    const t = setTimeout(() => setWrong(null), 600)
+    if (wrong.size === 0) return
+    const t = setTimeout(() => setWrong(new Set()), 600)
     return () => clearTimeout(t)
   }, [wrong])
 
@@ -27,19 +31,23 @@ export function MatchView({ onExit }: { onExit: () => void }) {
     setRound(newMatchRound())
     setSelected(null)
     setMatched(new Set())
-    setWrong(null)
+    setWrong(new Set())
   }
 
-  const pickSpanish = (id: string) => {
+  // Se puede empezar por cualquier columna: el primer toque selecciona; el
+  // segundo, en la OTRA columna, comprueba si casan (mismo id de palabra).
+  const pick = (side: Side, id: string) => {
     if (matched.has(id)) return
-    if (selected === null) return
-    if (selected === id) {
-      setMatched((m) => new Set(m).add(id))
-      setSelected(null)
-    } else {
-      setWrong(id)
-      setSelected(null)
+    if (selected === null || selected.side === side) {
+      setSelected({ side, id })
+      return
     }
+    if (selected.id === id) {
+      setMatched((m) => new Set(m).add(id))
+    } else {
+      setWrong(new Set([id, selected.id]))
+    }
+    setSelected(null)
   }
 
   if (done) {
@@ -58,11 +66,19 @@ export function MatchView({ onExit }: { onExit: () => void }) {
     )
   }
 
+  const cardClass = (side: Side, c: MatchCard) =>
+    'match__card' +
+    (matched.has(c.id) ? ' match__card--done' : '') +
+    (selected?.side === side && selected.id === c.id
+      ? ' match__card--sel'
+      : '') +
+    (wrong.has(c.id) ? ' match__card--wrong' : '')
+
   return (
     <div className="match">
       <Card>
         <p className="alfabeto__prompt">
-          Toca una palabra y luego su significado. Calentamiento — no puntúa.
+          Toca una palabra y su significado. Calentamiento — no puntúa.
         </p>
         <p className="match__count">
           {matched.size} / {total} emparejadas
@@ -75,13 +91,9 @@ export function MatchView({ onExit }: { onExit: () => void }) {
             <button
               key={c.id}
               type="button"
-              className={
-                'match__card' +
-                (matched.has(c.id) ? ' match__card--done' : '') +
-                (selected === c.id ? ' match__card--sel' : '')
-              }
+              className={cardClass('gr', c)}
               disabled={matched.has(c.id)}
-              onClick={() => setSelected(c.id)}
+              onClick={() => pick('gr', c.id)}
               lang="grc"
             >
               {c.text}
@@ -93,13 +105,9 @@ export function MatchView({ onExit }: { onExit: () => void }) {
             <button
               key={c.id}
               type="button"
-              className={
-                'match__card' +
-                (matched.has(c.id) ? ' match__card--done' : '') +
-                (wrong === c.id ? ' match__card--wrong' : '')
-              }
+              className={cardClass('es', c)}
               disabled={matched.has(c.id)}
-              onClick={() => pickSpanish(c.id)}
+              onClick={() => pick('es', c.id)}
             >
               {c.text}
             </button>
