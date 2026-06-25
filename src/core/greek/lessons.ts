@@ -119,6 +119,41 @@ export const LESSONS: Lesson[] = [
     ],
   },
   {
+    id: 'espiritus',
+    title: 'Los espíritus (la h aspirada)',
+    icon: '💨',
+    band: 'Cimientos',
+    summary: 'La marca sobre la vocal inicial que añade (o no) una h.',
+    blocks: [
+      {
+        kind: 'parrafo',
+        text: 'Toda palabra que empieza por VOCAL lleva encima una pequeña marca llamada espíritu. Hay dos y cambian cómo suena el principio de la palabra: el áspero añade una h aspirada; el suave no añade nada.',
+      },
+      { kind: 'titulo', text: 'Áspero y suave' },
+      {
+        kind: 'ejemplo',
+        gr: 'ἡμέρα',
+        pron: 'he-MÉ-ra',
+        gloss: 'día — espíritu ÁSPERO ( ̔ ): suena la h al empezar',
+      },
+      {
+        kind: 'ejemplo',
+        gr: 'ἀγαθός',
+        pron: 'a-ga-THÓS',
+        gloss: 'bueno — espíritu SUAVE ( ̓ ): no añade sonido',
+      },
+      { kind: 'titulo', text: 'La ρ inicial' },
+      {
+        kind: 'parrafo',
+        text: 'Una ρ al principio de palabra lleva siempre espíritu áspero (ῥ). Por eso muchos helenismos conservan ese rastro: ῥυθμός → ritmo, ῥητορική → retórica (y la “rh-” que verás en otras lenguas).',
+      },
+      {
+        kind: 'tip',
+        text: 'El espíritu va sobre la vocal inicial (o la segunda de un diptongo) y puede convivir con el acento: ὥρα lleva los dos. No los confundas: uno dice la h, el otro el tono.',
+      },
+    ],
+  },
+  {
     id: 'casos',
     title: 'Los casos (declinaciones)',
     icon: '🧩',
