@@ -47,8 +47,10 @@ export function ClozeView({ onExit }: { onExit: () => void }) {
         <p className="cloze__sentence">
           {item.words.map((w, i) =>
             i === item.blankIndex ? (
-              <span key={i} className="cloze__blank">
-                {answered ? item.answer : typed || '____'}
+              <span key={i}>
+                <span className="cloze__blank">
+                  {answered ? item.answer : typed || '____'}
+                </span>{' '}
               </span>
             ) : (
               <span key={i}>{w.gr} </span>
