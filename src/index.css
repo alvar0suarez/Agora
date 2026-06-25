@@ -1769,6 +1769,57 @@ button.camino__row--link:active {
   font-style: italic;
 }
 
+/* Lectura: construir la frase (banco de palabras) */
+.build__translation {
+  margin: 0.3rem 0 0;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.build__line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  min-height: 3rem;
+  margin: 0.8rem 0;
+  padding: 0.6rem;
+  border: 1px dashed var(--surface-2);
+  border-radius: 10px;
+  align-items: center;
+}
+
+.build__placeholder {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.build__bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.build__chip {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--surface-2);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.build__chip--placed {
+  border-color: var(--accent);
+  background: var(--bg);
+}
+
+.build__chip:disabled {
+  cursor: default;
+  opacity: 0.8;
+}
+
 /* Teoría intercalada en el Camino */
 .camino__lessons {
   list-style: none;
