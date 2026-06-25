@@ -27,4 +27,21 @@ describe('lecciones de teoría', () => {
     expect(lessonsForBand(first.band)).toContain(first)
     expect(lessonsForBand('banda-inexistente')).toHaveLength(0)
   })
+
+  it('las tablas (derivadas de los paradigmas) están bien formadas', () => {
+    let tablas = 0
+    for (const l of LESSONS) {
+      for (const b of l.blocks) {
+        if (b.kind !== 'tabla') continue
+        tablas++
+        expect(b.rows.length).toBeGreaterThan(0)
+        for (const row of b.rows) {
+          expect(row.length).toBe(b.headers.length)
+          // Ninguna celda quedó sin resolver (un '—' indicaría id/forma errónea).
+          for (const cell of row) expect(cell).not.toBe('—')
+        }
+      }
+    }
+    expect(tablas).toBeGreaterThan(0)
+  })
 })

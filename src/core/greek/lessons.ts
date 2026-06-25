@@ -10,12 +10,50 @@
  * curados a mano y revisables; nivel introductorio.
  */
 
+import { VERBS } from './verbs'
+import { NOUNS, CASE_LABEL, type GrammaticalCase } from './nouns'
+
 /** Un bloque de una lección (unión discriminada por `kind`). */
 export type LessonBlock =
   | { kind: 'parrafo'; text: string }
   | { kind: 'titulo'; text: string }
   | { kind: 'ejemplo'; gr: string; pron?: string; gloss: string }
   | { kind: 'tip'; text: string }
+  | { kind: 'tabla'; caption: string; headers: string[]; rows: string[][] }
+
+const CASE_ORDER: GrammaticalCase[] = ['nom', 'gen', 'dat', 'acc']
+
+/** Tabla de una declinación, DERIVADA del paradigma real (sin duplicar datos). */
+function nounTable(nounId: string): LessonBlock {
+  const n = NOUNS.find((x) => x.id === nounId)
+  if (!n) throw new Error(`nounTable: sustantivo desconocido '${nounId}'`)
+  const form = (c: GrammaticalCase, num: 'sg' | 'pl') =>
+    n.forms.find((f) => f.case === c && f.number === num)?.form ?? '—'
+  return {
+    kind: 'tabla',
+    caption: `${n.lemma} — ${n.declension} (${n.gender})`,
+    headers: ['Caso', 'Singular', 'Plural'],
+    rows: CASE_ORDER.map((c) => [CASE_LABEL[c], form(c, 'sg'), form(c, 'pl')]),
+  }
+}
+
+/** Tabla de conjugación, DERIVADA del paradigma real (sin duplicar datos). */
+function verbTable(verbId: string): LessonBlock {
+  const v = VERBS.find((x) => x.id === verbId)
+  if (!v) throw new Error(`verbTable: verbo desconocido '${verbId}'`)
+  const form = (p: 1 | 2 | 3, num: 'sg' | 'pl') =>
+    v.forms.find((f) => f.person === p && f.number === num)?.form ?? '—'
+  return {
+    kind: 'tabla',
+    caption: `${v.lemma} — ${v.tense}`,
+    headers: ['Persona', 'Singular', 'Plural'],
+    rows: ([1, 2, 3] as const).map((p) => [
+      `${p}.ª`,
+      form(p, 'sg'),
+      form(p, 'pl'),
+    ]),
+  }
+}
 
 /** Una lección de teoría, asociada a una banda del camino. */
 export interface Lesson {
@@ -77,6 +115,62 @@ export const LESSONS: Lesson[] = [
       {
         kind: 'tip',
         text: 'No confundas el acento con el ESPÍRITU de la vocal inicial: ἁ (áspero) se lee con una h aspirada; ἀ (suave) no suena. Es otra marca distinta, aunque se escriba arriba.',
+      },
+    ],
+  },
+  {
+    id: 'casos',
+    title: 'Los casos (declinaciones)',
+    icon: '🧩',
+    band: 'A2',
+    summary: 'Por qué la terminación de la palabra dice su función en la frase.',
+    blocks: [
+      {
+        kind: 'parrafo',
+        text: 'En español el orden marca quién hace qué ("el perro muerde al hombre" ≠ "el hombre muerde al perro"). En griego lo marca la TERMINACIÓN de la palabra: por eso el orden es libre y hay que mirar el final. A ese cambio de terminaciones se le llama declinación.',
+      },
+      { kind: 'titulo', text: 'Los cuatro casos' },
+      {
+        kind: 'parrafo',
+        text: 'Nominativo: el SUJETO (quién realiza la acción). Acusativo: el objeto directo (a quién/qué se hace). Genitivo: pertenencia u origen (normalmente "de"). Dativo: destinatario o instrumento (normalmente "a/para" o "con").',
+      },
+      {
+        kind: 'ejemplo',
+        gr: 'ὁ λόγος / τὸν λόγον',
+        gloss: 'la palabra como SUJETO (nom.) / como OBJETO (acus.)',
+      },
+      { kind: 'titulo', text: '2.ª declinación (masculina): λόγος' },
+      nounTable('logos'),
+      { kind: 'titulo', text: '1.ª declinación (femenina): ψυχή' },
+      nounTable('psyche'),
+      {
+        kind: 'tip',
+        text: 'Truco de lectura: ante una palabra, pregúntate "¿qué función tiene?" mirando su terminación. Reconocer el caso es la llave para entender quién hace qué a quién.',
+      },
+    ],
+  },
+  {
+    id: 'verbo-presente',
+    title: 'El presente del verbo',
+    icon: '🔁',
+    band: 'A2',
+    summary: 'Conjugar: la terminación dice la persona y el número.',
+    blocks: [
+      {
+        kind: 'parrafo',
+        text: 'El verbo griego también cambia de terminación. La raíz se mantiene (λύ‑ = "soltar") y la terminación indica QUIÉN actúa (persona: yo/tú/él…) y CUÁNTOS (número: singular/plural). No hace falta el pronombre: ya va en la terminación.',
+      },
+      { kind: 'titulo', text: 'λύω «desatar, soltar», en presente' },
+      verbTable('luo'),
+      {
+        kind: 'parrafo',
+        text: 'Fíjate en el patrón regular del presente activo: ‑ω, ‑εις, ‑ει, ‑ομεν, ‑ετε, ‑ουσι(ν). Esas seis terminaciones se repiten en muchísimos verbos.',
+      },
+      { kind: 'titulo', text: 'El verbo «ser»: εἰμί' },
+      verbTable('eimi'),
+      {
+        kind: 'tip',
+        text: 'εἰμί es irregular y frecuentísimo (como «ser» en español): conviene aprendérselo de memoria desde el principio.',
       },
     ],
   },
