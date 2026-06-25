@@ -102,8 +102,10 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    Incluye la **teoría explicada** (feature Teoría, mini-artículos intercalados
    en el Camino). *Hecho:* lecciones con tablas derivadas de los paradigmas —
    «Los acentos», «Los casos», «El presente del verbo».
-   *Pendiente, en goteo:* artículo, género/número, más tiempos… y ejercicios de
-   FRASE estilo Duolingo atados a cada lección.
+   *Pendiente, en goteo:* artículo, género/número, más tiempos…
+   Ejercicios de FRASE estilo Duolingo: *hecho* «Construir» (ordenar las
+   palabras de un aforismo, con banco); *pendiente* poner la palabra en su
+   forma y traducir escribiendo.
 3. **Unificar el diseño (cimiento, hacerlo pronto).** El CSS está coherente en
    color pero fragmentado en estructura (cada feature reinventa su BEM, colores
    de feedback y espaciado/tipografía sin escala). Conviene extraer tokens
