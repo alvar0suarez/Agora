@@ -8,6 +8,7 @@ import {
   type ProgressState,
 } from '../../core/progress'
 import { buildPlan, gatherPlanInput, type DailyPlan } from '../../core/plan'
+import { lessonsForBand } from '../../core/greek'
 import { Card } from '../../core/ui/Card'
 import { useNavigate } from '../../core/ui/navigation'
 
@@ -141,6 +142,8 @@ export function CaminoScreen() {
               )
             : 100
           const target = targetFor(status, band.code)
+          // Teoría intercalada: las lecciones de esta banda, si ya está abierta.
+          const lessons = status === 'locked' ? [] : lessonsForBand(band.code)
 
           const inner = (
             <>
@@ -197,6 +200,21 @@ export function CaminoScreen() {
               ) : (
                 <div className="camino__row">{inner}</div>
               )}
+              {lessons.length > 0 ? (
+                <ul className="camino__lessons">
+                  {lessons.map((l) => (
+                    <li key={l.id}>
+                      <button
+                        type="button"
+                        className="camino__lesson"
+                        onClick={() => goTo('teoria')}
+                      >
+                        📖 Teoría: {l.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </li>
           )
         })}

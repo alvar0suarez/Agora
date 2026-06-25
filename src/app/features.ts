@@ -5,6 +5,7 @@ import { alfabetoFeature } from '../features/alfabeto'
 import { vocabularioFeature } from '../features/vocabulario'
 import { lecturaFeature } from '../features/lectura'
 import { gramaticaFeature } from '../features/gramatica'
+import { teoriaFeature } from '../features/teoria'
 import { etimologiaFeature } from '../features/etimologia'
 import { museoFeature } from '../features/museo'
 
@@ -21,6 +22,7 @@ export function registerFeatures(): void {
   registerFeature(vocabularioFeature)
   registerFeature(lecturaFeature)
   registerFeature(gramaticaFeature)
+  registerFeature(teoriaFeature)
   registerFeature(etimologiaFeature)
   registerFeature(museoFeature)
 }

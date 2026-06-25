@@ -1672,3 +1672,83 @@ button.camino__row--link:active {
     transform: translateX(4px);
   }
 }
+
+/* Teoría: lista y lector de lecciones */
+.teoria__band {
+  margin-bottom: 1rem;
+}
+
+.teoria__band-name {
+  margin: 0.2rem 0 0.4rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.lesson__h {
+  margin: 1.1rem 0 0.3rem;
+  font-size: 1.05rem;
+  color: var(--accent);
+}
+
+.lesson__p {
+  margin: 0.4rem 0;
+  line-height: 1.6;
+}
+
+.lesson__ej {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin: 0.6rem 0;
+  padding: 0.5rem 0.7rem;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 8px 8px 0;
+}
+
+.lesson__gr {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.lesson__pron {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.lesson__gloss {
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.lesson__tip {
+  margin: 0.8rem 0 0;
+  padding: 0.6rem 0.8rem;
+  background: var(--surface);
+  border: 1px dashed var(--surface-2);
+  border-radius: 8px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Teoría intercalada en el Camino */
+.camino__lessons {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.camino__lesson {
+  background: none;
+  border: none;
+  padding: 0.2rem 0;
+  color: var(--accent);
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
