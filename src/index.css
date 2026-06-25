@@ -1733,6 +1733,42 @@ button.camino__row--link:active {
   font-size: 0.95rem;
 }
 
+.lesson__tabla {
+  margin: 0.7rem 0;
+}
+
+.lesson__tabla table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.05rem;
+}
+
+.lesson__tabla th,
+.lesson__tabla td {
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--surface-2);
+}
+
+.lesson__tabla th {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lesson__tabla td:first-child {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.lesson__tabla figcaption {
+  margin-top: 0.3rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
 /* Teoría intercalada en el Camino */
 .camino__lessons {
   list-style: none;

@@ -100,9 +100,10 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    tiempos verbales y modelos de declinación, más aforismos y piezas de museo.
    Imprescindible para B2 pero es maratón: añadir de poco en poco, no de golpe.
    Incluye la **teoría explicada** (feature Teoría, mini-artículos intercalados
-   en el Camino). *Hecho:* infraestructura de lecciones + «Los acentos».
-   *Pendiente, en goteo:* casos/declinaciones, verbos/conjugación, artículo…
-   y ejercicios de FRASE estilo Duolingo atados a cada lección.
+   en el Camino). *Hecho:* lecciones con tablas derivadas de los paradigmas —
+   «Los acentos», «Los casos», «El presente del verbo».
+   *Pendiente, en goteo:* artículo, género/número, más tiempos… y ejercicios de
+   FRASE estilo Duolingo atados a cada lección.
 3. **Unificar el diseño (cimiento, hacerlo pronto).** El CSS está coherente en
    color pero fragmentado en estructura (cada feature reinventa su BEM, colores
    de feedback y espaciado/tipografía sin escala). Conviene extraer tokens

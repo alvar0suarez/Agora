@@ -42,6 +42,32 @@ export function LessonReader({
                   💡 {b.text}
                 </p>
               )
+            case 'tabla':
+              return (
+                <figure key={i} className="lesson__tabla">
+                  <table>
+                    <thead>
+                      <tr>
+                        {b.headers.map((h, j) => (
+                          <th key={j}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {b.rows.map((row, r) => (
+                        <tr key={r}>
+                          {row.map((cell, c) => (
+                            <td key={c} lang={c === 0 ? undefined : 'grc'}>
+                              {cell}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <figcaption>{b.caption}</figcaption>
+                </figure>
+              )
           }
         })}
       </Card>
