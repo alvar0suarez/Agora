@@ -100,9 +100,9 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    tiempos verbales y modelos de declinación, más aforismos y piezas de museo.
    Imprescindible para B2 pero es maratón: añadir de poco en poco, no de golpe.
    Incluye la **teoría explicada** (feature Teoría, mini-artículos intercalados
-   en el Camino). *Hecho:* lecciones con tablas derivadas de los paradigmas —
-   «Los acentos», «Los casos», «El presente del verbo».
-   *Pendiente, en goteo:* artículo, género/número, más tiempos…
+   en el Camino). *Hecho:* lecciones con tablas — «Los acentos», «Los casos»,
+   «El presente del verbo», «El artículo» (género/número/caso de un vistazo).
+   *Pendiente, en goteo:* más tiempos verbales, otras declinaciones, preposiciones…
    Ejercicios de FRASE estilo Duolingo: *hecho* «Construir» (ordenar las
    palabras de un aforismo, con banco); *pendiente* poner la palabra en su
    forma y traducir escribiendo.

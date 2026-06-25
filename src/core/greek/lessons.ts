@@ -174,6 +174,56 @@ export const LESSONS: Lesson[] = [
       },
     ],
   },
+  {
+    id: 'articulo',
+    title: 'El artículo (ὁ, ἡ, τό)',
+    icon: '🗝️',
+    band: 'A2',
+    summary: 'El «el/la/lo» griego: un mapa de género, número y caso.',
+    blocks: [
+      {
+        kind: 'parrafo',
+        text: 'El artículo es la palabra más frecuente del griego y un mapa en miniatura: cambia según el GÉNERO (masculino, femenino, neutro), el NÚMERO (singular/plural) y el CASO. Si reconoces el artículo, ya sabes qué función tiene el sustantivo que le acompaña.',
+      },
+      { kind: 'titulo', text: 'Singular' },
+      {
+        kind: 'tabla',
+        caption: 'El artículo en singular',
+        headers: ['Caso', 'Masculino', 'Femenino', 'Neutro'],
+        rows: [
+          ['nominativo', 'ὁ', 'ἡ', 'τό'],
+          ['genitivo', 'τοῦ', 'τῆς', 'τοῦ'],
+          ['dativo', 'τῷ', 'τῇ', 'τῷ'],
+          ['acusativo', 'τόν', 'τήν', 'τό'],
+        ],
+      },
+      { kind: 'titulo', text: 'Plural' },
+      {
+        kind: 'tabla',
+        caption: 'El artículo en plural',
+        headers: ['Caso', 'Masculino', 'Femenino', 'Neutro'],
+        rows: [
+          ['nominativo', 'οἱ', 'αἱ', 'τά'],
+          ['genitivo', 'τῶν', 'τῶν', 'τῶν'],
+          ['dativo', 'τοῖς', 'ταῖς', 'τοῖς'],
+          ['acusativo', 'τούς', 'τάς', 'τά'],
+        ],
+      },
+      {
+        kind: 'parrafo',
+        text: 'Dos detalles que ahorran trabajo: en el NEUTRO, el nominativo y el acusativo son siempre iguales (τό / τά), y el GENITIVO plural es τῶν en los tres géneros.',
+      },
+      {
+        kind: 'ejemplo',
+        gr: 'ὁ λόγος · ἡ ψυχή · τὸ δῶρον',
+        gloss: 'el discurso (masc.) · el alma (fem.) · el regalo (neutro)',
+      },
+      {
+        kind: 'tip',
+        text: 'Aprende el artículo como un esqueleto: muchas terminaciones de los sustantivos riman con él (τοῦ λόγου, τῷ λόγῳ, τὴν ψυχήν…). Saberlo te da media declinación gratis.',
+      },
+    ],
+  },
 ]
 
 /** Índice por id, para resolver una lección rápido. */
