@@ -1,5 +1,6 @@
 import { registerFeature } from '../core/plugin/registry'
 import { inicioFeature } from '../features/inicio'
+import { entrenarFeature } from '../features/entrenar'
 import { caminoFeature } from '../features/camino'
 import { alfabetoFeature } from '../features/alfabeto'
 import { vocabularioFeature } from '../features/vocabulario'
@@ -17,6 +18,7 @@ import { museoFeature } from '../features/museo'
  */
 export function registerFeatures(): void {
   registerFeature(inicioFeature)
+  registerFeature(entrenarFeature)
   registerFeature(caminoFeature)
   registerFeature(alfabetoFeature)
   registerFeature(vocabularioFeature)

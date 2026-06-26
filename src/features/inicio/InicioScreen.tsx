@@ -49,6 +49,16 @@ export function InicioScreen() {
 
   return (
     <div className="inicio">
+      <button
+        className="btn btn--primary entrenar-cta"
+        onClick={() => goTo('entrenar')}
+      >
+        <span className="entrenar-cta__title">🎯 Entrenar</span>
+        <span className="entrenar-cta__hint">
+          Sesión variada: reconocer, escribir y más, intercalado
+        </span>
+      </button>
+
       <Card title="Tu progreso">
         {loading ? (
           <p>Cargando…</p>
