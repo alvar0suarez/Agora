@@ -2,9 +2,13 @@ import {
   VOCAB,
   LETTERS,
   REALIA,
+  CLOZE_ITEMS,
+  BUILD_ITEMS,
   type VocabEntry,
   type GreekLetter,
   type Realia,
+  type ClozeItem,
+  type BuildItem,
 } from '../../core/greek'
 
 /**
@@ -18,7 +22,12 @@ import {
  * ESCRIBIR vocabulario y reconocer letras.
  */
 /** Tipos de EJERCICIO con SRS (se intercalan y dan XP). El museo no es uno. */
-export type ExerciseType = 'vocab-rec' | 'vocab-type' | 'letter-rec'
+export type ExerciseType =
+  | 'vocab-rec'
+  | 'vocab-type'
+  | 'letter-rec'
+  | 'cloze'
+  | 'build'
 
 /**
  * Un ítem de la sesión mixta. Los de SRS llevan `srsKey`; el `museo` es un
@@ -28,6 +37,8 @@ export type ExerciseItem =
   | { type: 'vocab-rec'; srsKey: string; entry: VocabEntry }
   | { type: 'vocab-type'; srsKey: string; entry: VocabEntry }
   | { type: 'letter-rec'; srsKey: string; letter: GreekLetter }
+  | { type: 'cloze'; srsKey: string; cloze: ClozeItem }
+  | { type: 'build'; srsKey: string; build: BuildItem }
   | { type: 'museo'; realia: Realia }
 
 /** Ítems con SRS (todos menos el respiro de museo). */
@@ -40,7 +51,13 @@ export function museoBreather(rnd: () => number = Math.random): ExerciseItem {
 }
 
 /** Orden fijo de tipos para intercalar de forma estable (round-robin). */
-export const TYPE_ORDER: ExerciseType[] = ['vocab-rec', 'vocab-type', 'letter-rec']
+export const TYPE_ORDER: ExerciseType[] = [
+  'vocab-rec',
+  'cloze',
+  'vocab-type',
+  'build',
+  'letter-rec',
+]
 
 // Claves SRS idénticas a las de los modos enfocados (progreso compartido).
 const vocabKey = (mode: 'rec' | 'type', id: string) => `vocab:${mode}:${id}`
@@ -68,6 +85,14 @@ export const ALL_ITEMS: SrsItem[] = [
       srsKey: letterKey('rec', l.id),
       letter: l,
     }),
+  ),
+  // Huecos y construir-frase: su `id` ya ES la clave SRS (lectura:cloze:…,
+  // lectura:build:…) → progreso compartido con los modos de lectura.
+  ...CLOZE_ITEMS.map(
+    (c): SrsItem => ({ type: 'cloze', srsKey: c.id, cloze: c }),
+  ),
+  ...BUILD_ITEMS.map(
+    (b): SrsItem => ({ type: 'build', srsKey: b.id, build: b }),
   ),
 ]
 

@@ -1,4 +1,4 @@
-import { APHORISMS, type Aphorism } from '../../core/greek'
+import { APHORISMS, type Aphorism } from './aphorisms'
 
 /**
  * "Construir la frase" (estilo Duolingo): te damos la traducción y las palabras
