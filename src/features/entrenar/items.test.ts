@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { ALL_ITEMS, TYPE_ORDER, earnsXp } from './items'
-import { VOCAB, LETTERS } from '../../core/greek'
+import { ALL_ITEMS, TYPE_ORDER, earnsXp, museoBreather } from './items'
+import { VOCAB, LETTERS, REALIA } from '../../core/greek'
 
 describe('entrenar · catálogo de ítems', () => {
   it('cubre vocabulario (rec + escribir) y letras (rec)', () => {
@@ -29,5 +29,12 @@ describe('entrenar · catálogo de ítems', () => {
     for (const t of TYPE_ORDER) expect(earnsXp(t)).toBe(true)
     const present = new Set(ALL_ITEMS.map((i) => i.type))
     for (const t of TYPE_ORDER) expect(present.has(t)).toBe(true)
+  })
+
+  it('el respiro de museo trae una pieza real (sin clave SRS)', () => {
+    const m = museoBreather(() => 0)
+    expect(m.type).toBe('museo')
+    if (m.type === 'museo') expect(m.realia).toBe(REALIA[0])
+    expect('srsKey' in m).toBe(false)
   })
 })

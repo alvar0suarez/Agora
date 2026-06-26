@@ -23,6 +23,7 @@ import {
   ALL_ITEMS,
   TYPE_ORDER,
   earnsXp,
+  museoBreather,
   type ExerciseItem,
   type ExerciseType,
 } from './items'
@@ -106,6 +107,11 @@ export function useEntrenar() {
       NEW_PER_SESSION,
     )
     const picked = [...due, ...fresh].slice(0, SESSION_CAP)
+    // Un respiro de museo a media sesión (si hay material suficiente): rompe la
+    // rutina con una pieza real, sin nota ni XP.
+    if (picked.length >= 4) {
+      picked.splice(Math.floor(picked.length / 2), 0, museoBreather())
+    }
 
     setStates(byKey)
     setQueue(picked)
@@ -127,10 +133,15 @@ export function useEntrenar() {
 
   const current = queue[0] ?? null
 
+  // El museo es un respiro: no califica, solo pasa a la siguiente carta.
+  const advance = useCallback(() => {
+    setQueue((q) => q.slice(1))
+  }, [])
+
   const grade = useCallback(
     (g: Grade) => {
       const item = queue[0]
-      if (!item) return
+      if (!item || item.type === 'museo') return
       const now = Date.now()
       const prev = states.get(item.srsKey) ?? newCard(now)
       const next = review(prev, g, now)
@@ -174,6 +185,7 @@ export function useEntrenar() {
     remaining: queue.length,
     total,
     grade,
+    advance,
     restart: build,
     stats,
   }
