@@ -26,6 +26,12 @@ export interface FeatureModule {
   icon?: string
   /** Política de seguridad del feature. */
   security: SecurityLevel
+  /**
+   * ¿Se muestra en la barra de navegación inferior? Por defecto sí. Los
+   * features con `nav: false` siguen registrados y son accesibles por `goTo`
+   * (p. ej. desde un hub como «Practicar»), pero no ocupan sitio en la barra.
+   */
+  nav?: boolean
   /** Componente de pantalla principal del feature. */
   Screen: ComponentType
 }

@@ -7,5 +7,6 @@ export const alfabetoFeature: FeatureModule = {
   title: 'Alfabeto',
   icon: '🔠',
   security: 'normal',
+  nav: false,
   Screen: AlfabetoScreen,
 }

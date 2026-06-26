@@ -7,5 +7,6 @@ export const teoriaFeature: FeatureModule = {
   title: 'Teoría',
   icon: '📖',
   security: 'normal',
+  nav: false,
   Screen: TeoriaScreen,
 }

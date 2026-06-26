@@ -7,5 +7,6 @@ export const etimologiaFeature: FeatureModule = {
   title: 'Raíces',
   icon: '🌳',
   security: 'normal',
+  nav: false,
   Screen: EtimologiaScreen,
 }
