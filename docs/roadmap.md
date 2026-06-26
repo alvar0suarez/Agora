@@ -94,8 +94,11 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    ejercicio que faltan para comprensión lectora B2: rellenar huecos (cloze),
    dictado por audio, emparejar, preguntas de comprensión, traducción inversa.
    *Hecho:* lectura y gramática suman XP al recuerdo real; **rellenar huecos
-   (cloze)** sobre aforismos; **emparejar** palabra↔significado (calentamiento).
-   *Pendiente:* dictado por audio, preguntas de comprensión, traducción inversa.
+   (cloze)** sobre aforismos; **emparejar** palabra↔significado (calentamiento);
+   **«Entrenar»**: sesión mixta que intercala tipos (reconocer/escribir/letras)
+   entre áreas con SRS/XP/logros centralizados — combate la monotonía y unifica.
+   *Pendiente:* sumar más tipos a Entrenar (huecos, construir, museo como
+   respiro); dictado por audio; preguntas de comprensión; traducción inversa.
 2. **Ampliar contenido (el grano largo, en goteo).** Más léxico filosófico, más
    tiempos verbales y modelos de declinación, más aforismos y piezas de museo.
    Imprescindible para B2 pero es maratón: añadir de poco en poco, no de golpe.
