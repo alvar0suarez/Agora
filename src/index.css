@@ -1791,6 +1791,18 @@ button.camino__row--link:active {
   opacity: 0.9;
 }
 
+/* Entrenar: respiro de museo */
+.entrenar-museo__greek {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin: 0.2rem 0 0.4rem;
+}
+
+.entrenar-museo__translation {
+  font-style: italic;
+  margin: 0 0 0.5rem;
+}
+
 /* Lectura: construir la frase (banco de palabras) */
 .build__translation {
   margin: 0.3rem 0 0;

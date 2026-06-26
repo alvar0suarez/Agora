@@ -1,4 +1,11 @@
-import { VOCAB, LETTERS, type VocabEntry, type GreekLetter } from '../../core/greek'
+import {
+  VOCAB,
+  LETTERS,
+  REALIA,
+  type VocabEntry,
+  type GreekLetter,
+  type Realia,
+} from '../../core/greek'
 
 /**
  * «Entrenar»: una sola sesión que INTERCALA tipos de ejercicio (reconocer,
@@ -10,13 +17,27 @@ import { VOCAB, LETTERS, type VocabEntry, type GreekLetter } from '../../core/gr
  * barajan e interpretan. Empezamos con tres tipos: reconocer vocabulario,
  * ESCRIBIR vocabulario y reconocer letras.
  */
+/** Tipos de EJERCICIO con SRS (se intercalan y dan XP). El museo no es uno. */
 export type ExerciseType = 'vocab-rec' | 'vocab-type' | 'letter-rec'
 
-/** Un ítem de la sesión mixta (unión discriminada por `type`). */
+/**
+ * Un ítem de la sesión mixta. Los de SRS llevan `srsKey`; el `museo` es un
+ * RESPIRO (una pieza real para mirar, sin nota ni XP) que rompe la rutina.
+ */
 export type ExerciseItem =
   | { type: 'vocab-rec'; srsKey: string; entry: VocabEntry }
   | { type: 'vocab-type'; srsKey: string; entry: VocabEntry }
   | { type: 'letter-rec'; srsKey: string; letter: GreekLetter }
+  | { type: 'museo'; realia: Realia }
+
+/** Ítems con SRS (todos menos el respiro de museo). */
+export type SrsItem = Extract<ExerciseItem, { srsKey: string }>
+
+/** Una pieza de museo al azar, para intercalar como respiro. */
+export function museoBreather(rnd: () => number = Math.random): ExerciseItem {
+  const r = REALIA[Math.floor(rnd() * REALIA.length)]
+  return { type: 'museo', realia: r }
+}
 
 /** Orden fijo de tipos para intercalar de forma estable (round-robin). */
 export const TYPE_ORDER: ExerciseType[] = ['vocab-rec', 'vocab-type', 'letter-rec']
@@ -25,24 +46,24 @@ export const TYPE_ORDER: ExerciseType[] = ['vocab-rec', 'vocab-type', 'letter-re
 const vocabKey = (mode: 'rec' | 'type', id: string) => `vocab:${mode}:${id}`
 const letterKey = (mode: 'rec', id: string) => `alfabeto:${mode}:${id}`
 
-/** Catálogo completo de ítems posibles. */
-export const ALL_ITEMS: ExerciseItem[] = [
+/** Catálogo completo de ítems con SRS. */
+export const ALL_ITEMS: SrsItem[] = [
   ...VOCAB.map(
-    (v): ExerciseItem => ({
+    (v): SrsItem => ({
       type: 'vocab-rec',
       srsKey: vocabKey('rec', v.id),
       entry: v,
     }),
   ),
   ...VOCAB.map(
-    (v): ExerciseItem => ({
+    (v): SrsItem => ({
       type: 'vocab-type',
       srsKey: vocabKey('type', v.id),
       entry: v,
     }),
   ),
   ...LETTERS.map(
-    (l): ExerciseItem => ({
+    (l): SrsItem => ({
       type: 'letter-rec',
       srsKey: letterKey('rec', l.id),
       letter: l,

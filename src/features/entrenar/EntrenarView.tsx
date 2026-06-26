@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { normalizeGreek, type VocabEntry, type GreekLetter } from '../../core/greek'
+import {
+  normalizeGreek,
+  type VocabEntry,
+  type GreekLetter,
+  type Realia,
+} from '../../core/greek'
 import { Card } from '../../core/ui/Card'
 import { GreekKeypad } from '../../core/ui/GreekKeypad'
 import { SessionHeader } from '../../core/ui/SessionHeader'
@@ -167,10 +172,36 @@ function VocabType({
   )
 }
 
+/** Respiro de museo: una pieza real para mirar, sin nota. Rompe la rutina. */
+function MuseoBreather({
+  realia,
+  onContinue,
+}: {
+  realia: Realia
+  onContinue: () => void
+}) {
+  return (
+    <>
+      <Card title={`🏺 Un respiro · ${realia.title}`}>
+        <p className="entrenar-museo__greek" lang="grc">
+          {realia.greek}
+        </p>
+        <p className="entrenar-museo__translation">«{realia.translation}»</p>
+        <p className="answer__line">
+          <strong>{realia.tipo}</strong> · {realia.fecha} · {realia.origen}
+        </p>
+      </Card>
+      <button className="btn btn--primary" onClick={onContinue}>
+        Seguir
+      </button>
+    </>
+  )
+}
+
 /**
- * «Entrenar»: la sesión mixta. Intercala reconocer, escribir y letras en una
- * sola tarjeta común, con el SRS/XP/logros compartidos. Una forma de practicar
- * variada y simple, en lugar de modos sueltos y monótonos.
+ * «Entrenar»: la sesión mixta. Intercala reconocer, escribir, letras y algún
+ * respiro de museo en una sola tarjeta común, con el SRS/XP/logros compartidos.
+ * Una forma de practicar variada y simple, en lugar de modos sueltos y monótonos.
  */
 export function EntrenarView({ onExit }: { onExit: () => void }) {
   const s = useEntrenar()
@@ -185,6 +216,10 @@ export function EntrenarView({ onExit }: { onExit: () => void }) {
   const item = s.current
   if (!item) return null
 
+  // Key estable por carta (el museo no tiene clave SRS) → estado limpio al pasar.
+  const itemKey =
+    item.type === 'museo' ? `museo:${item.realia.id}` : item.srsKey
+
   return (
     <div className="alfabeto">
       <SessionHeader
@@ -194,7 +229,7 @@ export function EntrenarView({ onExit }: { onExit: () => void }) {
         total={s.total}
       />
       {/* key por carta → cada ejercicio arranca con su estado limpio */}
-      <div key={item.srsKey}>
+      <div key={itemKey}>
         {item.type === 'vocab-rec' && (
           <VocabRecall entry={item.entry} onGrade={s.grade} />
         )}
@@ -203,6 +238,9 @@ export function EntrenarView({ onExit }: { onExit: () => void }) {
         )}
         {item.type === 'letter-rec' && (
           <LetterRecall letter={item.letter} onGrade={s.grade} />
+        )}
+        {item.type === 'museo' && (
+          <MuseoBreather realia={item.realia} onContinue={s.advance} />
         )}
       </div>
     </div>
