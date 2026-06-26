@@ -98,8 +98,9 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    **«Entrenar»**: sesión mixta que intercala tipos (reconocer/escribir/letras/
    huecos/construir + respiro de museo) entre áreas con SRS/XP/logros
    centralizados y prompts compartidos — combate la monotonía y unifica.
-   *Pendiente:* simplificar navegación / aspecto de menús restantes; dictado por
-   audio; preguntas de comprensión; traducción inversa.
+   Barra inferior simplificada a 5 (Inicio · Entrenar · Practicar · Camino ·
+   Museo); las áreas enfocadas viven en el hub «Practicar».
+   *Pendiente:* dictado por audio; preguntas de comprensión; traducción inversa.
 2. **Ampliar contenido (el grano largo, en goteo).** Más léxico filosófico, más
    tiempos verbales y modelos de declinación, más aforismos y piezas de museo.
    Imprescindible para B2 pero es maratón: añadir de poco en poco, no de golpe.

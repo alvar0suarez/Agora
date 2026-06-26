@@ -7,5 +7,6 @@ export const lecturaFeature: FeatureModule = {
   title: 'Lectura',
   icon: '📜',
   security: 'normal',
+  nav: false,
   Screen: LecturaScreen,
 }

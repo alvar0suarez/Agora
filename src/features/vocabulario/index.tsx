@@ -7,5 +7,6 @@ export const vocabularioFeature: FeatureModule = {
   title: 'Vocabulario',
   icon: '📚',
   security: 'normal',
+  nav: false,
   Screen: VocabularioScreen,
 }

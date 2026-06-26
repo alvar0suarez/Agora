@@ -23,6 +23,9 @@ export function App() {
   }, [])
 
   const active = features.find((f) => f.id === activeId) ?? null
+  // La barra solo muestra los features primarios; el resto vive en hubs
+  // (p. ej. «Practicar») y se alcanza por goTo, sin ocupar sitio abajo.
+  const navFeatures = features.filter((f) => f.nav !== false)
 
   return (
     <div className="app">
@@ -55,9 +58,9 @@ export function App() {
         </NavigationProvider>
       </main>
 
-      {features.length > 0 ? (
+      {navFeatures.length > 0 ? (
         <nav className="app__nav">
-          {features.map((f) => (
+          {navFeatures.map((f) => (
             <button
               key={f.id}
               className={`nav-btn${f.id === activeId ? ' nav-btn--active' : ''}`}

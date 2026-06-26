@@ -7,5 +7,6 @@ export const gramaticaFeature: FeatureModule = {
   title: 'Gramática',
   icon: '🏛️',
   security: 'normal',
+  nav: false,
   Screen: GramaticaScreen,
 }
