@@ -18,6 +18,12 @@ export interface AphorismWord {
    * de la palabra (la forma del texto suele estar flexionada respecto al lema).
    */
   lemmaId?: string
+  /**
+   * Lema de diccionario (forma de cita) cuando la palabra NO está en el
+   * vocabulario: así toda palabra del aforismo puede mostrar su ficha (lema +
+   * sentido), aunque no tenga aún entrada propia. Si hay `lemmaId`, este sobra.
+   */
+  lemma?: string
 }
 
 /** Un aforismo: texto completo, traducción, fuente y desglose. */
@@ -41,8 +47,8 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Conócete a ti mismo.',
     source: 'Máxima délfica',
     words: [
-      { gr: 'γνῶθι', gloss: 'conoce (imperativo)' },
-      { gr: 'σεαυτόν', gloss: 'a ti mismo' },
+      { gr: 'γνῶθι', gloss: 'conoce (imperativo)', lemmaId: 'gignosko' },
+      { gr: 'σεαυτόν', gloss: 'a ti mismo', lemma: 'σεαυτοῦ' },
     ],
   },
   {
@@ -51,8 +57,8 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Nada en exceso.',
     source: 'Máxima délfica',
     words: [
-      { gr: 'μηδέν', gloss: 'nada' },
-      { gr: 'ἄγαν', gloss: 'demasiado, en exceso' },
+      { gr: 'μηδέν', gloss: 'nada', lemma: 'μηδείς' },
+      { gr: 'ἄγαν', gloss: 'demasiado, en exceso', lemma: 'ἄγαν' },
     ],
   },
   {
@@ -62,7 +68,7 @@ export const APHORISMS: Aphorism[] = [
     source: 'Heráclito (atribuido)',
     words: [
       { gr: 'πάντα', gloss: 'todas las cosas, todo', lemmaId: 'pas' },
-      { gr: 'ῥεῖ', gloss: 'fluye, corre' },
+      { gr: 'ῥεῖ', gloss: 'fluye, corre', lemma: 'ῥέω' },
     ],
   },
   {
@@ -71,10 +77,10 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Solo sé que no sé nada.',
     source: 'Sócrates (tradición)',
     words: [
-      { gr: 'ἓν', gloss: 'una (cosa)' },
+      { gr: 'ἓν', gloss: 'una (cosa)', lemma: 'εἷς' },
       { gr: 'οἶδα', gloss: 'sé', lemmaId: 'oida' },
-      { gr: 'ὅτι', gloss: 'que' },
-      { gr: 'οὐδὲν', gloss: 'nada' },
+      { gr: 'ὅτι', gloss: 'que', lemma: 'ὅτι' },
+      { gr: 'οὐδὲν', gloss: 'nada', lemmaId: 'oudeis' },
       { gr: 'οἶδα', gloss: 'sé', lemmaId: 'oida' },
     ],
   },
@@ -84,8 +90,8 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Apresúrate despacio.',
     source: 'Proverbio (atribuido a Augusto)',
     words: [
-      { gr: 'σπεῦδε', gloss: 'apresúrate (imperativo)' },
-      { gr: 'βραδέως', gloss: 'despacio, lentamente' },
+      { gr: 'σπεῦδε', gloss: 'apresúrate (imperativo)', lemma: 'σπεύδω' },
+      { gr: 'βραδέως', gloss: 'despacio, lentamente', lemma: 'βραδύς' },
     ],
   },
   {
@@ -96,11 +102,11 @@ export const APHORISMS: Aphorism[] = [
     words: [
       { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
       { gr: 'βίος', gloss: 'vida', lemmaId: 'bios' },
-      { gr: 'βραχύς', gloss: 'breve, corto' },
+      { gr: 'βραχύς', gloss: 'breve, corto', lemma: 'βραχύς' },
       { gr: 'ἡ', gloss: 'la (artículo)', lemmaId: 'ho' },
-      { gr: 'δὲ', gloss: 'y, mas (contraste)' },
-      { gr: 'τέχνη', gloss: 'arte, técnica' },
-      { gr: 'μακρή', gloss: 'larga' },
+      { gr: 'δὲ', gloss: 'y, mas (contraste)', lemmaId: 'de' },
+      { gr: 'τέχνη', gloss: 'arte, técnica', lemma: 'τέχνη' },
+      { gr: 'μακρή', gloss: 'larga', lemma: 'μακρός' },
     ],
   },
   {
@@ -110,10 +116,10 @@ export const APHORISMS: Aphorism[] = [
     source: 'Platón, Apología de Sócrates',
     words: [
       { gr: 'ὁ', gloss: 'la (artículo)', lemmaId: 'ho' },
-      { gr: 'ἀνεξέταστος', gloss: 'no examinada, sin reflexión' },
+      { gr: 'ἀνεξέταστος', gloss: 'no examinada, sin reflexión', lemma: 'ἀνεξέταστος' },
       { gr: 'βίος', gloss: 'vida', lemmaId: 'bios' },
       { gr: 'οὐ', gloss: 'no', lemmaId: 'ou' },
-      { gr: 'βιωτὸς', gloss: 'digna de vivirse, vivible' },
+      { gr: 'βιωτὸς', gloss: 'digna de vivirse, vivible', lemma: 'βιωτός' },
       { gr: 'ἀνθρώπῳ', gloss: 'para el hombre', lemmaId: 'anthropos' },
     ],
   },
@@ -123,9 +129,9 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Lo bello es difícil.',
     source: 'Platón (proverbial)',
     words: [
-      { gr: 'χαλεπὰ', gloss: 'difíciles, arduas' },
+      { gr: 'χαλεπὰ', gloss: 'difíciles, arduas', lemma: 'χαλεπός' },
       { gr: 'τὰ', gloss: 'las (cosas)', lemmaId: 'ho' },
-      { gr: 'καλά', gloss: 'bellas, hermosas' },
+      { gr: 'καλά', gloss: 'bellas, hermosas', lemmaId: 'kalos' },
     ],
   },
   {
@@ -137,8 +143,8 @@ export const APHORISMS: Aphorism[] = [
       { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
       { gr: 'ἄνθρωπος', gloss: 'ser humano, hombre', lemmaId: 'anthropos' },
       { gr: 'φύσει', gloss: 'por naturaleza', lemmaId: 'physis' },
-      { gr: 'πολιτικὸν', gloss: 'político, social' },
-      { gr: 'ζῷον', gloss: 'animal, ser vivo' },
+      { gr: 'πολιτικὸν', gloss: 'político, social', lemma: 'πολιτικός' },
+      { gr: 'ζῷον', gloss: 'animal, ser vivo', lemma: 'ζῷον' },
     ],
   },
   {
@@ -150,7 +156,7 @@ export const APHORISMS: Aphorism[] = [
       { gr: 'ὁ', gloss: 'el (artículo)', lemmaId: 'ho' },
       { gr: 'χρόνος', gloss: 'tiempo', lemmaId: 'chronos' },
       { gr: 'πάντα', gloss: 'todas las cosas, todo', lemmaId: 'pas' },
-      { gr: 'λύει', gloss: 'resuelve, disuelve' },
+      { gr: 'λύει', gloss: 'resuelve, disuelve', lemma: 'λύω' },
     ],
   },
   {
@@ -159,7 +165,7 @@ export const APHORISMS: Aphorism[] = [
     translation: 'Uno y todo.',
     source: 'Tradición (panteísmo)',
     words: [
-      { gr: 'ἓν', gloss: 'uno' },
+      { gr: 'ἓν', gloss: 'uno', lemma: 'εἷς' },
       { gr: 'καὶ', gloss: 'y', lemmaId: 'kai' },
       { gr: 'πᾶν', gloss: 'todo', lemmaId: 'pas' },
     ],
@@ -183,7 +189,7 @@ export const APHORISMS: Aphorism[] = [
     source: 'Heráclito',
     words: [
       { gr: 'φύσις', gloss: 'naturaleza', lemmaId: 'physis' },
-      { gr: 'κρύπτεσθαι', gloss: 'ocultarse (infinitivo)' },
+      { gr: 'κρύπτεσθαι', gloss: 'ocultarse (infinitivo)', lemma: 'κρύπτω' },
       { gr: 'φιλεῖ', gloss: 'gusta de, ama', lemmaId: 'phileo' },
     ],
   },

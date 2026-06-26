@@ -33,4 +33,15 @@ describe('APHORISMS (datos)', () => {
       }
     }
   })
+
+  it('TODA palabra tiene ficha: un lemmaId válido o un lema de diccionario', () => {
+    for (const a of APHORISMS) {
+      for (const w of a.words) {
+        const tieneFicha = Boolean(
+          (w.lemmaId && vocabById.has(w.lemmaId)) || w.lemma?.trim(),
+        )
+        expect(tieneFicha, `${a.id}: «${w.gr}» sin ficha`).toBe(true)
+      }
+    }
+  })
 })
