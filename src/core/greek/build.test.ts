@@ -7,7 +7,7 @@ import {
   BUILD_ITEMS,
   MIN_TOKENS,
 } from './build'
-import type { Aphorism } from '../../core/greek'
+import type { Aphorism } from './aphorisms'
 
 const aph = (id: string, words: string[]): Aphorism => ({
   id,

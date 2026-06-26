@@ -1,5 +1,5 @@
-import { APHORISMS, type Aphorism, type AphorismWord } from '../../core/greek'
-import { normalizeGreek } from '../../core/greek'
+import { APHORISMS, type Aphorism, type AphorismWord } from './aphorisms'
+import { normalizeGreek } from './normalize'
 
 /**
  * "Rellenar huecos" (cloze) sobre los aforismos: a partir del desglose palabra

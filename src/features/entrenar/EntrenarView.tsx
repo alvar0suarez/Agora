@@ -8,6 +8,8 @@ import {
 import { Card } from '../../core/ui/Card'
 import { GreekKeypad } from '../../core/ui/GreekKeypad'
 import { SessionHeader } from '../../core/ui/SessionHeader'
+import { ClozePrompt } from '../../core/ui/ClozePrompt'
+import { BuildPrompt } from '../../core/ui/BuildPrompt'
 import { audio } from '../../core/audio'
 import type { Grade } from '../../core/srs'
 import { useEntrenar } from './useEntrenar'
@@ -238,6 +240,12 @@ export function EntrenarView({ onExit }: { onExit: () => void }) {
         )}
         {item.type === 'letter-rec' && (
           <LetterRecall letter={item.letter} onGrade={s.grade} />
+        )}
+        {item.type === 'cloze' && (
+          <ClozePrompt item={item.cloze} onGrade={s.grade} />
+        )}
+        {item.type === 'build' && (
+          <BuildPrompt item={item.build} onGrade={s.grade} />
         )}
         {item.type === 'museo' && (
           <MuseoBreather realia={item.realia} onContinue={s.advance} />

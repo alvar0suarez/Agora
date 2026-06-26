@@ -19,7 +19,7 @@ import {
   type ProgressState,
   type Achievement,
 } from '../../core/progress'
-import { CLOZE_ITEMS, clozeItemById, type ClozeItem } from './cloze'
+import { CLOZE_ITEMS, clozeItemById, type ClozeItem } from '../../core/greek'
 
 /** Huecos nuevos que se introducen como máximo en una sesión. */
 const NEW_PER_SESSION = 6

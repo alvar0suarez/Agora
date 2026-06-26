@@ -19,7 +19,7 @@ import {
   type ProgressState,
   type Achievement,
 } from '../../core/progress'
-import { BUILD_ITEMS, buildItemById, type BuildItem } from './build'
+import { BUILD_ITEMS, buildItemById, type BuildItem } from '../../core/greek'
 
 /** Frases nuevas que se introducen como máximo en una sesión. */
 const NEW_PER_SESSION = 5

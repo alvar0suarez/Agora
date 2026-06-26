@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildClozeItems, isClozeCorrect, clozeId, CLOZE_ITEMS } from './cloze'
-import type { Aphorism } from '../../core/greek'
+import type { Aphorism } from './aphorisms'
 
 const sample: Aphorism[] = [
   {
