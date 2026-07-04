@@ -10,6 +10,7 @@ import { gramaticaFeature } from '../features/gramatica'
 import { teoriaFeature } from '../features/teoria'
 import { etimologiaFeature } from '../features/etimologia'
 import { museoFeature } from '../features/museo'
+import { nousFeature } from '../features/nous'
 
 /**
  * Punto ÚNICO donde se enchufan los features al shell.
@@ -29,4 +30,5 @@ export function registerFeatures(): void {
   registerFeature(teoriaFeature)
   registerFeature(etimologiaFeature)
   registerFeature(museoFeature)
+  registerFeature(nousFeature)
 }
