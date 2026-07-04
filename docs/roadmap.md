@@ -124,9 +124,10 @@ es accionable desde Agora ahora mismo.
 **En marcha — Palabras de Nous (feature `nous`):** Agora importa el vocabulario
 que el usuario guarda leyendo en Nous (fichero `nous-vocab.v1`, ver
 `docs/formato-nous-vocab.md`). Hecho: importador + fichas (significado,
-etimología, griego detectado por heurística testeada). Siguiente: recepción por
-Web Share Target («Estudiar en Agora» directo desde Nous), mapa de palabras por
-raíces compartidas (estilo feature `etimologia`) y repaso SRS de esas palabras.
+etimología, griego detectado por heurística testeada) y recepción por **Web
+Share Target** («Estudiar en Agora» desde Nous: el SW guarda el fichero en la
+bandeja y `?f=nous` abre la feature, que lo importa sola). Siguiente: mapa de
+palabras por raíces compartidas (estilo feature `etimologia`) y repaso SRS.
 
 ## El método (resumen)
 

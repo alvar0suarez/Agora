@@ -21,5 +21,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
+  // El service worker (src/sw.ts) se typechequea aparte (tsconfig.sw.json):
+  // su lib WebWorker choca con la lib DOM de la app.
+  "exclude": ["src/sw.ts"],
   "include": ["src", "vite.config.ts"]
 }

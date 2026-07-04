@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { NousWordRecord } from '../../core/storage/db'
 import { Card } from '../../core/ui/Card'
 import { extractGreekFragments, splitComment } from './parse'
-import { importNousFile, loadNousWords } from './store'
+import { drainShareInbox, importNousFile, loadNousWords } from './store'
 
 /** Nombre legible de los códigos de idioma que llegan de Nous. */
 function idiomaNombre(code: string): string {
@@ -33,20 +33,30 @@ export function NousScreen() {
   const [aviso, setAviso] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
 
+  // Al montar: si el share target dejó un fichero en la bandeja (compartido
+  // desde Nous), se importa solo; si no, solo cargamos lo guardado.
   useEffect(() => {
-    void loadNousWords().then(setWords)
+    void (async () => {
+      const compartido = await drainShareInbox()
+      if (compartido !== null) await importText(compartido)
+      setWords(await loadNousWords())
+    })()
   }, [])
 
-  async function onFile(file: File) {
+  async function importText(raw: string) {
     try {
-      const res = await importNousFile(await file.text())
+      const res = await importNousFile(raw)
       setAviso(
         `Importadas ${res.total} palabras (${res.nuevas} nuevas, ${res.actualizadas} actualizadas).`,
       )
-      setWords(await loadNousWords())
     } catch (e) {
       setAviso(e instanceof Error ? e.message : 'No se pudo importar el fichero.')
     }
+  }
+
+  async function onFile(file: File) {
+    await importText(await file.text())
+    setWords(await loadNousWords())
   }
 
   if (words === null) return null

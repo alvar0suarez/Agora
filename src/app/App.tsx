@@ -8,10 +8,21 @@ import { registerFeatures } from './features'
 // Registramos los features una sola vez, al cargar el módulo del shell.
 registerFeatures()
 
+/**
+ * Deep-link mínimo: `?f=<featureId>` abre esa feature al cargar. Lo usa el
+ * Web Share Target (el SW redirige a `?f=nous` al recibir un fichero), y vale
+ * para cualquier feature registrada.
+ */
+function initialFeatureId(features: readonly { id: string }[]): string | null {
+  const wanted = new URLSearchParams(window.location.search).get('f')
+  if (wanted && features.some((f) => f.id === wanted)) return wanted
+  return features[0]?.id ?? null
+}
+
 export function App() {
   const features = useMemo(() => getFeatures(), [])
-  const [activeId, setActiveId] = useState<string | null>(
-    features[0]?.id ?? null,
+  const [activeId, setActiveId] = useState<string | null>(() =>
+    initialFeatureId(features),
   )
   const [audioOn, toggleAudio] = useAudioEnabled()
 
