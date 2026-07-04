@@ -24,9 +24,14 @@ export default defineConfig(({ command }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon.svg'],
+      // SW propio (src/sw.ts): mismo precache/offline que generaba generateSW,
+      // más el manejador del Web Share Target (recibir vocabulario desde Nous).
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       // Precache offline: el set por defecto no incluye audio, así que añadimos
       // .wav (clips eSpeak) y .m4a (grabaciones humanas) para que suenen sin conexión.
-      workbox: {
+      injectManifest: {
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,wav,m4a}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
@@ -49,10 +54,26 @@ export default defineConfig(({ command }) => ({
             purpose: 'any maskable',
           },
         ],
+        // Web Share Target: Agora aparece en el share sheet de Android para
+        // ficheros JSON («Estudiar en Agora» desde Nous). El POST lo atiende
+        // src/sw.ts, que deja el fichero en la bandeja y abre la feature nous.
+        // `action` es relativa al scope (en Pages: /Agora/share-nous).
+        share_target: {
+          action: 'share-nous',
+          method: 'POST',
+          enctype: 'multipart/form-data',
+          params: {
+            files: [
+              { name: 'vocab', accept: ['application/json', '.json'] },
+            ],
+          },
+        },
       },
-      // Permite probar la PWA también en modo desarrollo.
+      // Permite probar la PWA también en modo desarrollo (module: el SW de
+      // injectManifest se sirve sin bundlear en dev).
       devOptions: {
         enabled: true,
+        type: 'module',
       },
     }),
   ],

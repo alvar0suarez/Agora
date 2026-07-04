@@ -9,6 +9,7 @@ const AREAS: { id: string; icon: string; title: string; hint: string }[] = [
   { id: 'gramatica', icon: '🏛️', title: 'Gramática', hint: 'Conjugar y declinar formas' },
   { id: 'teoria', icon: '📖', title: 'Teoría', hint: 'Cómo funciona el griego, explicado' },
   { id: 'etimologia', icon: '🌳', title: 'Raíces', hint: 'Las palabras griegas en el español' },
+  { id: 'nous', icon: '🧠', title: 'Palabras de Nous', hint: 'Tu vocabulario de lectura, con sus raíces' },
 ]
 
 /**

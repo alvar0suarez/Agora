@@ -14,9 +14,11 @@ expone:
   - Material/notas de estudio que podrían archivarse en Nous
 consume:
   - Clips de audio de palabras griegas de YT-Extractor (para el botón de audio de las tarjetas)
+  - Vocabulario de lectura de Nous vía fichero `nous-vocab.v1` (feature `nous`: fichas, raíces, repaso)
   - (potencial) textos/recortes guardados en Nous
 relaciones:
   - Consume audio de YT-Extractor para el botón de audio; archiva material en Nous
+  - Nous → Agora: vocabulario vía `nous-vocab.v1` (el usuario comparte desde Nous con «Estudiar en Agora»)
 ---
 App personal de **lectura de griego antiguo**, autónoma y **offline**: no ofrece una
 API de red, sino **datos, contenido y herramientas reutilizables** a nivel de repo,

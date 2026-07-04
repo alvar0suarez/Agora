@@ -117,9 +117,17 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
    (`--color-success/-danger`, escala de espaciado y tipografía) y componentes
    comunes **antes** de añadir muchos features, para no acumular más deuda.
 
-**Aparcado:** integración con apps hermanas (audio de YT-Extractor, archivo en
-Nous). Está declarada en `.claude/ficha.md` pero depende de esas otras apps; no
+**Aparcado:** integración con apps hermanas por audio (YT-Extractor) y archivo en
+Nous. Está declarada en `.claude/ficha.md` pero depende de esas otras apps; no
 es accionable desde Agora ahora mismo.
+
+**En marcha — Palabras de Nous (feature `nous`):** Agora importa el vocabulario
+que el usuario guarda leyendo en Nous (fichero `nous-vocab.v1`, ver
+`docs/formato-nous-vocab.md`). Hecho: importador + fichas (significado,
+etimología, griego detectado por heurística testeada) y recepción por **Web
+Share Target** («Estudiar en Agora» desde Nous: el SW guarda el fichero en la
+bandeja y `?f=nous` abre la feature, que lo importa sola). Siguiente: mapa de
+palabras por raíces compartidas (estilo feature `etimologia`) y repaso SRS.
 
 ## El método (resumen)
 
