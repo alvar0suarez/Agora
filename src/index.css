@@ -1938,3 +1938,32 @@ button.camino__row--link:active {
   font-style: italic;
   color: var(--muted);
 }
+
+.nous-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nous-count {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.nous-prompt-word {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.nous-prompt-text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.nous-sep {
+  border: none;
+  border-top: 1px solid var(--surface-2);
+  margin: 0.75rem 0;
+}
