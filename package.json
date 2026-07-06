@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && tsc -p tsconfig.sw.json && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.sw.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "audio:samples": "node scripts/gen-neural-samples.mjs"
   },
   "dependencies": {
     "dexie": "^4.0.9",
