@@ -95,13 +95,32 @@ cede (de momento) en offline puro para el texto arbitrario.
 - *La joya:* voz propia entrenada para **texto arbitrario + conversación**,
   offline y replicable.
 
+**Listón acordado (dueño, jul-2026): ~80% pragmático.** No hace falta el 100%
+filológico: sí que λόγος y los acentos suenen bien y natural, que las frases se
+lean con entonación, y que el enfoque sea replicable (latín mañana). Se pulirá
+por iteración con el oído del dueño.
+
+**Estado del pipeline (hecho):**
+
+- **G2P ático** (`src/core/greek/g2p.ts`): texto politónico → IPA reconstruida,
+  puro y testeado. Acentos (agudo/circunflejo → sílaba tónica; el grave no),
+  aspiradas, largas, diptongos, [h], ζ=[zd], γ-nasal. Simplificaciones al 80%
+  documentadas en el propio módulo. Lee **palabras y frases arbitrarias**.
+- **Muestras A/B** (`npm run audio:samples`): genera las mismas palabras/frases
+  con varias voces neuronales de Azure vía IPA (el-GR y de-DE — el alemán tiene
+  aspiradas, largas y [y] nativas) y publica `public/audio/samples/index.html`
+  para elegir voz con el oído desde el móvil, comparando también contra el
+  eSpeak actual. Azure confirmado con soporte IPA en `<phoneme>` (y léxicos
+  custom como vía de máxima consistencia).
+
 **Qué necesito para avanzar en calidad de verdad:**
 
-- Una **API key** de un TTS de gama alta (Azure/Google/OpenAI/ElevenLabs) para
-  generar la prueba y los clips (va a `.env`, **nunca** al repo).
-- **Tu oído**: la calidad final solo la juzgas tú en el Android; aquí dejo verde
-  el pipeline y una **muestra A/B** (palabra + frase) para que compares y elijas
-  voz.
+- Una **API key de Azure Speech** (tier F0 gratuito: 500k caracteres/mes):
+  portal.azure.com → recurso "Speech" → Keys and Endpoint. En `.env` (ignorado):
+  `AZURE_TTS_KEY=…` y `AZURE_TTS_REGION=…`. **Nunca** al repo.
+- **Tu oído**: ejecutar `npm run audio:samples`, commitear `public/audio/samples/`
+  y escuchar el A/B en el móvil. Con la voz elegida, se regeneran TODOS los
+  clips (letras, vocab, aforismos) con el mismo pipeline.
 
 ## Etapas / proyectos
 
@@ -125,7 +144,11 @@ cede (de momento) en offline puro para el texto arbitrario.
 
 ## Estado
 
-- **Hecho:** rector documentado; motor viejo (eSpeak, robótico) marcado como
-  insuficiente en calidad; motor **repensado** con calidad primero.
-- **Siguiente:** G2P ático (sin key) y, en cuanto haya key, pipeline neuronal +
-  muestra A/B para elegir voz. Después, cobertura + Dictado con la voz buena.
+- **Hecho:** rector documentado; motor repensado con calidad primero (listón
+  ~80% pragmático); **G2P ático** puro y testeado (lee frases arbitrarias);
+  **pipeline de muestras A/B** con voces neuronales listo (`npm run audio:samples`).
+- **Bloqueado en el dueño:** API key de Azure Speech (F0 gratuito) para generar
+  las muestras y elegir voz con el oído.
+- **Después:** regenerar todos los clips con la voz elegida; auto-reproducir el
+  sonido como estímulo; **Dictado** en «Entrenar»; texto arbitrario en runtime
+  (diálogos subidos) y shadowing.
