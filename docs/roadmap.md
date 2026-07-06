@@ -89,6 +89,15 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
 > Acordado en sesión: el camino a B2 son tres esfuerzos distintos. No mezclarlos
 > en una misma sesión; una tarea por sesión limpia. Orden por palanca:
 
+> **Rector transversal — aprender de oído e interactuando** (ver
+> `docs/aprender-de-oido.md`). El idioma entra primero por el **oído** (como de
+> niño): el sonido es el estímulo principal y la escritura es apoyo. "Audio-first"
+> es invariante de diseño: todo ejercicio nuevo debe poder tener el sonido como
+> estímulo. El motor de voz offline **ático correcto** ya existe (`core/audio`);
+> falta cobertura total de clips y hacer del oído el **conductor** (dictado,
+> comprensión auditiva, repetir en voz alta/shadowing). Atraviesa las tres
+> prioridades de abajo.
+
 1. **Cerrar agujeros del bucle de aprendizaje (mayor palanca).** Que toda
    actividad ancle al recuerdo real y sume al progreso, y añadir tipos de
    ejercicio que faltan para comprensión lectora B2: rellenar huecos (cloze),
