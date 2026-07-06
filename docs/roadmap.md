@@ -126,8 +126,13 @@ que el usuario guarda leyendo en Nous (fichero `nous-vocab.v1`, ver
 `docs/formato-nous-vocab.md`). Hecho: importador + fichas (significado,
 etimología, griego detectado por heurística testeada) y recepción por **Web
 Share Target** («Estudiar en Agora» desde Nous: el SW guarda el fichero en la
-bandeja y `?f=nous` abre la feature, que lo importa sola). Siguiente: mapa de
-palabras por raíces compartidas (estilo feature `etimologia`) y repaso SRS.
+bandeja y `?f=nous` abre la feature, que lo importa sola). También hecho: **mapa de
+raíces** (las palabras conectadas por las raíces griegas que comparten, con
+fusión manual persistida cuando la heurística no casa dos formas de la misma
+raíz, y enriquecido con las raíces curadas de `core/greek`) y **repaso SRS**
+(tarjetas autoevaluadas palabra↔significado, prefijo `nous:`, XP del núcleo).
+Validado E2E en Chromium sobre la build real (23 comprobaciones, incluido el
+POST del share target contra el service worker).
 
 ## El método (resumen)
 

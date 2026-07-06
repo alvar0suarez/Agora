@@ -1,5 +1,6 @@
 import { db, type NousWordRecord } from '../../core/storage/db'
 import { parseNousFile } from './format'
+import type { RootMerges } from './map'
 
 /** Resultado de una importación, para informar al usuario. */
 export interface ImportResult {
@@ -30,6 +31,34 @@ export async function loadNousWords(): Promise<NousWordRecord[]> {
 /** Borra una palabra importada (solo en Agora; en Nous sigue existiendo). */
 export async function removeNousWord(id: string): Promise<void> {
   await db.nousVocab.delete(id)
+}
+
+// ── Fusiones manuales de raíces (mapa de palabras) ───────────────────────
+// Cuando la heurística no casa dos formas de la misma raíz (ἡγεῖσθαι/ἡγεμών),
+// el usuario las fusiona a mano y la decisión persiste aquí (kv).
+const MERGES_KEY = 'nous:root-merges'
+
+export async function loadRootMerges(): Promise<RootMerges> {
+  const e = await db.kv.get(MERGES_KEY)
+  return (e?.value as RootMerges | undefined) ?? {}
+}
+
+/** Registra «la raíz `from` es la misma que `into`» (claves normalizadas). */
+export async function saveRootMerge(from: string, into: string): Promise<RootMerges> {
+  const merges = await loadRootMerges()
+  if (from !== into) {
+    merges[from] = into
+    await db.kv.put({ key: MERGES_KEY, value: merges })
+  }
+  return merges
+}
+
+/** Deshace la fusión de `from`. */
+export async function removeRootMerge(from: string): Promise<RootMerges> {
+  const merges = await loadRootMerges()
+  delete merges[from]
+  await db.kv.put({ key: MERGES_KEY, value: merges })
+  return merges
 }
 
 // ── Bandeja del Web Share Target ─────────────────────────────────────────
