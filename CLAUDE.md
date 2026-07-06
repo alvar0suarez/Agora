@@ -13,6 +13,12 @@ comprensible) y gamificación ligera. De un solo usuario, usada **desde el móvi
 si algún día la hay, será solo backup cifrado, nunca el cerebro. Desarrollada con
 Claude Code; el dueño es técnico pero no desarrollador de apps: dirige y revisa.
 
+**Rector: aprender de oído e interactuando.** El idioma entra primero por el
+**oído** (como de niño: oír → asociar → responder → repetir en voz alta); la
+escritura es apoyo. "Audio-first" es invariante de diseño: todo ejercicio nuevo
+debe poder tener el **sonido como estímulo**, no como adorno. Detalle y etapas en
+`docs/aprender-de-oido.md`.
+
 ## Entorno de desarrollo
 
 - Se desarrolla en **Claude Code en la web**: contenedor en la nube, **efímero**.
