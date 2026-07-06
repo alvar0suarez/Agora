@@ -32,8 +32,10 @@ ser decoración (hoy solo suena al revelar) y pasa a **conducir**.
 - Cobertura hoy: 24 letras ✅ · ~10 palabras · 5 aforismos. **Parcial.**
 - Uso hoy: solo cue al *revelar*. **No dirige ningún ejercicio.**
 
-Es decir: el motor de voz correcto y offline **ya existe**; falta cobertura y,
-sobre todo, **hacer del oído el conductor**.
+**Pero la CALIDAD no basta** (feedback del dueño, jul-2026): el eSpeak curado
+suena robótico y en palabras "no funciona" para el estándar de una app top. La
+fonología es correcta, pero la naturalidad no está a la altura. → Se **repiensa
+el motor** con **calidad como prioridad** (ver abajo).
 
 ## Decisiones fijadas
 
@@ -42,13 +44,64 @@ sobre todo, **hacer del oído el conductor**.
    adelante, opción de **grabarte y compararte** con el modelo (MediaRecorder,
    offline; te juzgas tú). **No** hay reconocimiento de voz para ático
    reconstruido, así que **no** se puntúa la pronunciación automáticamente.
-2. **Voz: offline-correcta por defecto.** eSpeak con fonemas curados (robótica
-   pero fonológicamente correcta). Una voz **natural** es mejora **opcional**
-   futura (nube, o voz a medida entrenada — la "joya"); nunca a costa de perder
-   offline o de enseñar la pronunciación equivocada.
-3. **Qué sigue fuera de alcance.** Conversación libre y redacción libre. La
-   ampliación es acotada: **comprensión por el oído** + **repetición hablada
-   guiada** (shadowing). No chatbots ni diálogo abierto.
+2. **Voz: la MEJOR calidad posible** (revisado jul-2026, dueño). Se acepta lo
+   que haga falta para lograrlo —incluida la **nube**— siempre que la
+   pronunciación sea **ática correcta**. El offline sigue siendo deseable y la
+   **voz propia entrenada** es la meta offline (la "joya"), pero **no** se
+   sacrifica calidad por mantener offline a toda costa. Nunca griego moderno /
+   erasmiano (enseñaría mal).
+3. **Alcance ampliado hacia la conversación.** Antes "fuera de alcance". Ahora la
+   ambición incluye: leer **texto arbitrario** en griego con entonación (un
+   diálogo socrático que el dueño suba), y a futuro **conversar** con la app.
+   Esto arrastra un **LLM** y TTS de texto libre → es un salto real respecto al
+   local-first, asumido conscientemente. El entrenador de lectura sigue siendo la
+   base; la conversación es una vía nueva encima.
+
+## El motor, repensado (calidad primero)
+
+**El nudo:** no existe voz neuronal natural para **ático reconstruido**. La
+calidad top + ática correcta sale por uno de dos caminos:
+
+1. **Voz neuronal de gama alta alimentada con IPA/SSML** (Azure, Google y otros
+   aceptan `<phoneme>` IPA): le damos la pronunciación ática **correcta** y una
+   voz **natural** la renderiza, con entonación de frase. Riesgo: aspiración
+   [pʰ tʰ kʰ], cantidad vocálica y acento de altura pueden quedar aproximados.
+2. **Voz a medida entrenada** (Piper/XTTS/StyleTTS2) sobre grabaciones de
+   pronunciación reconstruida (Stratakis, Ranieri…): correcto + natural +
+   **offline** + **texto arbitrario**. Es la "joya"; requiere dataset/licencias
+   y entrenamiento.
+
+**Trampa de física:** *máxima calidad + ática correcta + offline + texto
+arbitrario*, las cuatro a la vez, hoy **no se puede**. Siempre cede una. Con
+"calidad la mejor posible" como norte, se prioriza calidad y ática correcta, y se
+cede (de momento) en offline puro para el texto arbitrario.
+
+**Cimientos, hágase el camino que se haga:**
+
+- **G2P ático** (texto griego → IPA reconstruida): hoy la pronunciación está
+  curada palabra a palabra; para **frases y texto arbitrario** hace falta
+  convertir cualquier texto a fonemas. Módulo **puro y testeable**, y
+  **replicable** (un G2P de latín mañana). Es el primer ladrillo, sirva el motor
+  que sirva.
+- **Motor desacoplado:** `core/audio` esconde el motor tras `AudioService`;
+  cambiarlo es **una línea** y es **agnóstico de idioma**. Justo lo que se quiere
+  para reutilizarlo en **latín** u otra lengua.
+
+**Plan de motor (dos vías, no excluyentes):**
+
+- *Ya:* subir la calidad del **contenido fijo** generando clips con voz neuronal
+  de gama alta **vía IPA en build-time** (runtime sigue offline; clips
+  commiteados). Reutiliza los fonemas curados.
+- *La joya:* voz propia entrenada para **texto arbitrario + conversación**,
+  offline y replicable.
+
+**Qué necesito para avanzar en calidad de verdad:**
+
+- Una **API key** de un TTS de gama alta (Azure/Google/OpenAI/ElevenLabs) para
+  generar la prueba y los clips (va a `.env`, **nunca** al repo).
+- **Tu oído**: la calidad final solo la juzgas tú en el Android; aquí dejo verde
+  el pipeline y una **muestra A/B** (palabra + frase) para que compares y elijas
+  voz.
 
 ## Etapas / proyectos
 
@@ -61,13 +114,18 @@ sobre todo, **hacer del oído el conductor**.
 | **E** | **Calidad de voz (transversal, opcional)** | Voz más natural como mejora opcional; el offline-correcto sigue por defecto. |
 | **F** | **Rector en los docs** | Este documento + roadmap + `CLAUDE.md`. Invariante "audio-first" para nuevos ejercicios. |
 
-**Primer corte (alto impacto, bajo riesgo):** Etapa **A** (cobertura total de
-audio) + el primer ejercicio de la **B**, **Dictado**, dentro de «Entrenar».
-Reutiliza el pipeline existente y convierte el oído de adorno en conductor.
+**Primer corte (revisado, calidad primero):**
+
+1. **G2P ático** (texto → IPA correcta): ladrillo puro y testeable, sirve para
+   cualquier motor y es replicable a otros idiomas. Se puede empezar **sin key**.
+2. **Pipeline de voz neuronal (build-time, vía IPA)** + **muestra A/B** para que
+   el dueño juzgue la calidad en el móvil y elija voz. Necesita **API key**.
+3. Con la voz buena elegida: **cobertura total** del contenido fijo y
+   auto-reproducir el sonido como **estímulo**; luego **Dictado** en «Entrenar».
 
 ## Estado
 
-- **Hecho:** motor de audio offline correcto (letras completas); este rector
-  documentado (Etapa F, parcial).
-- **Siguiente:** Etapa A — generar los clips que faltan (vocabulario y aforismos)
-  y auto-reproducir el sonido como estímulo; luego **Dictado** en «Entrenar».
+- **Hecho:** rector documentado; motor viejo (eSpeak, robótico) marcado como
+  insuficiente en calidad; motor **repensado** con calidad primero.
+- **Siguiente:** G2P ático (sin key) y, en cuanto haya key, pipeline neuronal +
+  muestra A/B para elegir voz. Después, cobertura + Dictado con la voz buena.
