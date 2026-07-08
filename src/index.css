@@ -1967,3 +1967,8 @@ button.camino__row--link:active {
   border-top: 1px solid var(--surface-2);
   margin: 0.75rem 0;
 }
+
+.nous-frag__ipa {
+  color: var(--muted);
+  font-size: 0.9em;
+}

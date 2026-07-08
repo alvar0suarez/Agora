@@ -129,3 +129,12 @@ export function extractGreekFragments(text: string): GreekFragment[] {
 export function greekKey(gr: string): string {
   return normalizeGreek(gr)
 }
+
+/**
+ * ¿El texto contiene alguna letra griega? Es el criterio de entrada de la
+ * feature: esta sección estudia SOLO las palabras que traen griego en su
+ * texto (palabra o comentario); el resto del vocabulario vive en Nous.
+ */
+export function hasGreek(text: string): boolean {
+  return /[\u0370-\u03ff\u1f00-\u1fff]/.test(text)
+}

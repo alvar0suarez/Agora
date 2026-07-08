@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { audio } from '../../core/audio'
+import { wordToIpa } from '../../core/greek'
 import type { NousWordRecord } from '../../core/storage/db'
 import { Card } from '../../core/ui/Card'
 import {
@@ -15,6 +17,7 @@ import {
   importNousFile,
   loadNousWords,
   loadRootMerges,
+  purgeNonGreekWords,
   removeRootMerge,
   saveRootMerge,
 } from './store'
@@ -66,6 +69,11 @@ export function NousScreen() {
   // desde Nous), se importa solo; si no, solo cargamos lo guardado.
   useEffect(() => {
     void (async () => {
+      // Limpieza: fuera las palabras sin griego (criterio de la sección).
+      const purgadas = await purgeNonGreekWords()
+      if (purgadas > 0) {
+        setAviso(`Quitadas ${purgadas} palabras sin griego (en Nous siguen; aquí solo se estudia lo que trae griego).`)
+      }
       const compartido = await drainShareInbox()
       if (compartido !== null) await importText(compartido)
       setMerges(await loadRootMerges())
@@ -76,8 +84,9 @@ export function NousScreen() {
   async function importText(raw: string) {
     try {
       const res = await importNousFile(raw)
+      const omitidas = res.omitidas > 0 ? ` ${res.omitidas} sin griego omitidas.` : ''
       setAviso(
-        `Importadas ${res.total} palabras (${res.nuevas} nuevas, ${res.actualizadas} actualizadas).`,
+        `Importadas ${res.total} palabras (${res.nuevas} nuevas, ${res.actualizadas} actualizadas).${omitidas}`,
       )
     } catch (e) {
       setAviso(e instanceof Error ? e.message : 'No se pudo importar el fichero.')
@@ -132,6 +141,7 @@ export function NousScreen() {
                     }
                   >
                     <span className="nous-frag__gr">{f.gr}</span>
+                    <span className="nous-frag__ipa">[{wordToIpa(f.gr)}]</span>
                     {f.translit ? <span className="nous-frag__tr">{f.translit}</span> : null}
                     {f.gloss ? <span className="nous-frag__gloss">«{f.gloss}»</span> : null}
                     <span className="etim-chevron">›</span>
@@ -180,6 +190,21 @@ export function NousScreen() {
           ← Raíces
         </button>
         <Card title={etiqueta(g)}>
+          <p className="nous-meta">
+            Se pronuncia: <span className="nous-frag__ipa">[{wordToIpa(etiqueta(g))}]</span>
+            {g.curated?.lemmaId ? (
+              <>
+                {' '}
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  onClick={() => void audio.pronounceWord(g.curated!.lemmaId!, { force: true })}
+                >
+                  🔊 Oír
+                </button>
+              </>
+            ) : null}
+          </p>
           {glosaDe(g) ? <p className="etim-detail"><strong>{glosaDe(g)}</strong></p> : null}
           {g.curated ? (
             <p className="nous-meta">
@@ -325,7 +350,8 @@ export function NousScreen() {
     <div className="nous">
       <Card title="Palabras de Nous">
         <p>
-          Tu vocabulario de lectura, traído desde Nous. En Nous: Vocabulario →
+          Tu vocabulario de lectura, traído desde Nous — solo las palabras que
+          traen <strong>griego</strong> en su texto. En Nous: Vocabulario →
           compartir → <strong>Estudiar en Agora</strong>. O importa aquí el
           fichero <code>nous-vocab.json</code>.
         </p>

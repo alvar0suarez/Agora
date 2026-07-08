@@ -1,25 +1,40 @@
 import { db, type NousWordRecord } from '../../core/storage/db'
 import { parseNousFile } from './format'
 import type { RootMerges } from './map'
+import { hasGreek } from './parse'
 
 /** Resultado de una importación, para informar al usuario. */
 export interface ImportResult {
   total: number
   nuevas: number
   actualizadas: number
+  /** Palabras del fichero sin nada de griego: no entran en esta sección. */
+  omitidas: number
 }
 
 /**
  * Importa el contenido de un fichero `nous-vocab.v1`. Idempotente: el id de
  * Nous es estable, así que reimportar actualiza las palabras existentes en
- * lugar de duplicarlas.
+ * lugar de duplicarlas. Solo entran palabras con griego en su texto.
  */
 export async function importNousFile(raw: string, now = Date.now()): Promise<ImportResult> {
-  const words = parseNousFile(raw, now)
-  const existentes = await db.nousVocab.bulkGet(words.map((w) => w.id))
+  const { palabras, omitidas } = parseNousFile(raw, now)
+  const existentes = await db.nousVocab.bulkGet(palabras.map((w) => w.id))
   const nuevas = existentes.filter((e) => e === undefined).length
-  await db.nousVocab.bulkPut(words)
-  return { total: words.length, nuevas, actualizadas: words.length - nuevas }
+  await db.nousVocab.bulkPut(palabras)
+  return { total: palabras.length, nuevas, actualizadas: palabras.length - nuevas, omitidas }
+}
+
+/**
+ * Limpieza: borra de Agora las palabras guardadas SIN griego (entraron antes
+ * de que existiera el criterio). Devuelve cuántas quitó. En Nous siguen
+ * existiendo: aquí solo se estudia lo griego.
+ */
+export async function purgeNonGreekWords(): Promise<number> {
+  const all = await db.nousVocab.toArray()
+  const fuera = all.filter((w) => !hasGreek(`${w.palabra} ${w.comentario}`)).map((w) => w.id)
+  if (fuera.length > 0) await db.nousVocab.bulkDelete(fuera)
+  return fuera.length
 }
 
 /** Todas las palabras importadas, alfabéticamente. */

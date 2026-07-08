@@ -1,4 +1,5 @@
 import type { NousWordRecord } from '../../core/storage/db'
+import { hasGreek } from './parse'
 
 /**
  * Validación del fichero de intercambio `nous-vocab.v1` que exporta Nous
@@ -17,11 +18,19 @@ function texto(v: unknown): string {
   return typeof v === 'string' ? v : ''
 }
 
+export interface ParsedFile {
+  /** Palabras que entran (traen griego en palabra o comentario). */
+  palabras: NousWordRecord[]
+  /** Cuántas se omitieron por no traer nada de griego. */
+  omitidas: number
+}
+
 /**
  * Parsea y valida el contenido del fichero. Devuelve los registros listos para
- * guardar. Lanza `Error` con mensaje legible (se muestra tal cual al usuario).
+ * guardar — SOLO las palabras con griego en su texto (criterio de la feature);
+ * las demás se cuentan como omitidas. Lanza `Error` con mensaje legible.
  */
-export function parseNousFile(raw: string, now: number): NousWordRecord[] {
+export function parseNousFile(raw: string, now: number): ParsedFile {
   let data: unknown
   try {
     data = JSON.parse(raw)
@@ -44,6 +53,7 @@ export function parseNousFile(raw: string, now: number): NousWordRecord[] {
     throw new Error('El fichero no contiene la lista "palabras".')
   }
   const out: NousWordRecord[] = []
+  let omitidas = 0
   for (const item of d.palabras) {
     if (typeof item !== 'object' || item === null) continue
     const w = item as Record<string, unknown>
@@ -51,6 +61,10 @@ export function parseNousFile(raw: string, now: number): NousWordRecord[] {
     const palabra = texto(w.palabra).trim()
     // Sin id o sin palabra la entrada no es utilizable: se salta, no rompe el import.
     if (!id || !palabra) continue
+    if (!hasGreek(`${palabra} ${texto(w.comentario)}`)) {
+      omitidas++
+      continue
+    }
     out.push({
       id,
       palabra,
@@ -62,5 +76,5 @@ export function parseNousFile(raw: string, now: number): NousWordRecord[] {
       importadaEn: now,
     })
   }
-  return out
+  return { palabras: out, omitidas }
 }
