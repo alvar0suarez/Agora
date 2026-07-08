@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractGreekFragments, greekKey, splitComment } from './parse'
+import { extractGreekFragments, greekKey, hasGreek, splitComment } from './parse'
 import { parseNousFile } from './format'
 
 // Comentario REAL de Nous (palabra «exégeta»), tal cual lo escribe el usuario
@@ -89,14 +89,16 @@ describe('parseNousFile', () => {
         creadaEn: 123,
         campoDesconocido: 'se ignora',
       },
-      { id: 'w2', palabra: 'hegemonía', idioma: 'ES' },
+      { id: 'w2', palabra: 'hegemonía', idioma: 'ES', comentario: 'de ἡγεμονία' },
+      { id: 'w3', palabra: 'serendipia', comentario: 'del inglés serendipity, sin griego' },
       { id: '', palabra: 'sin-id-se-salta' },
     ],
   })
 
   it('acepta un fichero v1 y normaliza los opcionales ausentes', () => {
-    const words = parseNousFile(valido, AHORA)
+    const { palabras: words, omitidas } = parseNousFile(valido, AHORA)
     expect(words).toHaveLength(2)
+    expect(omitidas).toBe(1) // serendipia: nada de griego → fuera
     expect(words[0]).toMatchObject({
       id: 'w1',
       palabra: 'exégeta',
@@ -108,11 +110,16 @@ describe('parseNousFile', () => {
     expect(words[1]).toMatchObject({
       id: 'w2',
       idioma: 'es', // se normaliza a minúsculas
-      comentario: '',
       contexto: '',
       libro: '',
       creadaEn: 0,
     })
+  })
+
+  it('hasGreek: el criterio de entrada de la sección', () => {
+    expect(hasGreek('formado por ἐξ y ἡγεῖσθαι')).toBe(true)
+    expect(hasGreek('palabra sin nada de griego')).toBe(false)
+    expect(hasGreek('')).toBe(false)
   })
 
   it('rechaza con mensajes legibles lo que no es nous-vocab', () => {
