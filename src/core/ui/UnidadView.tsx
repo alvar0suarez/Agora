@@ -11,6 +11,7 @@ import {
   VocabTypePrompt,
   VocabDictadoPrompt,
   LetterRecallPrompt,
+  MorphPrompt,
   MuseoBreatherCard,
 } from './prompts'
 import { audio } from '../audio'
@@ -144,6 +145,9 @@ export function UnidadView({
         )}
         {step.kind === 'ejercicio' && step.item.type === 'build' && (
           <BuildPrompt item={step.item.build} onGrade={s.grade} />
+        )}
+        {step.kind === 'ejercicio' && step.item.type === 'morph' && (
+          <MorphPrompt morph={step.item.morph} onGrade={s.grade} />
         )}
       </div>
     </div>

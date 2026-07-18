@@ -69,8 +69,9 @@ antes de las frases con artículo…).
   persistida. Barra: **Hoy · Camino · Practicar · Museo** (Inicio y Entrenar
   siguen accesibles desde Hoy). Los prompts y el catálogo de ejercicios
   subieron a `core` (una sola fuente para Entrenar y Hoy).
-  *Pendiente de F2.x:* unidades de morfología (conjugar/declinar) en el
-  syllabus cuando exista su tipo de ejercicio en el catálogo.
+  *F2.x* ✅: tipo «morph» en el catálogo (mismas claves SRS que el drill de
+  gramática) + 4 unidades en el camino (declinar λόγος/ψυχή tras la teoría de
+  casos; conjugar λύω/εἰμί tras la del verbo). Entrenar también lo intercala.
 - **F3 — Camino = mapa del syllabus** ✅ — las ~45 paradas agrupadas por tramo
   (Cimientos / A1 / Hacia A2) con tu posición: la actual se continúa, las
   hechas se repasan (sin duplicar el completado), las futuras esperan. El

@@ -1,4 +1,4 @@
-import { VOCAB, APHORISMS } from '../greek'
+import { VOCAB, APHORISMS, VERBS, NOUNS } from '../greek'
 
 /**
  * El SYLLABUS: la columna vertebral del viaje. Una secuencia ORDENADA de
@@ -18,7 +18,7 @@ export interface Unit {
   /** Título visible ("Letras I", "Leer: πάντα ῥεῖ"…). */
   title: string
   /** Tipo de unidad (decide el arco de pasos que construye la sesión). */
-  kind: 'letras' | 'vocab' | 'lectura' | 'teoria'
+  kind: 'letras' | 'vocab' | 'lectura' | 'teoria' | 'morfo'
   /** Letras que introduce (kind: letras). */
   letterIds?: string[]
   /** Palabras que introduce (kind: vocab). */
@@ -27,6 +27,8 @@ export interface Unit {
   aphorismId?: string
   /** Lección que abre (kind: teoria). */
   lessonId?: string
+  /** Claves SRS de las formas a drillar (kind: morfo). */
+  morphKeys?: string[]
 }
 
 /** Números romanos cortos para los títulos de serie ("Letras IV"). */
@@ -114,7 +116,7 @@ function buildSyllabus(): Unit[] {
     if (i % 2 === 1 && li < lecturaUnits.length) units.push(lecturaUnits[li++])
   })
 
-  // — Puente hacia A2: la teoría de la morfología, antes de sus unidades. —
+  // — Hacia A2: teoría de la morfología, cada una seguida de sus drills. —
   units.push(
     {
       id: 'teoria-articulo',
@@ -128,13 +130,29 @@ function buildSyllabus(): Unit[] {
       kind: 'teoria',
       lessonId: 'casos',
     },
-    {
-      id: 'teoria-verbo',
-      title: 'Teoría: el presente del verbo',
-      kind: 'teoria',
-      lessonId: 'verbo-presente',
-    },
   )
+  for (const n of NOUNS) {
+    units.push({
+      id: `morfo-${n.id}`,
+      title: `Declinar: ${n.lemma}`,
+      kind: 'morfo',
+      morphKeys: n.forms.map((f) => `noun:type:${f.id}`),
+    })
+  }
+  units.push({
+    id: 'teoria-verbo',
+    title: 'Teoría: el presente del verbo',
+    kind: 'teoria',
+    lessonId: 'verbo-presente',
+  })
+  for (const v of VERBS) {
+    units.push({
+      id: `morfo-${v.id}`,
+      title: `Conjugar: ${v.lemma}`,
+      kind: 'morfo',
+      morphKeys: v.forms.map((f) => `verb:type:${f.id}`),
+    })
+  }
 
   // Lecturas restantes como tramo final de v1.
   for (; li < lecturaUnits.length; li++) units.push(lecturaUnits[li])

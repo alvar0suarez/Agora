@@ -6,6 +6,7 @@ import {
   VocabTypePrompt,
   VocabDictadoPrompt,
   LetterRecallPrompt,
+  MorphPrompt,
   MuseoBreatherCard,
 } from '../../core/ui/prompts'
 import { useEntrenar } from './useEntrenar'
@@ -61,6 +62,9 @@ export function EntrenarView({ onExit }: { onExit: () => void }) {
         )}
         {item.type === 'build' && (
           <BuildPrompt item={item.build} onGrade={s.grade} />
+        )}
+        {item.type === 'morph' && (
+          <MorphPrompt morph={item.morph} onGrade={s.grade} />
         )}
         {item.type === 'museo' && (
           <MuseoBreatherCard realia={item.realia} onContinue={s.advance} />
