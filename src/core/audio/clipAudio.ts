@@ -55,6 +55,11 @@ class ClipAudioService implements AudioService {
     await this.playUrls(clipUrls('aphorisms', id), opts)
   }
 
+  async pronounceDialog(id: string, opts?: SpeakOptions): Promise<void> {
+    if (!isAudioEnabled() && !opts?.force) return
+    await this.playUrls(clipUrls('dialogos', id), opts)
+  }
+
   stop(): void {
     if (!this.current) return
     this.current.pause()

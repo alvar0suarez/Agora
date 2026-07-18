@@ -25,7 +25,8 @@ await build({
   outfile: bundle,
   logLevel: 'silent',
 })
-const { LETTERS, VOCAB, APHORISMS, textToIpa } = await import(bundle)
+const { LETTERS, VOCAB, APHORISMS, DIALOGOS, dialogLineId, textToIpa } =
+  await import(bundle)
 await rm(bundle, { force: true })
 
 /**
@@ -71,5 +72,12 @@ const out = {
   names: LETTERS.map((l) => ({ id: l.id, tokens: textToIpa(l.name) })),
   vocab: VOCAB.map((v) => ({ id: v.id, tokens: textToIpa(v.lemma) })),
   aphorisms: APHORISMS.map((a) => ({ id: a.id, tokens: textToIpa(a.greek) })),
+  // Cada línea de diálogo (del personaje Y tuyas) tiene su clip.
+  dialogos: DIALOGOS.flatMap((d) =>
+    d.turnos.map((t, i) => ({
+      id: dialogLineId(d.id, i),
+      tokens: textToIpa(t.gr),
+    })),
+  ),
 }
 process.stdout.write(JSON.stringify(out))

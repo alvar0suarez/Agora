@@ -41,6 +41,8 @@ export interface AudioService {
   pronounceWord(id: string, opts?: SpeakOptions): Promise<void>
   /** Pronuncia un aforismo por su id (clip en audio/aphorisms). */
   pronounceAphorism(id: string, opts?: SpeakOptions): Promise<void>
+  /** Pronuncia una línea de diálogo por su id (clip en audio/dialogos). */
+  pronounceDialog(id: string, opts?: SpeakOptions): Promise<void>
   /** Corta cualquier reproducción en curso. */
   stop(): void
 }

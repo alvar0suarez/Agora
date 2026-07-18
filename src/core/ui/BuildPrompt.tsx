@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { shuffledBank, isBuildCorrect, type BuildItem, type BuildChip } from '../greek'
 import { Card } from './Card'
+import { audio } from '../audio'
 import type { Grade } from '../srs'
 
 /**
@@ -35,6 +36,15 @@ export function BuildPrompt({
       <Card>
         <p className="alfabeto__prompt">Ordena la frase griega:</p>
         <p className="build__translation">«{item.translation}»</p>
+        <button
+          type="button"
+          className="btn btn--ghost"
+          onClick={() =>
+            void audio.pronounceAphorism(item.aphorismId, { force: true })
+          }
+        >
+          🔊 Oír la frase
+        </button>
       </Card>
 
       <div className="build__line" lang="grc" aria-live="polite">

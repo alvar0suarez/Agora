@@ -45,6 +45,7 @@ def main() -> None:
         ("letters-names", data["names"], lambda e: tokens_to_phonemes(e["tokens"])),
         ("vocab", data["vocab"], lambda e: tokens_to_phonemes(e["tokens"])),
         ("aphorisms", data["aphorisms"], lambda e: tokens_to_phonemes(e["tokens"])),
+        ("dialogos", data["dialogos"], lambda e: tokens_to_phonemes(e["tokens"])),
     ]
     total = 0.0
     n = 0

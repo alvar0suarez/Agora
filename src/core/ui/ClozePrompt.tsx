@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { isClozeCorrect, type ClozeItem } from '../greek'
 import { Card } from './Card'
+import { audio } from '../audio'
 import { GreekKeypad } from './GreekKeypad'
 import type { Grade } from '../srs'
 
@@ -43,6 +44,15 @@ export function ClozePrompt({
         <p className="cloze__hint">
           Pista: <strong>{item.hint}</strong>
         </p>
+        <button
+          type="button"
+          className="btn btn--ghost"
+          onClick={() =>
+            void audio.pronounceAphorism(item.aphorismId, { force: true })
+          }
+        >
+          🔊 Oír la frase
+        </button>
       </Card>
 
       {!answered ? (

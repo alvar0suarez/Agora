@@ -18,7 +18,7 @@ export interface Unit {
   /** Título visible ("Letras I", "Leer: πάντα ῥεῖ"…). */
   title: string
   /** Tipo de unidad (decide el arco de pasos que construye la sesión). */
-  kind: 'letras' | 'vocab' | 'lectura' | 'teoria' | 'morfo'
+  kind: 'letras' | 'vocab' | 'lectura' | 'teoria' | 'morfo' | 'dialogo'
   /** Letras que introduce (kind: letras). */
   letterIds?: string[]
   /** Palabras que introduce (kind: vocab). */
@@ -29,6 +29,8 @@ export interface Unit {
   lessonId?: string
   /** Claves SRS de las formas a drillar (kind: morfo). */
   morphKeys?: string[]
+  /** Diálogo que se conversa (kind: dialogo). */
+  dialogoId?: string
 }
 
 /** Números romanos cortos para los títulos de serie ("Letras IV"). */
@@ -113,6 +115,15 @@ function buildSyllabus(): Unit[] {
   let li = 0
   vocabUnits.forEach((u, i) => {
     units.push(u)
+    if (i === 1) {
+      // Primer DIÁLOGO: con muy pocas palabras ya puedes conversar.
+      units.push({
+        id: 'dialogo-agora',
+        title: 'Diálogo: ἐν τῇ ἀγορᾷ',
+        kind: 'dialogo',
+        dialogoId: 'agora',
+      })
+    }
     if (i % 2 === 1 && li < lecturaUnits.length) units.push(lecturaUnits[li++])
   })
 

@@ -90,3 +90,21 @@ antes de las frases con artículo…).
   · Museo»?
 - El tamaño de unidad (5-8 min, ~10-14 pasos): ¿bien para tu ritmo?
 - F2 reordena la puerta de entrada de la app: confirma antes de que lo toque.
+
+## Evolución: del arco a la HISTORIA (feedback jul-2026)
+
+Probado el viaje, el dueño pide menos tarjeta y más interacción: "como un
+diálogo… que te cuente una historia y vayas hablando con el personaje".
+Nace el **modo Diálogo** (primer paso de una dirección mayor):
+
+- `core/greek/dialogos.ts`: escenas conversacionales en griego simple con un
+  personaje (v1: Sócrates en el ágora). Cada línea con su clip de voz.
+- `core/ui/DialogoView`: chat de burbujas (visual): el personaje habla (voz +
+  texto + traducción), tú ELIGES tu réplica en griego y, al decirla, también
+  suena. Equivocarte no castiga: pruebas otra.
+- En el syllabus como unidad propia (💬), la primera muy pronto (tras las
+  primeras 8 palabras): conversar desde el principio.
+
+*Siguiente en esta dirección:* más escenas (arco narrativo por tramo), réplicas
+construidas con banco de palabras (no solo elegir), y personajes recurrentes.
+El griego de los diálogos es contenido erudito: lo revisa el dueño.
