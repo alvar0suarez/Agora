@@ -33,6 +33,9 @@ export default defineConfig(({ command }) => ({
       // .wav (clips eSpeak) y .m4a (grabaciones humanas) para que suenen sin conexión.
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,wav,m4a}'],
+        // Las muestras A/B de voz (audio/samples) son material de decisión, no
+        // de la app: fuera del precache offline para no engordar la PWA.
+        globIgnores: ['**/audio/samples/**'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
       manifest: {

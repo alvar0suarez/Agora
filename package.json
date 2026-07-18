@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.sw.json",
     "test": "vitest run",
-    "audio:samples": "node scripts/gen-neural-samples.mjs"
+    "audio:samples:piper": "node scripts/dump-sample-ipa.mjs | python3 scripts/gen-piper-samples.py voices",
+    "audio:samples:mms": "node scripts/dump-sample-ipa.mjs | python3 scripts/gen-mms-samples.py",
+    "audio:samples:azure": "node scripts/gen-neural-samples.mjs"
   },
   "dependencies": {
     "dexie": "^4.0.9",
