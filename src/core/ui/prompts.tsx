@@ -260,6 +260,72 @@ export function VocabDictadoPrompt({
   )
 }
 
+/** Drill de morfología: escribe la forma pedida (conjugar/declinar). */
+export function MorphPrompt({
+  morph,
+  onGrade,
+}: {
+  morph: { headword: string; gloss: string; prompt: string; answer: string }
+  onGrade: (g: Grade) => void
+}) {
+  const [typed, setTyped] = useState('')
+  const [correct, setCorrect] = useState<boolean | null>(null)
+  const answered = correct !== null
+  return (
+    <>
+      <Card>
+        <p className="alfabeto__prompt">Escribe la forma:</p>
+        <p className="answer__name" lang="grc">
+          {morph.headword}{' '}
+          <span className="verb__gloss">— {morph.gloss}</span>
+        </p>
+        <p className="answer__line">
+          <strong>{morph.prompt}</strong>
+        </p>
+      </Card>
+      <div className="typed" aria-live="polite">
+        {typed || ' '}
+      </div>
+      {!answered ? (
+        <>
+          <GreekKeypad
+            onInput={(l) => setTyped((t) => t + l)}
+            onBackspace={() => setTyped((t) => t.slice(0, -1))}
+          />
+          <button
+            className="btn btn--primary"
+            disabled={typed.length === 0}
+            onClick={() =>
+              setCorrect(normalizeGreek(typed) === normalizeGreek(morph.answer))
+            }
+          >
+            Comprobar
+          </button>
+        </>
+      ) : (
+        <>
+          <Card
+            className={
+              correct ? 'feedback feedback--correct' : 'feedback feedback--wrong'
+            }
+          >
+            <p className="answer__name">{correct ? '✓ ¡Correcto!' : '✗ Casi'}</p>
+            <p className="answer__line">
+              Respuesta: <strong lang="grc">{morph.answer}</strong>
+            </p>
+          </Card>
+          <button
+            className="btn btn--primary"
+            onClick={() => onGrade(correct ? 'good' : 'again')}
+          >
+            Siguiente
+          </button>
+        </>
+      )}
+    </>
+  )
+}
+
 /** Respiro de museo: una pieza real para mirar, sin nota. Rompe la rutina. */
 export function MuseoBreatherCard({
   realia,

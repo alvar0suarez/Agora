@@ -87,6 +87,18 @@ describe('constructor de sesión (arco oír → asociar → usar)', () => {
     expect(steps[0].kind).toBe('teoria')
   })
 
+  it('unidad de morfología: drill de todas sus formas, tras su teoría', () => {
+    const unit = unitById.get('morfo-luo')!
+    const steps = buildUnitSteps(unit, [], rnd)
+    const morphs = steps.filter(
+      (s) => s.kind === 'ejercicio' && s.item.type === 'morph',
+    )
+    expect(morphs).toHaveLength(6) // las 6 personas de λύω
+    const idx = (id: string) => SYLLABUS.findIndex((u) => u.id === id)
+    expect(idx('teoria-verbo')).toBeLessThan(idx('morfo-luo'))
+    expect(idx('teoria-casos')).toBeLessThan(idx('morfo-logos'))
+  })
+
   it('los repasos se recortan al tope y usan claves SRS reales', () => {
     const due = ALL_ITEMS.slice(0, 10)
     const steps = buildUnitSteps(unitById.get('teoria-acentos')!, due, rnd)

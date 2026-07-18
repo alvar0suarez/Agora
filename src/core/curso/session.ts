@@ -121,6 +121,17 @@ export function buildUnitSteps(
     return steps
   }
 
+  if (unit.kind === 'morfo') {
+    // USAR directo: la teoría previa (parada anterior) ya presentó el paradigma.
+    for (const key of unit.morphKeys ?? []) {
+      const it = ALL_ITEMS.find((i) => i.srsKey === key)
+      if (it) steps.push({ kind: 'ejercicio', item: it })
+    }
+    for (const it of reviews) steps.push({ kind: 'ejercicio', item: it })
+    steps.push(museo())
+    return steps
+  }
+
   // kind === 'lectura'
   const aphorism = unit.aphorismId
     ? aphorismById.get(unit.aphorismId)

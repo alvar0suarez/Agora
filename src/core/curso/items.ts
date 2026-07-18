@@ -4,6 +4,9 @@ import {
   REALIA,
   CLOZE_ITEMS,
   BUILD_ITEMS,
+  VERB_FORMS,
+  NOUN_FORMS,
+  CASE_LABEL,
   type VocabEntry,
   type GreekLetter,
   type Realia,
@@ -29,6 +32,19 @@ export type ExerciseType =
   | 'letter-rec'
   | 'cloze'
   | 'build'
+  | 'morph'
+
+/** Un drill de morfología: escribe la forma pedida de un paradigma. */
+export interface MorphExercise {
+  /** Lema del paradigma (λύω, λόγος…). */
+  headword: string
+  /** Significado del lema. */
+  gloss: string
+  /** Qué forma se pide ("yo (1.ª singular)", "genitivo plural"…). */
+  prompt: string
+  /** La forma griega correcta. */
+  answer: string
+}
 
 /**
  * Un ítem de la sesión mixta. Los de SRS llevan `srsKey`; el `museo` es un
@@ -41,6 +57,7 @@ export type ExerciseItem =
   | { type: 'letter-rec'; srsKey: string; letter: GreekLetter }
   | { type: 'cloze'; srsKey: string; cloze: ClozeItem }
   | { type: 'build'; srsKey: string; build: BuildItem }
+  | { type: 'morph'; srsKey: string; morph: MorphExercise }
   | { type: 'museo'; realia: Realia }
 
 /** Ítems con SRS (todos menos el respiro de museo). */
@@ -59,12 +76,15 @@ export const TYPE_ORDER: ExerciseType[] = [
   'vocab-dictado',
   'vocab-type',
   'build',
+  'morph',
   'letter-rec',
 ]
 
 // Claves SRS idénticas a las de los modos enfocados (progreso compartido).
 const vocabKey = (mode: 'rec' | 'type', id: string) => `vocab:${mode}:${id}`
 const letterKey = (mode: 'rec', id: string) => `alfabeto:${mode}:${id}`
+
+const numLabel = (n: 'sg' | 'pl') => (n === 'sg' ? 'singular' : 'plural')
 
 /** Catálogo completo de ítems con SRS. */
 export const ALL_ITEMS: SrsItem[] = [
@@ -105,6 +125,32 @@ export const ALL_ITEMS: SrsItem[] = [
   ),
   ...BUILD_ITEMS.map(
     (b): SrsItem => ({ type: 'build', srsKey: b.id, build: b }),
+  ),
+  // Morfología (conjugar/declinar escribiendo): MISMAS claves SRS que el drill
+  // de la feature gramática (verb:type:…, noun:type:…) → progreso compartido.
+  ...VERB_FORMS.map(
+    ({ verb, form }): SrsItem => ({
+      type: 'morph',
+      srsKey: `verb:type:${form.id}`,
+      morph: {
+        headword: verb.lemma,
+        gloss: verb.gloss,
+        prompt: `${form.pronoun} (${form.person}.ª ${numLabel(form.number)})`,
+        answer: form.form,
+      },
+    }),
+  ),
+  ...NOUN_FORMS.map(
+    ({ noun, form }): SrsItem => ({
+      type: 'morph',
+      srsKey: `noun:type:${form.id}`,
+      morph: {
+        headword: noun.lemma,
+        gloss: noun.gloss,
+        prompt: `${CASE_LABEL[form.case]} ${numLabel(form.number)}`,
+        answer: form.form,
+      },
+    }),
   ),
 ]
 
