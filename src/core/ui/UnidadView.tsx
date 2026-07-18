@@ -1,7 +1,7 @@
-import { SessionHeader } from '../../core/ui/SessionHeader'
-import { LessonReader } from '../../core/ui/LessonReader'
-import { ClozePrompt } from '../../core/ui/ClozePrompt'
-import { BuildPrompt } from '../../core/ui/BuildPrompt'
+import { SessionHeader } from './SessionHeader'
+import { LessonReader } from './LessonReader'
+import { ClozePrompt } from './ClozePrompt'
+import { BuildPrompt } from './BuildPrompt'
 import {
   IntroLetter,
   IntroVocab,
@@ -11,12 +11,12 @@ import {
   VocabDictadoPrompt,
   LetterRecallPrompt,
   MuseoBreatherCard,
-} from '../../core/ui/prompts'
-import { UnlockedBadges } from '../../core/ui/UnlockedBadges'
-import { Card } from '../../core/ui/Card'
-import { levelFromXp } from '../../core/progress'
-import type { Unit, Step } from '../../core/curso'
-import { useUnidad } from './useUnidad'
+} from './prompts'
+import { UnlockedBadges } from './UnlockedBadges'
+import { Card } from './Card'
+import { levelFromXp } from '../progress'
+import type { Unit, Step } from '../curso'
+import { useUnidad } from '../curso/useUnidad'
 
 /** Key estable de un paso (para montar cada uno con estado limpio). */
 function stepKey(step: Step): string {

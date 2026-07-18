@@ -1854,6 +1854,85 @@ button.camino__row--link:active {
   opacity: 0.8;
 }
 
+/* Camino: mapa del syllabus (ruta de unidades) */
+.ruta {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ruta__band {
+  margin: 0.9rem 0 0.3rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ruta__stop {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--surface-2);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.ruta__stop--actual {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.ruta__stop--hecha {
+  opacity: 0.75;
+}
+
+.ruta__stop--bloqueada {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ruta__icon {
+  flex-shrink: 0;
+  width: 1.6rem;
+  text-align: center;
+}
+
+.ruta__stop--hecha .ruta__icon {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.ruta__title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ruta__cta {
+  flex-shrink: 0;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.ruta__cta--muted {
+  color: var(--muted);
+  font-weight: 400;
+}
+
 /* Teoría intercalada en el Camino */
 .camino__lessons {
   list-style: none;

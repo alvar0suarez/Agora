@@ -7,7 +7,7 @@ import {
   isDue,
   type Grade,
   type SrsState,
-} from '../../core/srs'
+} from '../srs'
 import {
   loadProgress,
   saveProgress,
@@ -18,17 +18,16 @@ import {
   unlockedAchievements,
   type ProgressState,
   type Achievement,
-} from '../../core/progress'
+} from '../progress'
 import {
   ALL_ITEMS,
   TYPE_ORDER,
   earnsXp,
-  buildUnitSteps,
-  type Unit,
-  type Step,
   type SrsItem,
   type ExerciseType,
-} from '../../core/curso'
+} from './items'
+import { buildUnitSteps, type Step } from './session'
+import type { Unit } from './syllabus'
 
 export interface UnidadStats {
   reviewed: number

@@ -71,7 +71,11 @@ antes de las frases con artículo…).
   subieron a `core` (una sola fuente para Entrenar y Hoy).
   *Pendiente de F2.x:* unidades de morfología (conjugar/declinar) en el
   syllabus cuando exista su tipo de ejercicio en el catálogo.
-- **F3 — Camino = mapa del syllabus** con paradas de teoría en su sitio.
+- **F3 — Camino = mapa del syllabus** ✅ — las ~45 paradas agrupadas por tramo
+  (Cimientos / A1 / Hacia A2) con tu posición: la actual se continúa, las
+  hechas se repasan (sin duplicar el completado), las futuras esperan. El
+  motor de unidad (useUnidad + UnidadView) subió a `core` para que Hoy y
+  Camino lo compartan.
 - **F4 — DECIR (shadowing) y premios**: paso de repetir en voz alta al final de
   cada unidad; cierre con aforismo leído/pieza de museo.
 - **F5 — Simplificar**: «Entrenar» se convierte en «sesión libre» (o se retira

@@ -10,7 +10,7 @@ import { loadProgress, levelFromXp, emptyProgress } from '../../core/progress'
 import type { ProgressState } from '../../core/progress'
 import { Card } from '../../core/ui/Card'
 import { useNavigate } from '../../core/ui/navigation'
-import { UnidadView } from './UnidadView'
+import { UnidadView } from '../../core/ui/UnidadView'
 
 const KIND_ICON: Record<Unit['kind'], string> = {
   letras: '🔠',
