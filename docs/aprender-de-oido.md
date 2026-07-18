@@ -100,27 +100,39 @@ filológico: sí que λόγος y los acentos suenen bien y natural, que las fra
 lean con entonación, y que el enfoque sea replicable (latín mañana). Se pulirá
 por iteración con el oído del dueño.
 
-**Estado del pipeline (hecho):**
+**Decisión (dueño, jul-2026): motor OPEN SOURCE y LOCAL.** Nada de depender de
+un servicio (costes, control): el motor debe correr en local, ser extensible a
+otros idiomas (polaco, latín…) y valer también para **generar contenido** (p.
+ej. un short de Aristóteles y Platón hablando en ático, con subtítulos). La vía
+Azure queda como alternativa opcional documentada, no el camino.
+
+**Estado del pipeline (hecho, todo local y sin claves):**
 
 - **G2P ático** (`src/core/greek/g2p.ts`): texto politónico → IPA reconstruida,
   puro y testeado. Acentos (agudo/circunflejo → sílaba tónica; el grave no),
   aspiradas, largas, diptongos, [h], ζ=[zd], γ-nasal. Simplificaciones al 80%
   documentadas en el propio módulo. Lee **palabras y frases arbitrarias**.
-- **Muestras A/B** (`npm run audio:samples`): genera las mismas palabras/frases
-  con varias voces neuronales de Azure vía IPA (el-GR y de-DE — el alemán tiene
-  aspiradas, largas y [y] nativas) y publica `public/audio/samples/index.html`
-  para elegir voz con el oído desde el móvil, comparando también contra el
-  eSpeak actual. Azure confirmado con soporte IPA en `<phoneme>` (y léxicos
-  custom como vía de máxima consistencia).
+- **Piper (open source, VITS/onnx, corre en CPU)**: le pasamos NUESTRO IPA
+  directamente (`phonemes_to_ids`, sin espeak) → control total de la
+  pronunciación con voz neuronal local. Las voces alemana (`thorsten-high`) y
+  española (`davefx-medium`) contienen TODOS los fonemas que necesitamos
+  (incl. ʰ, ː, y, ŋ, h, ̯); la griega moderna "low" salió rota y se descartó.
+  `npm run audio:samples:piper` (voces de huggingface.co/rhasspy/piper-voices).
+- **MMS-TTS-GRC (Meta)**: VITS **entrenado en griego antiguo**; lee el texto tal
+  cual con lo que aprendió. Contraste en el A/B. Licencia **CC-BY-NC** (no vale
+  para contenido promocional; Piper sí). `npm run audio:samples:mms`.
+- **Muestras A/B publicadas** en `public/audio/samples/index.html`
+  (…github.io/Agora/audio/samples/): mismas palabras y frases con Piper-de,
+  Piper-es, MMS-grc y el eSpeak viejo. Fuera del precache de la PWA.
 
-**Qué necesito para avanzar en calidad de verdad:**
+**La "joya" (siguiente nivel, sigue el molde local):** afinar una voz PROPIA
+(Piper es entrenable; StyleTTS2 es MIT; Kokoro Apache) sobre grabaciones reales
+de pronunciación reconstruida → correcto + natural + offline + cualquier frase,
+y **replicable por idioma** (Piper ya trae polaco; MMS trae latín).
 
-- Una **API key de Azure Speech** (tier F0 gratuito: 500k caracteres/mes):
-  portal.azure.com → recurso "Speech" → Keys and Endpoint. En `.env` (ignorado):
-  `AZURE_TTS_KEY=…` y `AZURE_TTS_REGION=…`. **Nunca** al repo.
-- **Tu oído**: ejecutar `npm run audio:samples`, commitear `public/audio/samples/`
-  y escuchar el A/B en el móvil. Con la voz elegida, se regeneran TODOS los
-  clips (letras, vocab, aforismos) con el mismo pipeline.
+**Qué falta para decidir: tu oído.** Escucha el A/B en el móvil y di qué motor
+gana (o si ninguno llega al listón → plan de voz propia). Con el ganador se
+regeneran TODOS los clips (letras, vocab, aforismos) y el dictado.
 
 ## Etapas / proyectos
 
@@ -144,11 +156,13 @@ por iteración con el oído del dueño.
 
 ## Estado
 
-- **Hecho:** rector documentado; motor repensado con calidad primero (listón
-  ~80% pragmático); **G2P ático** puro y testeado (lee frases arbitrarias);
-  **pipeline de muestras A/B** con voces neuronales listo (`npm run audio:samples`).
-- **Bloqueado en el dueño:** API key de Azure Speech (F0 gratuito) para generar
-  las muestras y elegir voz con el oído.
-- **Después:** regenerar todos los clips con la voz elegida; auto-reproducir el
-  sonido como estímulo; **Dictado** en «Entrenar»; texto arbitrario en runtime
-  (diálogos subidos) y shadowing.
+- **Hecho:** rector documentado; motor con calidad primero y **open source
+  local** (decisión del dueño); **G2P ático** puro y testeado (lee frases
+  arbitrarias); **muestras A/B generadas en local sin claves** (Piper con
+  nuestro IPA, MMS-grc, eSpeak de referencia) y publicadas en
+  `/Agora/audio/samples/`.
+- **Bloqueado en el dueño:** escuchar el A/B en el móvil y elegir motor (o
+  pedir el plan de voz propia si ninguno llega al listón).
+- **Después:** regenerar todos los clips con el ganador; auto-reproducir el
+  sonido como estímulo; **Dictado** en «Entrenar»; lectura de textos subidos
+  (diálogos) y shadowing; misma receta para latín/polaco.
