@@ -77,17 +77,20 @@ src/
     storage/  Dexie (IndexedDB)
     crypto/   WebCrypto
     srs/      repetición espaciada (Leitner v1)
-    greek/    datos del idioma compartidos (alfabeto…)
-    ui/       componentes base
+    curso/    el viaje: syllabus, sesiones, catálogo de ejercicios
+    greek/    datos del idioma compartidos (alfabeto, G2P…)
+    ui/       componentes base + prompts de ejercicio compartidos
   features/   funcionalidades enchufables
 docs/         principios, modo de colaboración, roadmap
 ```
 
 ## Fases
 
-- **Fase 0** — esqueleto PWA verde + contrato + docs. ← hecho
-- **Fase 1** — alfabeto griego. 1a (reconocer) ✅ · 1b (escribir) ✅ · 1c (gamificación) ← siguiente
-- **Fase 2+** — vocabulario → lectura graduada → morfología.
+- **Fases 0–4** (esqueleto, alfabeto, vocabulario, lectura, morfología) ✅ y
+  **unificadas en un VIAJE guiado**: syllabus de unidades con arco
+  oír → asociar → usar → decir → premio (ver `docs/viaje-del-usuario.md`).
+- **Ahora**: contenido en goteo (cada añadido = unidades nuevas del syllabus)
+  y mejora de la voz (ver `docs/aprender-de-oido.md`).
 
 Ver `docs/roadmap.md`.
 
