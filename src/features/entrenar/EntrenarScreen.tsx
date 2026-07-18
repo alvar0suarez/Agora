@@ -15,10 +15,10 @@ export function EntrenarScreen() {
     <div className="modes">
       <Card title="Entrenar">
         <p>
-          Una sesión variada: reconocer, <strong>escribir</strong>, letras,
-          rellenar huecos, construir frases y algún respiro de museo, todo
-          intercalado. Lo que toque repasar y algo nuevo, mezclado para que no se
-          haga monótono.
+          Una sesión variada: reconocer (con voz), <strong>dictado</strong>,
+          escribir, letras, rellenar huecos, construir frases y algún respiro de
+          museo, todo intercalado. Lo que toque repasar y algo nuevo, mezclado
+          para que no se haga monótono.
         </p>
       </Card>
       <button

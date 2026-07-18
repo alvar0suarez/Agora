@@ -15,7 +15,7 @@ import type { Grade } from '../../core/srs'
 import { useEntrenar } from './useEntrenar'
 import { EntrenarSummary } from './EntrenarSummary'
 
-/** Reconocer una palabra: ves el griego, recuerdas el sentido, te autocalificas. */
+/** Reconocer una palabra: la OYES y la ves, recuerdas el sentido, te autocalificas. */
 function VocabRecall({
   entry,
   onGrade,
@@ -24,6 +24,10 @@ function VocabRecall({
   onGrade: (g: Grade) => void
 }) {
   const [revealed, setRevealed] = useState(false)
+  // Oído como estímulo: la palabra suena al aparecer (respeta el silenciador).
+  useEffect(() => {
+    void audio.pronounceWord(entry.id)
+  }, [entry.id])
   return (
     <>
       <Card>
@@ -174,6 +178,78 @@ function VocabType({
   )
 }
 
+/** Dictado (transcripción): OYES la palabra y la escribes en griego. */
+function VocabDictado({
+  entry,
+  onGrade,
+}: {
+  entry: VocabEntry
+  onGrade: (g: Grade) => void
+}) {
+  const [typed, setTyped] = useState('')
+  const [correct, setCorrect] = useState<boolean | null>(null)
+  // El sonido ES el ejercicio: suena siempre (aunque el auto-audio esté off).
+  useEffect(() => {
+    void audio.pronounceWord(entry.id, { force: true })
+  }, [entry.id])
+  const accepted = useMemo(() => {
+    const parts = entry.lemma.split(/[,/]/).map((p) => normalizeGreek(p))
+    return new Set(parts.filter(Boolean))
+  }, [entry])
+  const answered = correct !== null
+  return (
+    <>
+      <Card>
+        <p className="alfabeto__prompt">Escribe lo que oyes:</p>
+        <button
+          type="button"
+          className="btn btn--ghost"
+          onClick={() => void audio.pronounceWord(entry.id, { force: true })}
+        >
+          🔊 Oír de nuevo
+        </button>
+      </Card>
+      <div className="typed" aria-live="polite">
+        {typed || ' '}
+      </div>
+      {!answered ? (
+        <>
+          <GreekKeypad
+            onInput={(l) => setTyped((t) => t + l)}
+            onBackspace={() => setTyped((t) => t.slice(0, -1))}
+          />
+          <button
+            className="btn btn--primary"
+            disabled={typed.length === 0}
+            onClick={() => setCorrect(accepted.has(normalizeGreek(typed)))}
+          >
+            Comprobar
+          </button>
+        </>
+      ) : (
+        <>
+          <Card
+            className={
+              correct ? 'feedback feedback--correct' : 'feedback feedback--wrong'
+            }
+          >
+            <p className="answer__name">{correct ? '✓ ¡Correcto!' : '✗ Casi'}</p>
+            <p className="answer__line">
+              Era: <strong lang="grc">{entry.lemma}</strong> — {entry.gloss}
+            </p>
+          </Card>
+          <button
+            className="btn btn--primary"
+            onClick={() => onGrade(correct ? 'good' : 'again')}
+          >
+            Siguiente
+          </button>
+        </>
+      )}
+    </>
+  )
+}
+
 /** Respiro de museo: una pieza real para mirar, sin nota. Rompe la rutina. */
 function MuseoBreather({
   realia,
@@ -237,6 +313,9 @@ export function EntrenarView({ onExit }: { onExit: () => void }) {
         )}
         {item.type === 'vocab-type' && (
           <VocabType entry={item.entry} onGrade={s.grade} />
+        )}
+        {item.type === 'vocab-dictado' && (
+          <VocabDictado entry={item.entry} onGrade={s.grade} />
         )}
         {item.type === 'letter-rec' && (
           <LetterRecall letter={item.letter} onGrade={s.grade} />

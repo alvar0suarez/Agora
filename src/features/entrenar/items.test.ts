@@ -3,10 +3,11 @@ import { ALL_ITEMS, TYPE_ORDER, earnsXp, museoBreather } from './items'
 import { VOCAB, LETTERS, REALIA, CLOZE_ITEMS, BUILD_ITEMS } from '../../core/greek'
 
 describe('entrenar · catálogo de ítems', () => {
-  it('cubre vocabulario (rec + escribir), letras, huecos y construir', () => {
+  it('cubre vocabulario (rec + escribir + dictado), letras, huecos y construir', () => {
     const byType = (t: string) => ALL_ITEMS.filter((i) => i.type === t).length
     expect(byType('vocab-rec')).toBe(VOCAB.length)
     expect(byType('vocab-type')).toBe(VOCAB.length)
+    expect(byType('vocab-dictado')).toBe(VOCAB.length)
     expect(byType('letter-rec')).toBe(LETTERS.length)
     expect(byType('cloze')).toBe(CLOZE_ITEMS.length)
     expect(byType('build')).toBe(BUILD_ITEMS.length)
