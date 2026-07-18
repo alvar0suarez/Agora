@@ -1,5 +1,5 @@
-import { Card } from '../../core/ui/Card'
-import type { Lesson } from '../../core/greek'
+import { Card } from './Card'
+import type { Lesson } from '../greek'
 
 /** Lector de una lección: pinta sus bloques en orden, según su tipo. */
 export function LessonReader({

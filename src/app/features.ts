@@ -1,4 +1,5 @@
 import { registerFeature } from '../core/plugin/registry'
+import { hoyFeature } from '../features/hoy'
 import { inicioFeature } from '../features/inicio'
 import { entrenarFeature } from '../features/entrenar'
 import { practicarFeature } from '../features/practicar'
@@ -19,10 +20,12 @@ import { nousFeature } from '../features/nous'
  * registrarlo (una línea). Nada más cambia en el núcleo ni en la navegación.
  */
 export function registerFeatures(): void {
+  // «Hoy» primero: es la puerta de entrada del viaje (pantalla inicial).
+  registerFeature(hoyFeature)
   registerFeature(inicioFeature)
   registerFeature(entrenarFeature)
-  registerFeature(practicarFeature)
   registerFeature(caminoFeature)
+  registerFeature(practicarFeature)
   registerFeature(alfabetoFeature)
   registerFeature(vocabularioFeature)
   registerFeature(lecturaFeature)

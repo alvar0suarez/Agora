@@ -7,5 +7,6 @@ export const inicioFeature: FeatureModule = {
   title: 'Inicio',
   icon: '🏠',
   security: 'normal',
+  nav: false,
   Screen: InicioScreen,
 }

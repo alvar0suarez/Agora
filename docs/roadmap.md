@@ -101,7 +101,10 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
 > **Replanteamiento del viaje del usuario** (ver `docs/viaje-del-usuario.md`):
 > la app se reorganiza como una secuencia de UNIDADES guiadas con arco (oír →
 > asociar → usar → decir → premio) y paradas de teoría intercaladas, en fases
-> F1–F5. F1 (dictado + oído como estímulo) hecha; F2+ pendientes de OK.
+> F1–F5. **F1 y F2 hechas**: dictado, oído-estímulo, `core/curso` (syllabus de
+> ~45 unidades + constructor de sesión) y pantalla «Hoy» como puerta de entrada
+> (barra: Hoy · Camino · Practicar · Museo). Siguen F3 (Camino=mapa del
+> syllabus), F4 (shadowing y premios) y F5 (simplificación final).
 
 1. **Cerrar agujeros del bucle de aprendizaje (mayor palanca).** Que toda
    actividad ancle al recuerdo real y sume al progreso, y añadir tipos de

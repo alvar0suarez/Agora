@@ -58,14 +58,19 @@ antes de las frases con artículo…).
 
 ## Fases (cada una un PR pequeño, verde)
 
-- **F1 — Dictado (transcripción) + oído como estímulo** ← esta tanda
+- **F1 — Dictado (transcripción) + oído como estímulo** ✅
   Nuevo tipo «dictado»: OYES la palabra (voz neuronal) y la escribes con el
-  teclado griego. Y el reconocer de vocabulario auto-reproduce la palabra al
-  mostrarse (oír → asociar). Todo dentro de «Entrenar» hoy; pasará a las
-  unidades en F2.
-- **F2 — `core/curso` + «Hoy»**: syllabus v1 (Cimientos→A1 con el contenido
-  existente ordenado en ~20 unidades con su arco) + constructor de sesión +
-  pantalla «Hoy». Inicio muestra «Continuar: unidad N».
+  teclado griego. Y el reconocer de vocabulario auto-reproduce la palabra.
+- **F2 — `core/curso` + «Hoy»** ✅ (OK del dueño: "unificarlo todo")
+  Syllabus v1 (~45 unidades: 6 de letras + 18 de palabras + 15 de lectura +
+  5 paradas de teoría, todo el contenido existente reaprovechado) +
+  constructor de sesión con el arco (intro sonora → reconocer → dictado/
+  teclear → repasos SRS → museo) + pantalla «Hoy» con «Continuar» y posición
+  persistida. Barra: **Hoy · Camino · Practicar · Museo** (Inicio y Entrenar
+  siguen accesibles desde Hoy). Los prompts y el catálogo de ejercicios
+  subieron a `core` (una sola fuente para Entrenar y Hoy).
+  *Pendiente de F2.x:* unidades de morfología (conjugar/declinar) en el
+  syllabus cuando exista su tipo de ejercicio en el catálogo.
 - **F3 — Camino = mapa del syllabus** con paradas de teoría en su sitio.
 - **F4 — DECIR (shadowing) y premios**: paso de repetir en voz alta al final de
   cada unidad; cierre con aforismo leído/pieza de museo.

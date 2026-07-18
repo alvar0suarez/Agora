@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { LESSONS, lessonById } from '../../core/greek'
 import { READING_BANDS } from '../../core/progress'
 import { Card } from '../../core/ui/Card'
-import { LessonReader } from './LessonReader'
+import { LessonReader } from '../../core/ui/LessonReader'
 
 /**
  * Teoría: mini-artículos que explican cómo funciona el griego (acentos, casos,
