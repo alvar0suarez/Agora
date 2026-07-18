@@ -4,12 +4,13 @@ Pasamos NUESTRO IPA (del G2P) directamente al modelo (phonemes_to_ids →
 phoneme_ids_to_audio), sin espeak de por medio: control total de la
 pronunciación reconstruida con voz neuronal local (onnx, CPU).
 """
+import os
 import re
 import wave
 from pathlib import Path
 
 import numpy as np
-from piper import PiperVoice
+from piper import PiperVoice, SynthesisConfig
 
 VOWELS = "aeiouyɛɔ"
 
@@ -21,7 +22,8 @@ def adapt_ipa(ipa: str) -> str:
 
 
 def tokens_to_phonemes(tokens) -> list[str]:
-    """Concatena palabras (IPA adaptado) con espacios; puntuación → pausa."""
+    """Concatena palabras (IPA adaptado) con espacios; puntuación → pausa. Se
+    garantiza un cierre («.») para que la frase tenga entonación final natural."""
     chars: list[str] = []
     for t in tokens:
         if t["ipa"]:
@@ -32,13 +34,24 @@ def tokens_to_phonemes(tokens) -> list[str]:
             chars.append(",")
         elif any(p in t["text"] for p in ".;?!"):
             chars.append(".")
+    if chars and chars[-1] not in (",", "."):
+        chars.append(".")
     return chars
+
+
+# Ajustes de síntesis para APRENDER: algo más lento y estable que el defecto.
+# Overridables por entorno: PIPER_LENGTH (1.0 = velocidad normal), PIPER_NOISE.
+SYN_CONFIG = SynthesisConfig(
+    length_scale=float(os.environ.get("PIPER_LENGTH", "1.15")),
+    noise_scale=float(os.environ.get("PIPER_NOISE", "0.55")),
+    noise_w_scale=float(os.environ.get("PIPER_NOISE_W", "0.7")),
+)
 
 
 def synth_to_wav(voice: PiperVoice, phonemes: list[str], path: Path) -> float:
     """Sintetiza una lista de fonemas y la guarda como WAV. Devuelve segundos."""
     ids = voice.phonemes_to_ids(phonemes)
-    audio = voice.phoneme_ids_to_audio(ids)
+    audio = voice.phoneme_ids_to_audio(ids, syn_config=SYN_CONFIG)
     arr = (
         np.frombuffer(audio, dtype=np.int16)
         if isinstance(audio, (bytes, bytearray))

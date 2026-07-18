@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   normalizeGreek,
+  sentencePron,
+  wordPron,
   type VocabEntry,
   type GreekLetter,
   type Realia,
@@ -55,8 +57,7 @@ export function VocabRecallPrompt({
           <Card>
             <p className="answer__name">{entry.gloss}</p>
             <p className="answer__line">
-              <strong>{entry.pos}</strong>
-              {entry.pron ? <> · {entry.pron}</> : null}
+              <strong>{entry.pos}</strong> · {entry.pron ?? wordPron(entry.lemma)}
             </p>
           </Card>
           <div className="grade">
@@ -424,8 +425,7 @@ export function IntroVocab({
           <strong>{entry.gloss}</strong>
         </p>
         <p className="answer__line">
-          {entry.pos}
-          {entry.pron ? <> · suena: {entry.pron}</> : null}
+          {entry.pos} · suena: {entry.pron ?? wordPron(entry.lemma)}
         </p>
         {entry.derivados && entry.derivados.length > 0 ? (
           <p className="answer__line">
@@ -474,6 +474,7 @@ export function DecirPrompt({
         <p className="answer__name" lang="grc">
           {text}
         </p>
+        <p className="aphorism__pron">{sentencePron(text)}</p>
         <p className="answer__line">
           Imita el sonido y la melodía. Repítelo las veces que quieras.
         </p>
@@ -508,6 +509,7 @@ export function IntroAphorism({
         <p className="aphorism__greek" lang="grc">
           {aphorism.greek}
         </p>
+        <p className="aphorism__pron">{sentencePron(aphorism.greek)}</p>
         <p className="entrenar-museo__translation">«{aphorism.translation}»</p>
         <p className="answer__line">{aphorism.source}</p>
         <button
