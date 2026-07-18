@@ -12,5 +12,6 @@ export const silentAudio: AudioService = {
   async pronounce() {},
   async pronounceWord() {},
   async pronounceAphorism() {},
+  async pronounceDialog() {},
   stop() {},
 }

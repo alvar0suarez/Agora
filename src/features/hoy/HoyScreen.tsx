@@ -18,6 +18,7 @@ const KIND_ICON: Record<Unit['kind'], string> = {
   lectura: '📜',
   teoria: '📖',
   morfo: '🏛️',
+  dialogo: '💬',
 }
 
 /**

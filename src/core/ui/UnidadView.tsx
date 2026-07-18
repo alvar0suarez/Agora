@@ -1,5 +1,6 @@
 import { SessionHeader } from './SessionHeader'
 import { LessonReader } from './LessonReader'
+import { DialogoView } from './DialogoView'
 import { ClozePrompt } from './ClozePrompt'
 import { BuildPrompt } from './BuildPrompt'
 import {
@@ -34,6 +35,8 @@ function stepKey(step: Step): string {
       return `ia:${step.aphorism.id}`
     case 'teoria':
       return `t:${step.lesson.id}`
+    case 'dialogo':
+      return `dg:${step.dialogo.id}`
     case 'decir':
       return `d:${step.play}:${step.playId}`
     case 'museo':
@@ -113,6 +116,9 @@ export function UnidadView({
         )}
         {step.kind === 'teoria' && (
           <LessonReader lesson={step.lesson} onExit={s.advance} />
+        )}
+        {step.kind === 'dialogo' && (
+          <DialogoView dialogo={step.dialogo} onFinish={s.advance} />
         )}
         {step.kind === 'decir' && (
           <DecirPrompt

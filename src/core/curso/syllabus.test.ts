@@ -37,6 +37,18 @@ describe('syllabus (el camino)', () => {
     expect(idx('teoria-espiritus')).toBeLessThan(idx('letras-6'))
   })
 
+  it('el primer diálogo llega pronto (tras las primeras palabras)', () => {
+    const idx = (id: string) => SYLLABUS.findIndex((u) => u.id === id)
+    expect(idx('dialogo-agora')).toBeGreaterThan(idx('vocab-2'))
+    expect(idx('dialogo-agora')).toBeLessThan(idx('vocab-3'))
+  })
+
+  it('unidad de diálogo: un solo paso con el diálogo', () => {
+    const steps = buildUnitSteps(unitById.get('dialogo-agora')!, [], () => 0)
+    expect(steps).toHaveLength(1)
+    expect(steps[0].kind).toBe('dialogo')
+  })
+
   it('nextUnit avanza en orden y termina en null', () => {
     expect(nextUnit(new Set())).toBe(SYLLABUS[0])
     expect(nextUnit(new Set([SYLLABUS[0].id]))).toBe(SYLLABUS[1])

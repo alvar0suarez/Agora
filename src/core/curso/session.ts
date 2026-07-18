@@ -3,6 +3,7 @@ import {
   vocabById,
   aphorismById,
   lessonById,
+  dialogoById,
   CLOZE_ITEMS,
   BUILD_ITEMS,
   REALIA,
@@ -11,6 +12,7 @@ import {
   type Aphorism,
   type Lesson,
   type Realia,
+  type Dialogo,
 } from '../greek'
 import { ALL_ITEMS, type SrsItem } from './items'
 import type { Unit } from './syllabus'
@@ -26,6 +28,7 @@ export type Step =
   | { kind: 'intro-vocab'; entry: VocabEntry }
   | { kind: 'intro-aforismo'; aphorism: Aphorism }
   | { kind: 'teoria'; lesson: Lesson }
+  | { kind: 'dialogo'; dialogo: Dialogo }
   | { kind: 'ejercicio'; item: SrsItem }
   | {
       /** DECIR (shadowing): óyelo y repítelo en voz alta. Sin nota ni SRS. */
@@ -77,6 +80,12 @@ export function buildUnitSteps(
   if (unit.kind === 'teoria') {
     const lesson = unit.lessonId ? lessonById.get(unit.lessonId) : undefined
     if (lesson) steps.push({ kind: 'teoria', lesson })
+    return steps
+  }
+
+  if (unit.kind === 'dialogo') {
+    const dialogo = unit.dialogoId ? dialogoById.get(unit.dialogoId) : undefined
+    if (dialogo) steps.push({ kind: 'dialogo', dialogo })
     return steps
   }
 

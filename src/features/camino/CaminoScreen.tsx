@@ -16,12 +16,14 @@ const KIND_ICON: Record<Unit['kind'], string> = {
   lectura: '📜',
   teoria: '📖',
   morfo: '🏛️',
+  dialogo: '💬',
 }
 
 /** Tramo (banda) al que pertenece cada unidad, para agrupar el mapa. */
 function bandOf(unit: Unit): string {
   if (unit.kind === 'letras') return 'Cimientos'
   if (unit.kind === 'morfo') return 'Hacia A2'
+  if (unit.kind === 'dialogo') return 'A1'
   if (unit.kind === 'teoria') {
     return unit.lessonId === 'acentos' || unit.lessonId === 'espiritus'
       ? 'Cimientos'

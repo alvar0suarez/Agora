@@ -1716,6 +1716,94 @@ button:focus:not(:focus-visible) {
   opacity: 0.8;
 }
 
+/* Diálogo: conversación con un personaje (burbujas de chat) */
+.dialogo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.dialogo__chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.burbuja {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+  max-width: 88%;
+}
+
+.burbuja--p {
+  align-self: flex-start;
+}
+
+.burbuja--yo {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.burbuja__avatar {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.burbuja__cuerpo {
+  appearance: none;
+  border: 1px solid var(--surface-2);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.burbuja--p .burbuja__cuerpo {
+  border-bottom-left-radius: 4px;
+}
+
+.burbuja--yo .burbuja__cuerpo {
+  border-bottom-right-radius: 4px;
+  background: #0c4a6e;
+  border-color: #075985;
+}
+
+.burbuja__gr {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.burbuja__es {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.dialogo__opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.dialogo__mal {
+  animation: match-shake 0.3s;
+  border-color: #ef4444;
+}
+
+.dialogo__pista {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 /* Camino: mapa del syllabus (ruta de unidades) */
 .ruta {
   list-style: none;
