@@ -80,9 +80,9 @@ antes de las frases con artículo…).
 - **F4 — DECIR (shadowing)** ✅ — paso «óyelo y dilo EN VOZ ALTA» (imitando a
   la voz, autoevaluación honesta sin nota): dos palabras nuevas por unidad de
   vocabulario y la frase entera en las de lectura.
-- **F5 — Simplificar**: «Entrenar» se convierte en «sesión libre» (o se retira
-  si «Hoy» lo cubre); limpiar navegación al resultado final:
-  **Hoy · Camino · Practicar · Museo** (+ Nous dentro de Practicar).
+- **F5 — Simplificar** ✅ — «Entrenar» quedó como «sesión libre» (desde Hoy);
+  navegación final **Hoy · Camino · Practicar · Museo**; CSS del Camino viejo
+  retirado; roadmap y CLAUDE.md puestos al día con la realidad del viaje.
 
 ## Qué necesita OK del dueño
 
