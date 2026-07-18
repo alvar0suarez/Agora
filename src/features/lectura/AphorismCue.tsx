@@ -1,4 +1,4 @@
-import type { Aphorism } from '../../core/greek'
+import { sentencePron, type Aphorism } from '../../core/greek'
 import { audio } from '../../core/audio'
 
 /**
@@ -11,6 +11,7 @@ export function AphorismCue({ aphorism }: { aphorism: Aphorism }) {
   return (
     <>
       <p className="aphorism__greek">{aphorism.greek}</p>
+      <p className="aphorism__pron">{sentencePron(aphorism.greek)}</p>
       <button
         type="button"
         className="btn btn--ghost"

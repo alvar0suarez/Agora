@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { dialogLineId, type Dialogo, type DialogOption } from '../greek'
+import {
+  dialogLineId,
+  sentencePron,
+  type Dialogo,
+  type DialogOption,
+} from '../greek'
 import { audio } from '../audio'
 import { Card } from './Card'
 
@@ -84,6 +89,7 @@ export function DialogoView({
               <span className="burbuja__gr" lang="grc">
                 {t.gr}
               </span>
+              <span className="burbuja__pron">{sentencePron(t.gr)}</span>
               <span className="burbuja__es">{t.es}</span>
             </button>
           </div>

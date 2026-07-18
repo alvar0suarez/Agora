@@ -33,7 +33,6 @@ OUT = ROOT / "public" / "audio" / "samples"
 VOICES = {
     "piper-de-thorsten": "de_DE-thorsten-high.onnx",
     "piper-es-davefx": "es_ES-davefx-medium.onnx",
-    "piper-el-rapunzelina": "el_GR-rapunzelina-low.onnx",
 }
 
 
