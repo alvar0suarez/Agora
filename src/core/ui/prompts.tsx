@@ -381,6 +381,49 @@ export function IntroVocab({
   )
 }
 
+/**
+ * Paso DECIR (shadowing): óyelo y repítelo EN VOZ ALTA imitando a la voz.
+ * Autoevaluación honesta, sin nota ni puntuación falsa (no hay reconocimiento
+ * de voz para ático): «Otra vez» vuelve a sonar; «Me salió» avanza.
+ */
+export function DecirPrompt({
+  text,
+  onPlay,
+  onContinue,
+}: {
+  text: string
+  /** Reproduce el clip modelo (se llama también al montar). */
+  onPlay: () => void
+  onContinue: () => void
+}) {
+  useEffect(() => {
+    onPlay()
+    // Solo al montar: cada paso DECIR se monta con key propia.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return (
+    <>
+      <p className="alfabeto__prompt">Escúchalo y dilo EN VOZ ALTA 🗣️</p>
+      <Card>
+        <p className="answer__name" lang="grc">
+          {text}
+        </p>
+        <p className="answer__line">
+          Imita el sonido y la melodía. Repítelo las veces que quieras.
+        </p>
+      </Card>
+      <div className="grade">
+        <button className="btn" onClick={onPlay}>
+          🔊 Otra vez
+        </button>
+        <button className="btn btn--good" onClick={onContinue}>
+          Me salió 💪
+        </button>
+      </div>
+    </>
+  )
+}
+
 /** Paso OÍR: un aforismo entero — se oye, se ve y se entiende. */
 export function IntroAphorism({
   aphorism,

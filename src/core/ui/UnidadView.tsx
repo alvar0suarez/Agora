@@ -6,12 +6,14 @@ import {
   IntroLetter,
   IntroVocab,
   IntroAphorism,
+  DecirPrompt,
   VocabRecallPrompt,
   VocabTypePrompt,
   VocabDictadoPrompt,
   LetterRecallPrompt,
   MuseoBreatherCard,
 } from './prompts'
+import { audio } from '../audio'
 import { UnlockedBadges } from './UnlockedBadges'
 import { Card } from './Card'
 import { levelFromXp } from '../progress'
@@ -31,6 +33,8 @@ function stepKey(step: Step): string {
       return `ia:${step.aphorism.id}`
     case 'teoria':
       return `t:${step.lesson.id}`
+    case 'decir':
+      return `d:${step.play}:${step.playId}`
     case 'museo':
       return `m:${step.realia.id}`
   }
@@ -108,6 +112,17 @@ export function UnidadView({
         )}
         {step.kind === 'teoria' && (
           <LessonReader lesson={step.lesson} onExit={s.advance} />
+        )}
+        {step.kind === 'decir' && (
+          <DecirPrompt
+            text={step.text}
+            onPlay={() =>
+              step.play === 'word'
+                ? void audio.pronounceWord(step.playId, { force: true })
+                : void audio.pronounceAphorism(step.playId, { force: true })
+            }
+            onContinue={s.advance}
+          />
         )}
         {step.kind === 'museo' && (
           <MuseoBreatherCard realia={step.realia} onContinue={s.advance} />

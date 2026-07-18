@@ -67,13 +67,18 @@ describe('constructor de sesión (arco oír → asociar → usar)', () => {
       ejercicios.filter((e) => e.item.type === 'vocab-dictado'),
     ).toHaveLength(2)
     expect(ejercicios.filter((e) => e.item.type === 'vocab-type')).toHaveLength(2)
+    // DECIR: dos palabras nuevas se repiten en voz alta (shadowing).
+    expect(steps.filter((s) => s.kind === 'decir')).toHaveLength(2)
   })
 
-  it('unidad de lectura: se oye el aforismo y luego se usa (huecos/construir)', () => {
+  it('unidad de lectura: se oye el aforismo, se usa y se DICE en voz alta', () => {
     const unit = SYLLABUS.find((u) => u.kind === 'lectura')!
     const steps = buildUnitSteps(unit, [], rnd)
     expect(steps[0].kind).toBe('intro-aforismo')
     expect(steps.length).toBeGreaterThan(1)
+    const decir = steps.find((s) => s.kind === 'decir')
+    expect(decir).toBeTruthy()
+    if (decir?.kind === 'decir') expect(decir.play).toBe('aphorism')
   })
 
   it('unidad de teoría: un solo paso con la lección', () => {

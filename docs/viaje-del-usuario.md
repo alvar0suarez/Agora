@@ -76,8 +76,9 @@ antes de las frases con artículo…).
   hechas se repasan (sin duplicar el completado), las futuras esperan. El
   motor de unidad (useUnidad + UnidadView) subió a `core` para que Hoy y
   Camino lo compartan.
-- **F4 — DECIR (shadowing) y premios**: paso de repetir en voz alta al final de
-  cada unidad; cierre con aforismo leído/pieza de museo.
+- **F4 — DECIR (shadowing)** ✅ — paso «óyelo y dilo EN VOZ ALTA» (imitando a
+  la voz, autoevaluación honesta sin nota): dos palabras nuevas por unidad de
+  vocabulario y la frase entera en las de lectura.
 - **F5 — Simplificar**: «Entrenar» se convierte en «sesión libre» (o se retira
   si «Hoy» lo cubre); limpiar navegación al resultado final:
   **Hoy · Camino · Practicar · Museo** (+ Nous dentro de Practicar).

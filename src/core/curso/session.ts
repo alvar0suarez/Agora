@@ -27,6 +27,16 @@ export type Step =
   | { kind: 'intro-aforismo'; aphorism: Aphorism }
   | { kind: 'teoria'; lesson: Lesson }
   | { kind: 'ejercicio'; item: SrsItem }
+  | {
+      /** DECIR (shadowing): óyelo y repítelo en voz alta. Sin nota ni SRS. */
+      kind: 'decir'
+      /** Texto griego a decir. */
+      text: string
+      /** Qué clip reproducir. */
+      play: 'word' | 'aphorism'
+      /** Id del clip (palabra o aforismo). */
+      playId: string
+    }
   | { kind: 'museo'; realia: Realia }
 
 /** Repasos SRS máximos que se cuelan en una unidad (mantenerla corta). */
@@ -102,6 +112,10 @@ export function buildUnitSteps(
       const it = exercise(i % 2 === 0 ? 'vocab-dictado' : 'vocab-type', v.id)
       if (it) steps.push({ kind: 'ejercicio', item: it })
     })
+    // DECIR: repite en voz alta un par de las palabras nuevas (shadowing).
+    for (const v of entries.slice(0, 2)) {
+      steps.push({ kind: 'decir', text: v.lemma, play: 'word', playId: v.id })
+    }
     for (const it of reviews) steps.push({ kind: 'ejercicio', item: it })
     steps.push(museo())
     return steps
@@ -122,6 +136,13 @@ export function buildUnitSteps(
     }
     const b = BUILD_ITEMS.find((b) => b.aphorismId === aphorism.id)
     if (b) steps.push({ kind: 'ejercicio', item: { type: 'build', srsKey: b.id, build: b } })
+    // DECIR: la frase entera en voz alta, imitando a la voz (shadowing).
+    steps.push({
+      kind: 'decir',
+      text: aphorism.greek,
+      play: 'aphorism',
+      playId: aphorism.id,
+    })
   }
   for (const it of reviews) steps.push({ kind: 'ejercicio', item: it })
   return steps
