@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { ALL_ITEMS, TYPE_ORDER, earnsXp, museoBreather } from './items'
-import { VOCAB, LETTERS, REALIA, CLOZE_ITEMS, BUILD_ITEMS } from '../../core/greek'
+import { VOCAB, LETTERS, REALIA, CLOZE_ITEMS, BUILD_ITEMS } from '../greek'
 
 describe('entrenar · catálogo de ítems', () => {
   it('cubre vocabulario (rec + escribir + dictado), letras, huecos y construir', () => {

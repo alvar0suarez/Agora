@@ -7,5 +7,6 @@ export const entrenarFeature: FeatureModule = {
   title: 'Entrenar',
   icon: '🎯',
   security: 'normal',
+  nav: false,
   Screen: EntrenarScreen,
 }

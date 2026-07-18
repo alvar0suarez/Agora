@@ -9,7 +9,7 @@ import {
   type Realia,
   type ClozeItem,
   type BuildItem,
-} from '../../core/greek'
+} from '../greek'
 
 /**
  * «Entrenar»: una sola sesión que INTERCALA tipos de ejercicio (reconocer,

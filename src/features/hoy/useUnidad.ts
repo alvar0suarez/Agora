@@ -23,16 +23,14 @@ import {
   ALL_ITEMS,
   TYPE_ORDER,
   earnsXp,
-  museoBreather,
-  type ExerciseItem,
+  buildUnitSteps,
+  type Unit,
+  type Step,
+  type SrsItem,
   type ExerciseType,
-} from '../../core/curso/items'
+} from '../../core/curso'
 
-/** Máximo de ítems por sesión (corta y constante) y de cuántos nuevos meter. */
-const SESSION_CAP = 18
-const NEW_PER_SESSION = 6
-
-export interface EntrenarStats {
+export interface UnidadStats {
   reviewed: number
   recalled: number
   xpGained: number
@@ -41,9 +39,9 @@ export interface EntrenarStats {
   newAchievements: Achievement[]
 }
 
-/** Intercala listas por turnos (round-robin): [a1,b1,c1,a2,b2,…]. */
-function interleave(lists: ExerciseItem[][]): ExerciseItem[] {
-  const out: ExerciseItem[] = []
+/** Intercala listas por turnos (round-robin). */
+function interleave(lists: SrsItem[][]): SrsItem[] {
+  const out: SrsItem[] = []
   const max = Math.max(0, ...lists.map((l) => l.length))
   for (let i = 0; i < max; i++) {
     for (const list of lists) if (i < list.length) out.push(list[i])
@@ -52,16 +50,16 @@ function interleave(lists: ExerciseItem[][]): ExerciseItem[] {
 }
 
 /**
- * Motor de la sesión mixta: arma una cola INTERCALANDO tipos (primero lo que
- * toca repasar, luego algo nuevo) y centraliza —una sola vez— la lógica de SRS,
- * XP, racha y logros que antes estaba repetida en cada feature.
+ * Corre UNA unidad del syllabus: construye sus pasos (arco oír → asociar →
+ * usar → premio, con repasos SRS vencidos intercalados) y centraliza SRS + XP +
+ * racha + logros al calificar. Mismo motor que Entrenar, pero guiado.
  */
-export function useEntrenar() {
+export function useUnidad(unit: Unit) {
   const [loading, setLoading] = useState(true)
   const [states, setStates] = useState<Map<string, SrsState>>(new Map())
-  const [queue, setQueue] = useState<ExerciseItem[]>([])
+  const [queue, setQueue] = useState<Step[]>([])
   const [total, setTotal] = useState(0)
-  const [stats, setStats] = useState<EntrenarStats>({
+  const [stats, setStats] = useState<UnidadStats>({
     reviewed: 0,
     recalled: 0,
     xpGained: 0,
@@ -84,38 +82,30 @@ export function useEntrenar() {
       unlockedAchievements(loadedProgress).map((a) => a.id),
     )
 
+    // Repasos vencidos de TODAS las áreas, intercalados por tipo (variedad).
+    // Lo que esta unidad introduce se excluye: aún no toca repasarlo.
+    const introduced = new Set([
+      ...(unit.letterIds ?? []),
+      ...(unit.vocabIds ?? []),
+    ])
+    const duePerType = new Map<ExerciseType, SrsItem[]>()
+    for (const t of TYPE_ORDER) duePerType.set(t, [])
     const byKey = new Map<string, SrsState>()
-    const duePerType = new Map<ExerciseType, ExerciseItem[]>()
-    const freshPerType = new Map<ExerciseType, ExerciseItem[]>()
-    for (const t of TYPE_ORDER) {
-      duePerType.set(t, [])
-      freshPerType.set(t, [])
-    }
     for (const it of ALL_ITEMS) {
       const s = loaded.get(it.srsKey)
-      if (!s) {
-        freshPerType.get(it.type)!.push(it)
-      } else {
-        byKey.set(it.srsKey, s)
-        if (isDue(s, now)) duePerType.get(it.type)!.push(it)
-      }
+      if (!s) continue
+      byKey.set(it.srsKey, s)
+      const contentId =
+        'letter' in it ? it.letter.id : 'entry' in it ? it.entry.id : null
+      if (contentId && introduced.has(contentId)) continue
+      if (isDue(s, now)) duePerType.get(it.type)!.push(it)
     }
-
     const due = interleave(TYPE_ORDER.map((t) => duePerType.get(t)!))
-    const fresh = interleave(TYPE_ORDER.map((t) => freshPerType.get(t)!)).slice(
-      0,
-      NEW_PER_SESSION,
-    )
-    const picked = [...due, ...fresh].slice(0, SESSION_CAP)
-    // Un respiro de museo a media sesión (si hay material suficiente): rompe la
-    // rutina con una pieza real, sin nota ni XP.
-    if (picked.length >= 4) {
-      picked.splice(Math.floor(picked.length / 2), 0, museoBreather())
-    }
 
+    const steps = buildUnitSteps(unit, due)
     setStates(byKey)
-    setQueue(picked)
-    setTotal(picked.length)
+    setQueue(steps)
+    setTotal(steps.length)
     setStats({
       reviewed: 0,
       recalled: 0,
@@ -125,7 +115,7 @@ export function useEntrenar() {
       newAchievements: [],
     })
     setLoading(false)
-  }, [])
+  }, [unit])
 
   useEffect(() => {
     void build()
@@ -133,15 +123,16 @@ export function useEntrenar() {
 
   const current = queue[0] ?? null
 
-  // El museo es un respiro: no califica, solo pasa a la siguiente carta.
+  /** Pasos sin nota (intro, teoría, museo): solo avanzar. */
   const advance = useCallback(() => {
     setQueue((q) => q.slice(1))
   }, [])
 
   const grade = useCallback(
     (g: Grade) => {
-      const item = queue[0]
-      if (!item || item.type === 'museo') return
+      const step = queue[0]
+      if (!step || step.kind !== 'ejercicio') return
+      const item = step.item
       const now = Date.now()
       const prev = states.get(item.srsKey) ?? newCard(now)
       const next = review(prev, g, now)
@@ -173,7 +164,8 @@ export function useEntrenar() {
         streakDays: newStreak ?? s.streakDays,
         newAchievements: fresh ?? s.newAchievements,
       }))
-      setQueue((q) => (g === 'again' ? [...q.slice(1), item] : q.slice(1)))
+      // Fallar reencola el paso al final (se reintenta en esta unidad).
+      setQueue((q) => (g === 'again' ? [...q.slice(1), step] : q.slice(1)))
     },
     [queue, states],
   )
@@ -186,7 +178,6 @@ export function useEntrenar() {
     total,
     grade,
     advance,
-    restart: build,
     stats,
   }
 }
