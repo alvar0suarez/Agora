@@ -25,6 +25,7 @@ import {
 export type ExerciseType =
   | 'vocab-rec'
   | 'vocab-type'
+  | 'vocab-dictado'
   | 'letter-rec'
   | 'cloze'
   | 'build'
@@ -36,6 +37,7 @@ export type ExerciseType =
 export type ExerciseItem =
   | { type: 'vocab-rec'; srsKey: string; entry: VocabEntry }
   | { type: 'vocab-type'; srsKey: string; entry: VocabEntry }
+  | { type: 'vocab-dictado'; srsKey: string; entry: VocabEntry }
   | { type: 'letter-rec'; srsKey: string; letter: GreekLetter }
   | { type: 'cloze'; srsKey: string; cloze: ClozeItem }
   | { type: 'build'; srsKey: string; build: BuildItem }
@@ -54,6 +56,7 @@ export function museoBreather(rnd: () => number = Math.random): ExerciseItem {
 export const TYPE_ORDER: ExerciseType[] = [
   'vocab-rec',
   'cloze',
+  'vocab-dictado',
   'vocab-type',
   'build',
   'letter-rec',
@@ -76,6 +79,15 @@ export const ALL_ITEMS: SrsItem[] = [
     (v): SrsItem => ({
       type: 'vocab-type',
       srsKey: vocabKey('type', v.id),
+      entry: v,
+    }),
+  ),
+  // Dictado (transcripción): OYES la palabra (voz neuronal) y la escribes.
+  // Es una destreza propia (comprensión auditiva) → su propio espacio SRS.
+  ...VOCAB.map(
+    (v): SrsItem => ({
+      type: 'vocab-dictado',
+      srsKey: `vocab:dictado:${v.id}`,
       entry: v,
     }),
   ),

@@ -93,12 +93,15 @@ abrirlo a más gente vive aparcada y por separado en `docs/exploracion-comunidad
 > `docs/aprender-de-oido.md`). El idioma entra primero por el **oído** (como de
 > niño): el sonido es el estímulo principal y la escritura es apoyo. "Audio-first"
 > es invariante de diseño: todo ejercicio nuevo debe poder tener el sonido como
-> estímulo. Hay motor de audio offline con fonología ática correcta, pero su
-> **calidad es insuficiente** (robótico); se **repiensa con calidad primero** —la
-> mejor posible, aceptando la nube y una voz propia entrenada como meta— para
-> leer hasta frases con entonación y ser replicable a otros idiomas (latín). Falta
-> además hacer del oído el **conductor** (dictado, comprensión, shadowing).
+> estímulo. *Resuelto el motor:* voz neuronal **open source y local** (Piper +
+> G2P propio) — TODOS los clips regenerados (letras, nombres, 71 palabras, 15
+> aforismos) y el **dictado** ya existe. Replicable a otros idiomas (latín).
 > Atraviesa las tres prioridades de abajo.
+
+> **Replanteamiento del viaje del usuario** (ver `docs/viaje-del-usuario.md`):
+> la app se reorganiza como una secuencia de UNIDADES guiadas con arco (oír →
+> asociar → usar → decir → premio) y paradas de teoría intercaladas, en fases
+> F1–F5. F1 (dictado + oído como estímulo) hecha; F2+ pendientes de OK.
 
 1. **Cerrar agujeros del bucle de aprendizaje (mayor palanca).** Que toda
    actividad ancle al recuerdo real y sume al progreso, y añadir tipos de
