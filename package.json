@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.sw.json",
     "test": "vitest run",
+    "audio:clips": "node scripts/dump-clips-ipa.mjs | python3 scripts/gen-piper-clips.py voices",
     "audio:samples:piper": "node scripts/dump-sample-ipa.mjs | python3 scripts/gen-piper-samples.py voices",
     "audio:samples:mms": "node scripts/dump-sample-ipa.mjs | python3 scripts/gen-mms-samples.py",
     "audio:samples:azure": "node scripts/gen-neural-samples.mjs"

@@ -40,8 +40,8 @@ class ClipAudioService implements AudioService {
   ): Promise<void> {
     // Silenciado solo afecta al sonido AUTOMÁTICO; con `force` (botón explícito) suena.
     if (!isAudioEnabled() && !opts?.force) return
-    if (what !== 'sound') return // por ahora solo hay clips del sonido
-    await this.playUrls(clipUrls('letters', letter.id), opts)
+    const folder = what === 'name' ? 'letters-names' : 'letters'
+    await this.playUrls(clipUrls(folder, letter.id), opts)
   }
 
   async pronounceWord(id: string, opts?: SpeakOptions): Promise<void> {
